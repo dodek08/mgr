@@ -16,29 +16,22 @@ gsl_monte_function I; //Tq
 gsl_monte_vegas_state *s;
 
 vector<double> u2s; //dostepne wartosci u2 z pliku
-vector<double> Tgs; //wektor wyliczonych Tg
 vector<double> kt2su; //wektor wykorzystanych kt2
 vector<double> u2su; //wektor wykorzystanych u2
 map<double,double> as_2;//mapa przechowujaca as_2(u^2)
-size_t calls = 1000000; //dla beki liczba iteracji
-int n=100000000; //liczba iteracji
+size_t calls = 1000000; // liczba iteracji
 double h=0.1;
-
-//ftg na dole bo sie pluje
 
 
 double Tq(const double & kt2, const double & u2)
 {
-    if(kt2>u2)
+  if(kt2>u2)
   return 1.;
   clock_t t;
   t=clock();
   double result=0., error=0.;       // result and error
   struct pars pms={u2};
   I.params=&pms;
-
-
-
   s = gsl_monte_vegas_alloc(2);
   double xl[2]={kt2, 0.};
   double xu[2]={u2,1.};
@@ -147,15 +140,12 @@ double Tg(const double & kt2, const double & u2)
   if(kt2>u2)
   return 1.;
   vector<double>::iterator test=find(u2s.begin(), u2s.end(), u2);
-  gsl_rng_set(r, chrono::system_clock::now().time_since_epoch().count());
+  // gsl_rng_set(r, chrono::system_clock::now().time_since_epoch().count());
   clock_t t;
   t=clock();
   double result=0., error=0.;		// result and error
   struct pars pms={u2};
   H.params=&pms;
-
-
-
   s = gsl_monte_vegas_alloc(2);
   double xl[2]={kt2, 0.};
   double xu[2]={u2,1.};
@@ -293,31 +283,6 @@ void read_alphas()
     sort(u2s.begin(), u2s.end());
 }
 
-void make_lattice()
-{
-    double tmp=0;
-    vector<double>::iterator U2=u2s.begin();
-    vector<double>::iterator KT2=u2s.begin();
-    while(U2!=u2s.end())
-    {
-        while(KT2!=U2)
-        {
-            tmp=Tg(*KT2++,*U2);
-        }
-        U2++;
-        KT2=u2s.begin();
-    }
-    vector<double>::iterator it1=kt2su.begin();
-    vector<double>::iterator it2=u2su.begin();
-    vector<double>::iterator it3=Tgs.begin();
-    fstream save;
-    save.open("wyniki.dat", ios::out );
-    while(it3!=Tgs.end())
-    {
-            save<<*it1++<<"\t"<<*it2++<<"\t"<<*it3++<<endl;
-    }
-    save.close();
-}
 
 double interpolacja(const double & kt2)
 {
@@ -365,7 +330,7 @@ void draw_gluons()
 1666668.3285
     };
     fstream save;
-    string NAZWA="fragment_gluon";
+    string NAZWA="fragment_u";
 
     save.open(NAZWA,ios::out);
 
@@ -375,8 +340,7 @@ void draw_gluons()
         {
         for(double & mu2:mu2s)
             {
-            save<<x<<"\t"<<val<<"\t"<<mu2<<"\t"<<fa(x,val,mu2)<<endl;
-            //save<<val<<"\t"<<val*val<<"\t"<<((val+h)*(val+h)-(val-h)*(val-h))/(2*h)<<"\t"<<2*val<<endl;
+            save<<x<<"\t"<<val<<"\t"<<mu2<<"\t"<<fu(x,val,mu2)<<endl;
             cout<<x<<"\t"<<val<<"\t"<<mu2<<endl;
             }
         }
@@ -384,7 +348,6 @@ void draw_gluons()
     }
 
     save.close();
-
 }
 
 double a(const double & x, const double & kt2)

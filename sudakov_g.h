@@ -2,6 +2,7 @@
 // author: Dominik Kasperski
 // kasperski.dominik@gmail.com
 // 9.10.16
+//	wszystkie funkcje dzialaja poprawnie 19.09.2017
 ///gsl
 
 #ifndef SUDAKOV_G
@@ -71,9 +72,8 @@ int find_index_gt(const vector<double> & vec, const double& val); // funkcja pom
 double Tg(const double & kt2, const double & u2); // liczenie prawidłowe
 double Tq(const double &, const double &);
 void read_alphas(); //wczytuje plik z as_2(u^2) o nazwie "CTEQ10_alphas_2.dat"
-void make_lattice(); // robi siatke jeszcze nie dziala
-void test_delta(const double &kt2, const double & u2);
-void draw_gluons();
+void test_delta(const double &kt2, const double & u2); //testuje dzialanie theta
+void draw_gluons(); //wylicza kilkadziesiat punktow z rozkladu gluonów
 
 ///czesc gsl
 double ftg(double *args, size_t dim, void *params); //funkcja wymagana przez biblioteke
