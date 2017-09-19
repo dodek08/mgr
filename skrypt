@@ -1,0 +1,9 @@
+set terminal postscript eps enhanced colour
+set font "Helvet,12"
+set output "test.pdf"
+
+
+#set xlabel "I_{out} [mA]"
+#set ylabel "{/Symbol h}"
+
+splot "wyniki_1_sposob.dat" w p t "wyniki 1 sposob", "wyniki_2_sposob.dat" w p t "wyniki 2 sposob"
