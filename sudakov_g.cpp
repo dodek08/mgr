@@ -12,6 +12,7 @@ constexpr double RMAX=generatorFBN.max();
 const gsl_rng_type * T = gsl_rng_taus113; //generator do wyboru z gsl
 gsl_rng * r=gsl_rng_alloc(T);
 gsl_monte_function H; //Tg
+gsl_monte_function I; //Tq
 gsl_monte_vegas_state *s;
 
 vector<double> u2s; //dostepne wartosci u2 z pliku
@@ -26,10 +27,44 @@ double h=0.1;
 //ftg na dole bo sie pluje
 
 
-double Tq(const double &, const double &)
+double Tq(const double & kt2, const double & u2)
 {
-    return 1.;
+    if(kt2>u2)
+  return 1.;
+  clock_t t;
+  t=clock();
+  double result=0., error=0.;       // result and error
+  struct pars pms={u2};
+  I.params=&pms;
+
+
+
+  s = gsl_monte_vegas_alloc(2);
+  double xl[2]={kt2, 0.};
+  double xu[2]={u2,1.};
+  gsl_monte_vegas_integrate (&I, xl, xu, 2, calls/10, r, s, &result, &error);
+  //s->stage=1;
+  do
+  {
+  result=0.;
+  error=0.;
+  gsl_monte_vegas_integrate (&I, xl, xu, 2, calls/5, r, s, &result, &error);
+  //cout<<"chisq<< "<<s->chisq<<endl;
+  //s->stage=1;
+  if(s->chisq==0)
+  //gsl_monte_vegas_init(s);
+  break;
+  }
+  while ((fabs (s->chisq - 1.0) > 0.35) ); //w celu uzyskania najwiekszej dokladnosci
+  gsl_monte_vegas_free(s);
+
+  t=clock()-t;
+  cout<<"time TQ: "<<((double)t)/CLOCKS_PER_SEC<<endl;
+  //cout<<result<<endl;
+  return exp(-result);
 }
+
+
 
 void test_delta(const double &kt2, const double & u2)
 {
@@ -55,12 +90,8 @@ void test_delta(const double &kt2, const double & u2)
         throw Blad("nie ma alfy dla takiego u^2", kt2, u2, kt2, u2);
     else
     {
-        double ret=0;
-        double ret1=0;
-        double ret2=0;
         double z=0;
         double delta=0;
-        double tmp=0;
         double pt2=0;
         vector<double>::iterator it=find(u2s.begin(), u2s.end(), kt2);
         if((*test!=u2))
@@ -110,42 +141,13 @@ void cool_down()
     gsl_rng_free(r);
 }
 
-double nTg(const double & kt2, const double & u2)
-{
-    if(kt2>u2)
-        throw Blad("kt^2 wieksze od u^2", kt2, u2, kt2, u2);
-    vector<double>::iterator test=find(u2s.begin(), u2s.end(), u2);
-    if((*test!=u2))
-        throw Blad("nie ma alfy dla takiego u^2", kt2, u2, kt2, u2);
-    else
-    {
-        double ret=0;
-        double ret1=0;
-        double ret2=0;
-        double z=0;
-        double delta=0;
-        double tmp=0;
-        vector<double>::iterator it=find(u2s.begin(), u2s.end(), kt2);
-        if((*test!=u2))
-            throw Blad("nie ma takiego kt^2", kt2, u2, kt2, u2);
-        kt2su.push_back(kt2);
-        u2su.push_back(u2);
-
-        for(int i=0; i<n; i=1)
-
-
-        Tgs.push_back(exp(-ret));
-        return Tgs.back();
-    }
-}
-
 
 double Tg(const double & kt2, const double & u2)
 {
-	  if(kt2>u2)
-	  return 1.;
-    vector<double>::iterator test=find(u2s.begin(), u2s.end(), u2);
-    gsl_rng_set(r, chrono::system_clock::now().time_since_epoch().count());
+  if(kt2>u2)
+  return 1.;
+  vector<double>::iterator test=find(u2s.begin(), u2s.end(), u2);
+  gsl_rng_set(r, chrono::system_clock::now().time_since_epoch().count());
   clock_t t;
   t=clock();
   double result=0., error=0.;		// result and error
@@ -155,27 +157,27 @@ double Tg(const double & kt2, const double & u2)
 
 
   s = gsl_monte_vegas_alloc(2);
-        double xl[2]={kt2, 0.};
-        double xu[2]={u2,1.};
-        gsl_monte_vegas_integrate (&H, xl, xu, 2, calls/10, r, s, &result, &error);
-        //s->stage=1;
-        do
-        {
-            result=0.;
-            error=0.;
-            gsl_monte_vegas_integrate (&H, xl, xu, 2, calls/5, r, s, &result, &error);
-//            cout<<"chisq<< "<<s->chisq<<endl;
-            //s->stage=1;
-            if(s->chisq==0)
-                //gsl_monte_vegas_init(s);
-                break;
-        }
-        while ((fabs (s->chisq - 1.0) > 0.35) ); //w celu uzyskania najwiekszej dokladnosci
-    gsl_monte_vegas_free(s);
+  double xl[2]={kt2, 0.};
+  double xu[2]={u2,1.};
+  gsl_monte_vegas_integrate (&H, xl, xu, 2, calls/10, r, s, &result, &error);
+  //s->stage=1;
+  do
+  {
+  result=0.;
+  error=0.;
+  gsl_monte_vegas_integrate (&H, xl, xu, 2, calls/5, r, s, &result, &error);
+  //cout<<"chisq<< "<<s->chisq<<endl;
+  //s->stage=1;
+  if(s->chisq==0)
+  //gsl_monte_vegas_init(s);
+  break;
+  }
+  while ((fabs (s->chisq - 1.0) > 0.35) ); //w celu uzyskania najwiekszej dokladnosci
+  gsl_monte_vegas_free(s);
 
   t=clock()-t;
   cout<<"time TG: "<<((double)t)/CLOCKS_PER_SEC<<endl;
-//  cout<<result<<endl;
+  //cout<<result<<endl;
   return exp(-result);
 }
 
@@ -183,8 +185,11 @@ double Tg(const double & kt2, const double & u2)
 void warm_up()
 {
   gsl_rng_env_setup ();
+  gsl_rng_set(r, chrono::system_clock::now().time_since_epoch().count());
   H.f=&ftg;
   H.dim=2;
+  I.f=&ftq;
+  I.dim=2;
 }
 
 int find_index_gt(const vector<double> & vec, const double & val)
@@ -252,6 +257,21 @@ inline double totPgg(const double & z)
     else
         return ret;
 }
+
+inline double totPqq(const double & delta, const double & z)
+{
+    if((1.-delta-z)>0)
+    {
+        double ret = Cq*(1+z*z)/(1-z);
+        if(ret!=ret)
+            throw Blad("nan w Pgg!", delta, z, delta, z);
+    else
+        return ret;
+    }
+    else
+        return 0.;
+}
+
 
 inline double Pqg(const double & z)
 {
@@ -476,6 +496,14 @@ double ftg(double *args, size_t dim, void *params)
     //prams := {u2}
     //args := {pt2,z}
     return interpolacja(args[0])/(args[0]*2*M_PI)*(totPgg(args[1])*theta(sqrt(args[0])/(sqrt(args[0])+sqrt(fp->u2)),args[1])+Pqg(args[1]));
+}
+
+double ftq(double *args, size_t dim, void *params)
+{
+    struct pars * fp = (struct pars *)params;
+    //prams := {u2}
+    //args := {pt2,z}
+    return interpolacja(args[0])/(args[0]*2*M_PI)*totPqq(sqrt(args[0])/(sqrt(args[0])+sqrt(fp->u2)),args[1]);
 }
 
 void draw_gluons()
@@ -948,5 +976,3 @@ double fsi(const double & x, const double & kt2, const double & mu2)
 {
     return (fsid(x,kt2+h,mu2)-fsid(x,kt2-h,mu2))/(2*h);
 }
-
-ARTUR

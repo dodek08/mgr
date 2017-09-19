@@ -41,7 +41,7 @@
 #define lambda0 1.
 #define Cg 3. //casimir gluony
 
-#define Cq 1.333333 //casimir kwarki
+#define Cq 1.333333 //casimir kwarki, jednoczesnie Cf
 
 //do rozkladow kwarkow
 #define Ns  0.107
@@ -65,6 +65,7 @@ using namespace std;
 double theta(const double & delta, const double & z); //wykorzystane funkcje Heaviside'a do ulepszenia
 inline double Pgg(const double & z);    // Pgg Kimber 1.41
 inline double totPgg(const double & z);    // Pgg Kimber 1.41
+inline double totPqq(const double & delta, const double & z);    // Pqq notatki Marcina
 inline double Pqg(const double & z);    // Pqg Kimber 1.43
 double interpolacja(const double & kt2);
 int find_index_gt(const vector<double> & vec, const double& val); // funkcja pomocnicza do wyszukiwania indeksow
@@ -88,6 +89,7 @@ void draw_gluons();
 ///czesc gsl
 //pair<double,double>TG(const double & kt2, const double & u2); // funkcja do wywolania, (result,error) blad wyznaczenia to srednia wazona bledow
 double ftg(double *args, size_t dim, void *params); //funkcja wymagana przez biblioteke
+double ftq(double *args, size_t dim, void *params); //funkcja wymagana przez biblioteke
 void warm_up(); //ustawia generator i strukture do calkowania z gsl
 void cool_down(); //uwalnia pamiec
 struct pars {double u2; }; // co dac jako parametr jak calkuje sie po wszystkim? nullptr! czyli 0, wtedy tylko trzeba go w funkcji zwracajacej double przekazywanej do gsl_monte_function np zrzutowac na void, zeby nie bylo, ze sie nie uzywa zmiennej. Ale to akurat nie ten przypadek, ze wzgledu na delte trzeba przekazac u2
