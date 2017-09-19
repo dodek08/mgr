@@ -61,7 +61,6 @@
 
 using namespace std;
 
-//class Sudakov_g{
 double theta(const double & delta, const double & z); //wykorzystane funkcje Heaviside'a do ulepszenia
 inline double Pgg(const double & z);    // Pgg Kimber 1.41
 inline double totPgg(const double & z);    // Pgg Kimber 1.41
@@ -69,34 +68,19 @@ inline double totPqq(const double & delta, const double & z);    // Pqq notatki 
 inline double Pqg(const double & z);    // Pqg Kimber 1.43
 double interpolacja(const double & kt2);
 int find_index_gt(const vector<double> & vec, const double& val); // funkcja pomocnicza do wyszukiwania indeksow
-//public:
-double Tg2(const double & kt2, const double & u2);//liczenie czyste MC
 double Tg(const double & kt2, const double & u2); // liczenie prawidłowe
-double Tgt(const double & kt2, const double & u2); // liczenie "kombinowane" z trapezami i rozpisane na czesci
-double Integrand_as_2(const double & kt2, const double & u2); // calka z as_2 w podanych granicach liczona trapezami
-//vector<double> u2s; //dostepne wartosci u2 z pliku
-//vector<double> Tgs; //wektor wyliczonych Tg
-//vector<double> kt2su; //wektor wykorzystanych kt2
-//vector<double> u2su; //wektor wykorzystanych u2
-//map<double,double> as_2; //mapa przechowujaca as_2(u^2)
+double Tq(const double &, const double &);
 void read_alphas(); //wczytuje plik z as_2(u^2) o nazwie "CTEQ10_alphas_2.dat"
 void make_lattice(); // robi siatke jeszcze nie dziala
-//int n=100000; //liczba iteracji
-double calka_test(const double & lx, const double & ux, const double & ly, const double & uy);
 void test_delta(const double &kt2, const double & u2);
 void draw_gluons();
 
 ///czesc gsl
-//pair<double,double>TG(const double & kt2, const double & u2); // funkcja do wywolania, (result,error) blad wyznaczenia to srednia wazona bledow
 double ftg(double *args, size_t dim, void *params); //funkcja wymagana przez biblioteke
 double ftq(double *args, size_t dim, void *params); //funkcja wymagana przez biblioteke
 void warm_up(); //ustawia generator i strukture do calkowania z gsl
 void cool_down(); //uwalnia pamiec
 struct pars {double u2; }; // co dac jako parametr jak calkuje sie po wszystkim? nullptr! czyli 0, wtedy tylko trzeba go w funkcji zwracajacej double przekazywanej do gsl_monte_function np zrzutowac na void, zeby nie bylo, ze sie nie uzywa zmiennej. Ale to akurat nie ten przypadek, ze wzgledu na delte trzeba przekazac u2
-//size_t calls = 10000; //dla beki liczba iteracji
-//gsl_monte_function H;
-//};
-
 
 //czesc do rozkladow
 
@@ -129,8 +113,5 @@ double fsi(const double &, const double &, const double &);
 double fu(const double &, const double &, const double &);
 double fd(const double &, const double &, const double &);
 double fs(const double &, const double &, const double &);
-
-
-double Tq(const double &, const double &);
 
 #endif
