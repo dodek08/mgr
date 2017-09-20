@@ -25,7 +25,7 @@ double h=0.1;
 
 double Tq(const double & kt2, const double & u2)
 {
-  if(kt2>u2)
+  if(kt2>=u2)
   return 1.;
   clock_t t;
   t=clock();
@@ -137,7 +137,7 @@ void cool_down()
 
 double Tg(const double & kt2, const double & u2)
 {
-  if(kt2>u2)
+  if(kt2>=u2)
   return 1.;
   vector<double>::iterator test=find(u2s.begin(), u2s.end(), u2);
   // gsl_rng_set(r, chrono::system_clock::now().time_since_epoch().count());
@@ -229,7 +229,7 @@ double theta(const double & delta, const double & z)
 
 inline double Pgg(const double & z)
 {
-    double ret = 6*(z*(1-z)+(1-z)/z+z/(1-z));
+    double ret = 6.*(z*(1-z)+(1-z)/z+z/(1-z));
     if(ret!=ret)
         throw Blad("nan w Pgg!", z, z, z, z);
     else
@@ -252,7 +252,7 @@ inline double totPqq(const double & delta, const double & z)
     {
         double ret = Cq*(1+z*z)/(1-z);
         if(ret!=ret)
-            throw Blad("nan w Pgg!", delta, z, delta, z);
+            throw Blad("nan w totPqq!", delta, z, delta, z);
     else
         return ret;
     }
@@ -301,7 +301,7 @@ double ftg(double *args, size_t dim, void *params)
     struct pars * fp = (struct pars *)params;
     //prams := {u2}
     //args := {pt2,z}
-    return interpolacja(args[0])/(args[0]*2*M_PI)*(totPgg(args[1])*theta(sqrt(args[0])/(sqrt(args[0])+sqrt(fp->u2)),args[1])+Pqg(args[1]));
+    return interpolacja(args[0])/(args[0]*2*M_PI)*(totPgg(args[1])*theta(sqrt(args[0])/(sqrt(args[0])+sqrt(fp->u2)),args[1])+5.0*Pqg(args[1]));
 }
 
 double ftq(double *args, size_t dim, void *params)
@@ -315,9 +315,7 @@ double ftq(double *args, size_t dim, void *params)
 void draw_gluons()
 {
     vector<double> kt2s={
-714285.715501964,
-1428571.42977893,
-2142857.14405589
+        1.689999
     };
     vector<double> xs={
     0.99,
@@ -325,27 +323,56 @@ void draw_gluons()
 0.9570000333
     };
     vector<double> mu2s={
-    1.69,
-833335.00925,
-1666668.3285
-    };
+    1.689999,
+1.819711834,
+1.959380543,
+2.109769272,
+2.271700818,
+2.446061129,
+2.633804151,
+2.835957052,
+3.053625835,
+3.288001394,
+3.540366027,
+3.812100454,
+4.104691368,
+4.419739572,
+4.758968734,
+5.124234819,
+5.517536247,
+5.941024818,
+6.397017493,
+6.888009065,
+7.416685813,
+7.985940193,
+8.598886669,
+9.25887875,
+9.969527336,
+10.73472048,
+11.55864464,
+12.44580762,
+13.4010632,
+14.4296377,
+15.53715859,
+
+        };
     fstream save;
-    string NAZWA="fragment_u";
+    string NAZWA="fragment_tg_10";
 
     save.open(NAZWA,ios::out);
 
-    for(double & x : xs)
-    {
+    // for(double & x : xs)
+    // {
     for(double & val : kt2s)
         {
         for(double & mu2:mu2s)
             {
-            save<<x<<"\t"<<val<<"\t"<<mu2<<"\t"<<fu(x,val,mu2)<<endl;
-            cout<<x<<"\t"<<val<<"\t"<<mu2<<endl;
+            save<<val<<"\t"<<mu2<<"\t"<<Tg(val,mu2)<<endl;
+            cout/*<<x*/<<"\t"<<val<<"\t"<<mu2<<endl;
             }
         }
-        cout<<NAZWA<<"\t"<<x<<endl;
-    }
+        cout<<NAZWA<<"\t"/*<<x*/<<endl;
+    // }
 
     save.close();
 }
