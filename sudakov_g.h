@@ -32,6 +32,7 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_monte.h>
 
+#include "LHAPDF/LHAPDF.h"
 
 
 //przyspieszenie obliczen dla rozkladu z Kimber 3.22
@@ -73,7 +74,6 @@ double Tg(const double & kt2, const double & u2); // liczenie prawidłowe
 double Tq(const double &, const double &);
 void read_alphas(); //wczytuje plik z as_2(u^2) o nazwie "CTEQ10_alphas_2.dat"
 void test_delta(const double &kt2, const double & u2); //testuje dzialanie theta
-void draw_gluons(); //wylicza kilkadziesiat punktow z rozkladu gluonów
 
 ///czesc gsl
 double ftg(double *args, size_t dim, void *params); //funkcja wymagana przez biblioteke
@@ -81,37 +81,5 @@ double ftq(double *args, size_t dim, void *params); //funkcja wymagana przez bib
 void warm_up(); //ustawia generator i strukture do calkowania z gsl
 void cool_down(); //uwalnia pamiec
 struct pars {double u2; }; // co dac jako parametr jak calkuje sie po wszystkim? nullptr! czyli 0, wtedy tylko trzeba go w funkcji zwracajacej double przekazywanej do gsl_monte_function np zrzutowac na void, zeby nie bylo, ze sie nie uzywa zmiennej. Ale to akurat nie ten przypadek, ze wzgledu na delte trzeba przekazac u2
-
-//czesc do rozkladow
-
-double a(const double &, const double &);
-double fad(const double &, const double &, const double &);
-double fa(const double &, const double &, const double &);
-//void draw(const double & x, const double & mu2, const double & kt2ul);
-
-double ui(const double &, const double &);
-double di(const double &, const double &);
-double si(const double &, const double &);
-
-double u(const double &, const double &);
-double d(const double &, const double &);
-double ss(const double &, const double &);
-
-
-double fuid(const double &, const double &, const double &);
-double fdid(const double &, const double &, const double &);
-double fsid(const double &, const double &, const double &);
-
-double fud(const double &, const double &, const double &);
-double fdd(const double &, const double &, const double &);
-double fsd(const double &, const double &, const double &);
-
-double fui(const double &, const double &, const double &);
-double fdi(const double &, const double &, const double &);
-double fsi(const double &, const double &, const double &);
-
-double fu(const double &, const double &, const double &);
-double fd(const double &, const double &, const double &);
-double fs(const double &, const double &, const double &);
 
 #endif

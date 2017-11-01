@@ -20,8 +20,8 @@ vector<double> kt2su; //wektor wykorzystanych kt2
 vector<double> u2su; //wektor wykorzystanych u2
 map<double,double> as_2;//mapa przechowujaca as_2(u^2)
 size_t calls = 1000000; // liczba iteracji
-double h=0.1;
 
+const LHAPDF::PDF* pdf = LHAPDF::mkPDF("CT10nlo", 0); //wazne!
 
 double Tq(const double & kt2, const double & u2)
 {
@@ -137,12 +137,14 @@ void cool_down()
 
 double Tg(const double & kt2, const double & u2)
 {
+
+    //zaimplementowac przyblizenie dla malych mu2
   if(kt2>=u2)
   return 1.;
   vector<double>::iterator test=find(u2s.begin(), u2s.end(), u2);
   // gsl_rng_set(r, chrono::system_clock::now().time_since_epoch().count());
-  clock_t t;
-  t=clock();
+  // clock_t t;
+  // t=clock();
   double result=0., error=0.;		// result and error
   struct pars pms={u2};
   H.params=&pms;
@@ -165,8 +167,8 @@ double Tg(const double & kt2, const double & u2)
   while ((fabs (s->chisq - 1.0) > 0.35) ); //w celu uzyskania najwiekszej dokladnosci
   gsl_monte_vegas_free(s);
 
-  t=clock()-t;
-  cout<<"time TG: "<<((double)t)/CLOCKS_PER_SEC<<endl;
+  // t=clock()-t;
+  // cout<<"time TG: "<<((double)t)/CLOCKS_PER_SEC<<endl;
   //cout<<result<<endl;
   return exp(-result);
 }
@@ -287,12 +289,14 @@ void read_alphas()
 double interpolacja(const double & kt2)
 {
 //      interpolacja liniowa
-    int index = find_index_gt(u2s,kt2);
-    double x1=u2s[index];
-    double x2=u2s[index-1];
-    double y1=as_2[x1];
-    double y2=as_2[x2];
-    return y1+(y2-y1)/(x2-x1)*(kt2-x1);
+    // int index = find_index_gt(u2s,kt2);
+    // double x1=u2s[index];
+    // double x2=u2s[index-1];
+    // double y1=as_2[x1];
+    // double y2=as_2[x2];
+    // return y1+(y2-y1)/(x2-x1)*(kt2-x1);
+      return pdf->alphasQ2(kt2); // odpowiednie as_2
+
 }
 
 
@@ -301,7 +305,7 @@ double ftg(double *args, size_t dim, void *params)
     struct pars * fp = (struct pars *)params;
     //prams := {u2}
     //args := {pt2,z}
-    return interpolacja(args[0])/(args[0]*2*M_PI)*(totPgg(args[1])*theta(sqrt(args[0])/(sqrt(args[0])+sqrt(fp->u2)),args[1])+5.0*Pqg(args[1]));
+    return interpolacja(args[0])/(args[0]*2*M_PI)*(args[1]*totPgg(args[1])*theta(sqrt(args[0])/(sqrt(args[0])+sqrt(fp->u2)),args[1])+5.0*Pqg(args[1]));
 }
 
 double ftq(double *args, size_t dim, void *params)
@@ -310,184 +314,4 @@ double ftq(double *args, size_t dim, void *params)
     //prams := {u2}
     //args := {pt2,z}
     return interpolacja(args[0])/(args[0]*2*M_PI)*totPqq(sqrt(args[0])/(sqrt(args[0])+sqrt(fp->u2)),args[1]);
-}
-
-void draw_gluons()
-{
-    vector<double> kt2s={
-        1.689999
-    };
-    vector<double> xs={
-    0.99,
-0.9735000167,
-0.9570000333
-    };
-    vector<double> mu2s={
-    1.689999,
-1.819711834,
-1.959380543,
-2.109769272,
-2.271700818,
-2.446061129,
-2.633804151,
-2.835957052,
-3.053625835,
-3.288001394,
-3.540366027,
-3.812100454,
-4.104691368,
-4.419739572,
-4.758968734,
-5.124234819,
-5.517536247,
-5.941024818,
-6.397017493,
-6.888009065,
-7.416685813,
-7.985940193,
-8.598886669,
-9.25887875,
-9.969527336,
-10.73472048,
-11.55864464,
-12.44580762,
-13.4010632,
-14.4296377,
-15.53715859,
-
-        };
-    fstream save;
-    string NAZWA="fragment_tg_10";
-
-    save.open(NAZWA,ios::out);
-
-    // for(double & x : xs)
-    // {
-    for(double & val : kt2s)
-        {
-        for(double & mu2:mu2s)
-            {
-            save<<val<<"\t"<<mu2<<"\t"<<Tg(val,mu2)<<endl;
-            cout/*<<x*/<<"\t"<<val<<"\t"<<mu2<<endl;
-            }
-        }
-        cout<<NAZWA<<"\t"/*<<x*/<<endl;
-    // }
-
-    save.close();
-}
-
-double a(const double & x, const double & kt2)
-{
-    return Ng*pow(x,-lambdag)*pow((1-x),Bg)*log(kt2/lambda0);
-}
-
-double fad(const double & x, const double & la2, const double & mu2)
-{
-    return a(x,la2)*Tg(la2,mu2);
-}
-
-double fa(const double & x, const double & kt2, const double & mu2)
-{
-    return (fad(x,kt2+h,mu2)-fad(x,kt2-h,mu2))/(2*h);
-}
-
-double ui(const double & x, const double & kt2)
-{
-    return 2*Ns*pow(x,-lambdas)*pow((1-x),betas)*log(kt2/lambda0);
-}
-
-double di(const double & x, const double & kt2)
-{
-    return 2*Ns*pow(x,-lambdas)*pow((1-x),betas)*log(kt2/lambda0);
-}
-
-double si(const double & x, const double & kt2)
-{
-    return Ns*pow(x,-lambdas)*pow((1-x),betas)*log(kt2/lambda0);
-}
-
-double u(const double & x, const double & kt2)
-{
-    return ui(x,kt2)+Nu*pow(x,alfau)*pow((1-x),betau)*log(kt2/lambda0);
-}
-
-double d(const double & x, const double & kt2)
-{
-    return di(x,kt2)+Nd*pow(x,alfad)*pow((1-x),betad)*log(kt2/lambda0);
-}
-
-double ss(const double & x, const double & kt2)
-{
-    return si(x,kt2);
-}
-
-double fuid(const double & x, const double & la2, const double & mu2)
-{
-    return ui(x,la2)*Tq(la2,mu2);
-}
-
-double fdid(const double & x, const double & la2, const double & mu2)
-{
-    return di(x,la2)*Tq(la2,mu2);
-}
-
-double fsid(const double & x, const double & la2, const double & mu2)
-{
-    return si(x,la2)*Tq(la2,mu2);
-}
-
-double fdd(const double & x, const double & la2, const double & mu2)
-{
-    return d(x,la2)*Tq(la2,mu2);
-}
-
-double fud(const double & x, const double & la2, const double & mu2)
-{
-    return u(x,la2)*Tq(la2,mu2);
-}
-
-double fsd(const double & x, const double & la2, const double & mu2)
-{
-    return ss(x,la2)*Tq(la2,mu2);
-}
-
-//double GluonDF::pochodna(double (GluonDF::*ff)(const double &, const double &, const double &), const double & x, const double & kt2, const double & mu2)
-//{
-//        return ((this->ff)(x,kt2+h,mu2)-(this_>ff)(x,kt2-h,mu2))/(2*h);
-//}
-
-double fu(const double & x, const double & kt2, const double & mu2)
-{
-    return (fud(x,kt2+h,mu2)-fud(x,kt2-h,mu2))/(2*h);
-}
-
-
-double fd(const double & x, const double & kt2, const double & mu2)
-{
-    return (fdd(x,kt2+h,mu2)-fdd(x,kt2-h,mu2))/(2*h);
-}
-
-
-double fs(const double & x, const double & kt2, const double & mu2)
-{
-    return (fsd(x,kt2+h,mu2)-fsd(x,kt2-h,mu2))/(2*h);
-}
-
-
-double fui(const double & x, const double & kt2, const double & mu2)
-{
-    return (fuid(x,kt2+h,mu2)-fuid(x,kt2-h,mu2))/(2*h);
-}
-
-
-double fdi(const double & x, const double & kt2, const double & mu2)
-{
-    return (fdid(x,kt2+h,mu2)-fdid(x,kt2-h,mu2))/(2*h);
-}
-
-
-double fsi(const double & x, const double & kt2, const double & mu2)
-{
-    return (fsid(x,kt2+h,mu2)-fsid(x,kt2-h,mu2))/(2*h);
 }
