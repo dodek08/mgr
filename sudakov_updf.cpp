@@ -507,7 +507,7 @@ void draw_gluons()
     save.close();
 }
 
-void draw_gluons()
+void draw_quarks_sudakov_factor();
 {
     vector<double> kt2s={
         0.001225,
@@ -554,7 +554,7 @@ void draw_gluons()
 29285714.2865805,
 30000000.0008575,
 30714285.7151345,
-31428571.429411,4
+31428571.4294114,
 32142857.1436884,
 32857142.8579654,
 33571428.5722423,
@@ -848,7 +848,8 @@ void draw_gluons()
     string NAZWA="siatkaTQ";
 
     save.open(NAZWA,ios::out);
-    clock_t t,tt;
+    clock_t t;
+    clock_t tt;
     t=clock();
     // for(double & x : xs)
     // {

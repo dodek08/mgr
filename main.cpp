@@ -11,7 +11,7 @@ int main()
         /*Obj.*/read_alphas();
         clock_t start = clock();
         cout<<setprecision(10)<<endl;
-        draw_gluons();
+        draw_quarks_sudakov_factor();
         cout << "Czas wykonywania: " << (double)(clock()-start)/(CLOCKS_PER_SEC) << "sek" << endl;
         cool_down();
     }
