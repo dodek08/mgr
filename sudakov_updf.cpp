@@ -855,16 +855,15 @@ void draw_quarks_sudakov_factor()
     // {
     int licznik=0;
     for(double & val : kt2s)
-        {
+        {                
+        tt=clock();
         for(double & mu2:mu2s)
             {
-                tt=clock();
             save/*<<x*/<<"\t"<<val<<"\t"<<mu2<<"\t"<<Tq(val,mu2)<<endl;
             cout<<licznik++<<"\t"<<val<<"\t"<<mu2<<"\t"<<Tq(val,mu2)<<endl;
-                tt=clock()-tt;
-                cout<<"time sigma mu: "<<((double)tt)/CLOCKS_PER_SEC<<endl;
             }
-
+        tt=clock()-tt;
+        cout<<"time sigma mu: "<<((double)tt)/CLOCKS_PER_SEC<<endl;
         }
         cout<<NAZWA/*<<"\t"<<x*/<<endl;
     // } 
