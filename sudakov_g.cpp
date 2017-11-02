@@ -27,8 +27,8 @@ double Tq(const double & kt2, const double & u2)
 {
   if(kt2>=u2)
   return 1.;
-  clock_t t;
-  t=clock();
+  // clock_t t;
+  // t=clock();
   double result=0., error=0.;       // result and error
   struct pars pms={u2};
   I.params=&pms;
@@ -51,8 +51,8 @@ double Tq(const double & kt2, const double & u2)
   while ((fabs (s->chisq - 1.0) > 0.35) ); //w celu uzyskania najwiekszej dokladnosci
   gsl_monte_vegas_free(s);
 
-  t=clock()-t;
-  cout<<"time TQ: "<<((double)t)/CLOCKS_PER_SEC<<endl;
+  // t=clock()-t;
+  // cout<<"time TQ: "<<((double)t)/CLOCKS_PER_SEC<<endl;
   //cout<<result<<endl;
   return exp(-result);
 }
