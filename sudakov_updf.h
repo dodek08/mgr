@@ -66,6 +66,7 @@ using namespace std;
 //czesc do rozkladow
 
 void draw_gluons(); //wylicza kilkadziesiat punktow z rozkladu gluonów
+void draw_quarks_sudakov_factor();
 
 double a(const double &, const double &);
 double fad(const double &, const double &, const double &);
