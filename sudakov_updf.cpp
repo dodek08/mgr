@@ -507,7 +507,7 @@ void draw_gluons()
     save.close();
 }
 
-void draw_quarks_sudakov_factor();
+void draw_quarks_sudakov_factor()
 {
     vector<double> kt2s={
         0.001225,
@@ -872,7 +872,7 @@ void draw_quarks_sudakov_factor();
     t=clock()-t;
     cout<<"time TQ: "<<((double)t)/CLOCKS_PER_SEC<<endl;
     save.close();
-
+}
 
 double a(const double & x, const double & kt2)
 {
