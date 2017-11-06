@@ -9,6 +9,7 @@ int main()
         /*Sudakov_g Obj;
         Obj.*/warm_up();
         /*Obj.*/read_alphas();
+        read_Ts();
         clock_t start = clock();
         cout<<setprecision(10)<<endl;
         draw_gluons();

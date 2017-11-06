@@ -66,6 +66,9 @@ using namespace std;
 //czesc do rozkladow
 
 void draw_gluons(); //wylicza kilkadziesiat punktow z rozkladu gluonów
+void read_Ts();
+
+double Tgs(const double & kt2, const double & mu2);
 
 double a(const double &, const double &);
 double fad(const double &, const double &, const double &);

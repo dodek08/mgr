@@ -190,11 +190,9 @@ int find_index_gt(const vector<double> & vec, const double & val)
     int right=size+1;
     int left=0;
     int index=(right+left)/2;
-    //cout<<val<<" "<<vec.size()<<endl;
     bool not_match=true;
     while(not_match)
     {
-        //cout<<index<<endl;
         index=(right+left)/2;
         if (vec[index]>=val and vec[index-1]<val)
             {
