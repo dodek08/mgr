@@ -812,16 +812,6 @@ double fad(const double & x, const double & la2, const double & mu2)
     return pdfs->xfxQ2(21,x,la2)*Tgs(la2,mu2);
 }
 
-double fa(const double & x, const double & kt2, const double & mu2)
-{
-    if(sqrt(kt2)<sqrt(mu0))
-	{
-		return pdfs->xfxQ2(21,x,mu0)*Tqs(mu0,mu2);
-	}
-	else
-    return (fad(x,kt2+h,mu2)-fad(x,kt2-h,mu2))/(2*h);
-}
-
 double ui(const double & x, const double & kt2)
 {
     // return 2*Ns*pow(x,-lambdas)*pow((1-x),betas)*log(kt2/lambda0);
@@ -886,6 +876,16 @@ double fud(const double & x, const double & la2, const double & mu2)
 double fsd(const double & x, const double & la2, const double & mu2)
 {
     return pdfs->xfxQ2(3,x,la2)*Tqs(la2,mu2);
+}
+
+double fa(const double & x, const double & kt2, const double & mu2)
+{
+    if(sqrt(kt2)<sqrt(mu0))
+    {
+        return pdfs->xfxQ2(21,x,mu0)*Tqs(mu0,mu2);
+    }
+    else
+    return (fad(x,kt2+h,mu2)-fad(x,kt2-h,mu2))/(2*h);
 }
 
 double fu(const double & x, const double & kt2, const double & mu2)
