@@ -34,6 +34,8 @@
 #include <gsl/gsl_monte.h>
 
 #include "LHAPDF/LHAPDF.h"
+// #include "LHAPDFWrap.h"
+
 
 
 //przyspieszenie obliczen dla rozkladu z Kimber 3.22
@@ -69,6 +71,7 @@ void draw_gluons(); //wylicza kilkadziesiat punktow z rozkladu gluonów
 void read_Ts();
 
 double Tgs(const double & kt2, const double & mu2);
+double Tqs(const double & kt2, const double & mu2);
 
 double a(const double &, const double &);
 double fad(const double &, const double &, const double &);

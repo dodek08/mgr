@@ -21,7 +21,9 @@ vector<double> u2su; //wektor wykorzystanych u2
 map<double,double> as_2;//mapa przechowujaca as_2(u^2)
 size_t calls = 1000000; // liczba iteracji
 
-const LHAPDF::PDF* pdf = LHAPDF::mkPDF("CT10nlo", 0); //wazne!
+// const LHAPDF::PDF* pdf = LHAPDF::mkPDF("CT10nlo", 0); //wazne!
+const LHAPDF::PDF* pdf = LHAPDF::mkPDF("CT10nlo", 0);
+
 
 double Tq(const double & kt2, const double & u2)
 {
