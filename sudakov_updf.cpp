@@ -240,7 +240,7 @@ void draw_gluons()
 
 //kod od marcina generujacy siatke
 
-    double MINX = 1.0e-6;
+ double MINX = 1.0e-6;
 double MAXX = 0.99;
 double MINKT2 = pow( 0.035, 2.0) ;
 double MAXKT2 = pow( 1.0e4, 2.0 );
@@ -263,18 +263,30 @@ NMU2 = 120;
 DX = ( MAXLOGX - MINLOGX ) / NX;
 DKT2 = ( MAXLOGKT2 - MINLOGKT2 ) / NKT2;
 DMU2 = ( MAXLOGMU2 - MINLOGMU2 ) / NMU2;
+double logx;
+double logkt2;
+double logmu2;
+double x;
+double kt2;
+double mu2;
+
+
 
 for( int ix=0; ix<NX+1; ix++ ){
-  double logx = MINLOGX + ix*DX;
-  cout<< setprecision(8) <<logx<<"\t"<<exp(logx)<<endl;
-  // for( int ikt2=0; ikt2<NKT2+1; ikt2++ ){
-  //   double logkt2 = MINLOGKT2 + ikt2*DKT2;
-  //   for( int imu2=0; imu2<NMU2+1; imu2++ ){
-  //    double logmu2 = MINLOGMU2 + imu2*DMU2;
-        // save<<logx<<"\t"<<logkt2<<"\t"<<logmu2<<"\t"<<fa(log(logx),log(logkt2),log(logmu2))<<endl;
-        // cout<<logx<<"\t"<<logkt2<<"\t"<<logmu2<<endl;
-        // }
-    // }
+  logx = MINLOGX + ix*DX;
+  x = exp(logx);
+  for( int ikt2=0; ikt2<NKT2+1; ikt2++ ){
+    logkt2 = MINLOGKT2 + ikt2*DKT2;
+        kt2 = exp(logkt2);
+        t=clock();
+    for( int imu2=0; imu2<NMU2+1; imu2++ ){
+     logmu2 = MINLOGMU2 + imu2*DMU2;
+        mu2 = exp(logmu2);
+     
+            save<<x<<"\t"<<kt2<<"\t"<<mu2<<"\t"<<Tg(kt2,mu2)<<endl;
+        }
+        cout << "time sigma kt2 " << (double)(clock()-t)/(CLOCKS_PER_SEC) << "sek" << endl;
+    }
 }
 
 // double XTMP=exp(-13.815511);
