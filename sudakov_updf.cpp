@@ -7,7 +7,7 @@
 double h=0.001; //przy rozniczkowaniu numerycznym
 const LHAPDF::PDF* pdfs = LHAPDF::mkPDF("CT10nlo", 0); //wazne!
 
-double mu0 = 1.79;/*LHAPDF::mkPDF("CT10nlo", 0)->q2Min();*/
+double mu0 = LHAPDF::mkPDF("CT10nlo", 0)->q2Min()+0.1;
 
 multimap<tuple<double,double>,double> TG;
 multimap<tuple<double,double>,double> TQ;
@@ -177,7 +177,7 @@ double Tqs(const double & kt2, const double & mu2)
 double Tgs(const double & kt2, const double & mu2)
 {
     if(mu2<XMIN or mu2>XMAX)
-        throw Blad("out of range w fg",mu2,kt2,0.,0.);
+        throw Blad("out of range w Tg",mu2,kt2,XMIN,XMAX);
     int tab[3]={0}; //table of indexes
     //unsigned int i=1;
 
@@ -225,328 +225,7 @@ double Tgs(const double & kt2, const double & mu2)
 
 void draw_gluons()
 {
-    /*vector<double> kt2s={
-        0.001225,
-0.00146581,
-0.00175396,
-0.00209875,
-0.00251133,
-0.00300501,
-0.00359573,
-0.00430258,
-0.00514839,
-0.00616046,
-0.00737148,
-0.00882057,
-0.0105545,
-0.0126293,
-0.015112,
-0.0180827,
-0.0216375,
-0.025891,
-0.0309806,
-0.0370708,
-0.0443582,
-0.0530781,
-0.0635123,
-0.0759975,
-0.0909371,
-0.108814,
-0.130204,
-0.1558,
-0.186427,
-0.223075,
-0.266927,
-0.3194,
-0.382187,
-0.457318,
-0.547218,
-0.65479,
-0.783509,
-0.937531,
-1.12183,
-1.34236,
-1.60624,
-1.922,
-2.29983,
-2.75193,
-3.2929,
-3.94022,
-4.71479,
-5.64163,
-6.75067,
-8.07771,
-9.66563,
-11.5657,
-13.8393,
-16.5598,
-19.8152,
-23.7104,
-28.3715,
-33.9487,
-40.6224,
-48.608,
-58.1633,
-69.5971,
-83.2785,
-99.6494,
-119.239,
-142.679,
-170.726,
-204.288,
-244.447,
-292.5,
-350,
-418.803,
-501.132,
-599.644,
-717.523,
-858.574,
-1027.35,
-1229.31,
-1470.97,
-1760.13,
-2106.14,
-2520.16,
-3015.58,
-3608.38,
-4317.72,
-5166.5,
-6182.13,
-7397.42,
-8851.6,
-10591.7,
-12673.8,
-15165.2,
-18146.4,
-21713.6,
-25982,
-31089.6,
-37201.2,
-44514.2,
-53264.9,
-63735.7,
-76264.9,
-91257.1,
-109196,
-130662,
-156348,
-187083,
-223860,
-267866,
-320523,
-383532,
-458927,
-549143,
-657094,
-786266,
-940829,
-1.12578e+06,
-1.34708e+06,
-1.61189e+06,
-1.92876e+06,
-2.30792e+06,
-2.76161e+06,
-3.30449e+06,
-3.95409e+06,
-4.73138e+06,
-5.66148e+06,
-6.77441e+06,
-8.10613e+06,
-9.69964e+06,
-1.16064e+07,
-1.3888e+07,
-1.66181e+07,
-1.98849e+07,
-2.37939e+07,
-2.84713e+07,
-3.40682e+07,
-4.07653e+07,
-4.87789e+07,
-5.83679e+07,
-6.98419e+07,
-8.35715e+07,
-// 1e+08
-    };
-    vector<double> xs={
     
-    5e-06,
-6.38122e-06,
-8.14398e-06,
-1.03937e-05,
-1.32649e-05,
-1.69292e-05,
-2.16058e-05,
-2.75742e-05,
-3.51914e-05,
-4.49127e-05,
-5.73196e-05,
-7.31537e-05,
-9.33619e-05,
-0.000119152,
-0.000152067,
-0.000194075,
-0.000247687,
-0.000316108,
-0.000403431,
-0.000514876,
-0.000657107,
-0.000838628,
-0.00107029,
-0.00136595,
-0.00174329,
-0.00222486,
-0.00283946,
-0.00362384,
-0.0046249,
-0.0059025,
-0.00753302,
-0.00961396,
-0.0122697,
-0.0156592,
-0.0199849,
-0.0255056,
-0.0325513,
-0.0415434,
-0.0530195,
-0.0676657,
-0.0863579,
-0.110214,
-0.140659,
-0.179516,
-0.229105,
-0.292394,
-0.373166,
-0.47625,
-0.607811,
-0.775714,
-0.99
-    
-    };
-    vector<double> mu2s={
-    1.79,
-2.07689,
-2.40975,
-2.79596,
-3.24408,
-3.76401,
-4.36727,
-5.06722,
-5.87935,
-6.82164,
-7.91496,
-9.1835,
-10.6553,
-12.3631,
-14.3445,
-16.6436,
-19.3111,
-22.4061,
-25.9971,
-30.1637,
-34.9981,
-40.6073,
-47.1154,
-54.6667,
-63.4282,
-73.5939,
-85.3889,
-99.0743,
-114.953,
-133.377,
-154.753,
-179.556,
-208.333,
-241.723,
-280.465,
-325.415,
-377.57,
-438.083,
-508.295,
-589.761,
-684.282,
-793.953,
-921.201,
-1068.84,
-1240.15,
-1438.91,
-1669.52,
-1937.1,
-2247.56,
-2607.78,
-3025.74,
-3510.67,
-4073.33,
-4726.17,
-5483.64,
-6362.51,
-7382.24,
-8565.4,
-9938.19,
-11531,
-13379.1,
-15523.4,
-18011.3,
-20898,
-24247.4,
-28133.5,
-32642.5,
-37874.2,
-43944.3,
-50987.4,
-59159.2,
-68640.7,
-79641.9,
-92406.2,
-107216,
-124400,
-144338,
-167471,
-194312,
-225454,
-261588,
-303513,
-352157,
-408598,
-474085,
-550067,
-638227,
-740516,
-859200,
-996905,
-1.15668e+06,
-1.34206e+06,
-1.55716e+06,
-1.80672e+06,
-2.09629e+06,
-2.43227e+06,
-2.82209e+06,
-3.27439e+06,
-3.79918e+06,
-4.40808e+06,
-5.11457e+06,
-5.93428e+06,
-6.88538e+06,
-7.98891e+06,
-9.26931e+06,
-1.07549e+07,
-1.24786e+07,
-1.44786e+07,
-1.67991e+07,
-1.94915e+07,
-2.26154e+07,
-2.624e+07,
-3.04455e+07,
-3.53251e+07,
-4.09867e+07,
-4.75556e+07,
-5.51775e+07,
-6.40208e+07,
-7.42815e+07,
-8.61867e+07,
-1e+08
-        };
-    */       
    cout<<mu0<<endl;
     string NAZWA = "siatki/GLUON_test_";
     stringstream stream;
@@ -598,18 +277,15 @@ for( int ix=0; ix<NX+1; ix++ ){
     // }
 }
 
-double XTMP=exp(-13.815511);
-double KT2TMP=exp(-6.7048144);
+// double XTMP=exp(-13.815511);
+// double KT2TMP=exp(-6.7048144);
 
- cout<<Tg(KT2TMP, 0.58221562)<<endl;
- cout<<Tg(KT2TMP, 2.3660621)<<endl;
- cout<<Tg(KT2TMP, 4.1499086)<<endl;
-
-
-
-
-
-
+//  cout<<fa(XTMP, KT2TMP, exp(0.58221562))<<endl;
+//  cout<<fa(XTMP, KT2TMP, exp(2.3660621))<<endl;
+//  cout<<fa(XTMP, KT2TMP, exp(4.1499086))<<endl;
+// double XTMP=exp(-0.010050336);
+// double KT2TMP=exp(15.908131);
+// cout<<fa(XTMP, KT2TMP, exp(14.852988))<<endl;
 
 
 
@@ -803,7 +479,7 @@ double KT2TMP=exp(-6.7048144);
 double a(const double & x, const double & kt2)
 {
     // return Ng*pow(x,-lambdag)*pow((1-x),Bg)*log(kt2/lambda0);
-    return pdfs->xfxQ2(21,x,kt2)*log(kt2/lambda0); //PDF parton id (21=gluon)
+    return pdfs->xfxQ2(21,x,kt2);//*log(kt2/lambda0); //PDF parton id (21=gluon)
     //Marcin nie mnozy przez log(kt2/lambda0) tylko od razu rozklad z biblioteki * Sudakov
 }
 
@@ -882,7 +558,7 @@ double fa(const double & x, const double & kt2, const double & mu2)
 {
     if(sqrt(kt2)<sqrt(mu0))
     {
-        return pdfs->xfxQ2(21,x,mu0)*Tqs(mu0,mu2);
+        return pdfs->xfxQ2(21,x,mu0)*Tgs(mu0,mu2)/mu0;
     }
     else
     return (fad(x,kt2+h,mu2)-fad(x,kt2-h,mu2))/(2*h);
@@ -892,7 +568,7 @@ double fu(const double & x, const double & kt2, const double & mu2)
 {
     if(sqrt(kt2)<sqrt(mu0))
 	{
-		return pdfs->xfxQ2(2,x,mu0)*Tqs(mu0,mu2);
+		return pdfs->xfxQ2(2,x,mu0)*Tqs(mu0,mu2)/mu0;
 	}
 	else
     return (fud(x,kt2+h,mu2)-fud(x,kt2-h,mu2))/(2*h);
@@ -903,7 +579,7 @@ double fd(const double & x, const double & kt2, const double & mu2)
 {
     if(sqrt(kt2)<sqrt(mu0))
 	{
-		return pdfs->xfxQ2(1,x,mu0)*Tqs(mu0,mu2);
+		return pdfs->xfxQ2(1,x,mu0)*Tqs(mu0,mu2)/mu0;
 	}
 	else
     return (fdd(x,kt2+h,mu2)-fdd(x,kt2-h,mu2))/(2*h);
@@ -914,7 +590,7 @@ double fs(const double & x, const double & kt2, const double & mu2)
 {
 	if(sqrt(kt2)<sqrt(mu0))
 	{
-		return pdfs->xfxQ2(3,x,mu0)*Tqs(mu0,mu2);
+		return pdfs->xfxQ2(3,x,mu0)*Tqs(mu0,mu2)/mu0;
 	}
 	else
     return (fsd(x,kt2+h,mu2)-fsd(x,kt2-h,mu2))/(2*h);
@@ -925,7 +601,7 @@ double fui(const double & x, const double & kt2, const double & mu2)
 {
     if(sqrt(kt2)<sqrt(mu0))
 	{
-		return pdfs->xfxQ2(-2,x,mu0)*Tqs(mu0,mu2);
+		return pdfs->xfxQ2(-2,x,mu0)*Tqs(mu0,mu2)/mu0;
 	}
 	else
     return (fuid(x,kt2+h,mu2)-fuid(x,kt2-h,mu2))/(2*h);
@@ -936,7 +612,7 @@ double fdi(const double & x, const double & kt2, const double & mu2)
 {
     if(sqrt(kt2)<sqrt(mu0))
 	{
-		return pdfs->xfxQ2(-1,x,mu0)*Tqs(mu0,mu2);
+		return pdfs->xfxQ2(-1,x,mu0)*Tqs(mu0,mu2)/mu0;
 	}
 	else
     return (fdid(x,kt2+h,mu2)-fdid(x,kt2-h,mu2))/(2*h);
@@ -948,7 +624,7 @@ double fsi(const double & x, const double & kt2, const double & mu2)
 	double ret;
 	if(sqrt(kt2)<sqrt(mu0))
 	{
-		ret= pdfs->xfxQ2(-3,x,mu0)*Tqs(mu0,mu2);
+		ret= pdfs->xfxQ2(-3,x,mu0)*Tqs(mu0,mu2)/mu0;
 	}
 	else
 	{
