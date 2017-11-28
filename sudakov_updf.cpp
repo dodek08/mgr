@@ -6,30 +6,72 @@
 
 double h=0.1; //przy rozniczkowaniu numerycznym
  const LHAPDF::PDF* pdfs = LHAPDF::mkPDF("CT10nlo", 0); //wazne!
+ double timetg;
+ double timetq;
 
 void draw_gluons()
 {
     fstream save;
-    string NAZWA="siatkaTG_2";
+    string NAZWA="siatkaTG_2_T";
 
     save.open(NAZWA,ios::out);
-    clock_t t;
+    clock_t t,t1;
     t=clock();
-    // for(double & x : xs)
-    // {
-    for(double & val : kt2s)
-        {
-        for(double & mu2:mu2s)
-            {
-            save/*<<x*/<<"\t"<<val<<"\t"<<mu2<<"\t"<<Tg(val,mu2)<<endl;
-            cout/*<<x*/<<"\t"<<val<<"\t"<<mu2<<"\t"<<Tg(val,mu2)<<endl;
-            }
-        }
-        cout<<NAZWA/*<<"\t"<<x*/<<endl;
-    // } 
+    t1 = clock();
+     double MINX = 1.0e-6;
+double MAXX = 0.99;
+double MINKT2 = pow( 0.035, 2.0) ;
+double MAXKT2 = pow( 1.0e4, 2.0 );
+double MINMU2 = 1.79;
+double MAXMU2 = pow( 1.0e4, 2.0 );
+double MINLOGX, MINLOGKT2, MINLOGMU2;
+double MAXLOGX, MAXLOGKT2, MAXLOGMU2;
+int NX, NKT2, NMU2;
+double DX, DKT2, DMU2;
 
-    t=clock()-t;
-    cout<<"time TG: "<<((double)t)/CLOCKS_PER_SEC<<endl;
+MINLOGX = log( MINX );
+MAXLOGX = log( MAXX );
+MINLOGKT2 = log( MINKT2 );
+MAXLOGKT2 = log( MAXKT2 );
+MINLOGMU2 = log( MINMU2 );
+MAXLOGMU2 = log( MAXMU2 );
+NX = 60;
+NKT2 = 140;
+NMU2 = 120;
+DX = ( MAXLOGX - MINLOGX ) / NX;
+DKT2 = ( MAXLOGKT2 - MINLOGKT2 ) / NKT2;
+DMU2 = ( MAXLOGMU2 - MINLOGMU2 ) / NMU2;
+double logx;
+double logkt2;
+double logmu2;
+double x;
+double kt2;
+double mu2;
+
+
+
+// for( int ix=0; ix<NX+1; ix++ ){
+//   logx = MINLOGX + ix*DX;
+//   x = exp(logx);
+  for( int ikt2=0; ikt2<NKT2+1; ikt2++ ){
+    logkt2 = MINLOGKT2 + ikt2*DKT2;
+        kt2 = exp(logkt2);
+        t=clock();
+    for( int imu2=0; imu2<NMU2+1; imu2++ ){
+     logmu2 = MINLOGMU2 + imu2*DMU2;
+        mu2 = exp(logmu2);
+     
+            save.precision(8);
+            save<<setprecision(8)<<kt2<<"\t"<<mu2<<"\t"<<Tg(kt2,mu2)<<endl;
+            // cout.precision(8);
+            // cout<<setprecision(8)<<kt2<<"\t"<<mu2<<"\t"<<Tg(kt2,mu2)<<endl;
+        }
+        cout<<setprecision(2)<<(double)(ikt2)/(NKT2)*100 <<"%\t time sigma TG \t" << (double)(clock()-t)/(CLOCKS_PER_SEC) << "sek" << endl;
+    }
+// }
+    t1=clock()-t1;
+    // cout<<"time TG: "<<((double)t1)/CLOCKS_PER_SEC<<endl;
+    timetg=((double)t1)/CLOCKS_PER_SEC;
     save.close();
 }
 
@@ -38,30 +80,70 @@ void draw_quarks_sudakov_factor()
     fstream save;
     string NAZWA="siatkaTQ_2";
 
-    save.open(NAZWA,ios::out);
-    clock_t t;
-    clock_t tt;
+        save.open(NAZWA,ios::out);
+    clock_t t,t1;
     t=clock();
-    // for(double & x : xs)
-    // {
-    int licznik=0;
-    for(double & val : kt2s)
-        {                
-        tt=clock();
-        for(double & mu2:mu2s)
-            {
-            save/*<<x*/<<"\t"<<val<<"\t"<<mu2<<"\t"<<Tq(val,mu2)<<endl;
-            cout<<licznik++<<"\t"<<val<<"\t"<<mu2<<"\t"<<Tq(val,mu2)<<endl;
-            }
-        tt=clock()-tt;
-        cout<<"time sigma mu: "<<((double)tt)/CLOCKS_PER_SEC<<endl;
-        }
-        cout<<NAZWA/*<<"\t"<<x*/<<endl;
-    // } 
+    t1 = clock();
+     double MINX = 1.0e-6;
+double MAXX = 0.99;
+double MINKT2 = pow( 0.035, 2.0) ;
+double MAXKT2 = pow( 1.0e4, 2.0 );
+double MINMU2 = 1.79;
+double MAXMU2 = pow( 1.0e4, 2.0 );
+double MINLOGX, MINLOGKT2, MINLOGMU2;
+double MAXLOGX, MAXLOGKT2, MAXLOGMU2;
+int NX, NKT2, NMU2;
+double DX, DKT2, DMU2;
 
-    t=clock()-t;
-    cout<<"time TQ: "<<((double)t)/CLOCKS_PER_SEC<<endl;
+MINLOGX = log( MINX );
+MAXLOGX = log( MAXX );
+MINLOGKT2 = log( MINKT2 );
+MAXLOGKT2 = log( MAXKT2 );
+MINLOGMU2 = log( MINMU2 );
+MAXLOGMU2 = log( MAXMU2 );
+NX = 60;
+NKT2 = 140;
+NMU2 = 120;
+DX = ( MAXLOGX - MINLOGX ) / NX;
+DKT2 = ( MAXLOGKT2 - MINLOGKT2 ) / NKT2;
+DMU2 = ( MAXLOGMU2 - MINLOGMU2 ) / NMU2;
+double logx;
+double logkt2;
+double logmu2;
+double x;
+double kt2;
+double mu2;
+
+
+
+// for( int ix=0; ix<NX+1; ix++ ){
+//   logx = MINLOGX + ix*DX;
+//   x = exp(logx);
+  for( int ikt2=0; ikt2<NKT2+1; ikt2++ ){
+    logkt2 = MINLOGKT2 + ikt2*DKT2;
+        kt2 = exp(logkt2);
+        t=clock();
+    for( int imu2=0; imu2<NMU2+1; imu2++ ){
+     logmu2 = MINLOGMU2 + imu2*DMU2;
+        mu2 = exp(logmu2);
+     
+            save.precision(8);
+            save<<setprecision(8)<<kt2<<"\t"<<mu2<<"\t"<<Tq(kt2,mu2)<<endl;
+            // cout<<setprecision(8)<<kt2<<"\t"<<mu2<<"\t"<<Tq(kt2,mu2)<<endl;
+        }
+        cout<<setprecision(2)<<(double)(ikt2)/(NKT2)*100 <<"%\t time sigma TQ \t" << (double)(clock()-t)/(CLOCKS_PER_SEC) << "sek" << endl;
+    }
+// }
+    t1=clock()-t1;
+    // cout<<"time TG: "<<((double)t1)/CLOCKS_PER_SEC<<endl;
+    timetq=((double)t1)/CLOCKS_PER_SEC;
     save.close();
+}
+
+void print_time()
+{
+    cout<<"time Tg \t"<<timetg<<endl;
+    cout<<"time Tq \t"<<timetq<<endl;
 }
 
 double a(const double & x, const double & kt2)
