@@ -6,13 +6,13 @@
 
 double h=0.1; //przy rozniczkowaniu numerycznym
  const LHAPDF::PDF* pdfs = LHAPDF::mkPDF("CT10nlo", 0); //wazne!
- double timetg;
- double timetq;
+ double timetg=997.;
+ double timetq=997.; 
 
 void draw_gluons()
 {
     fstream save;
-    string NAZWA="siatkaTG_2_T";
+    string NAZWA="siatkaTG_2_CZ_2";
 
     save.open(NAZWA,ios::out);
     clock_t t,t1;
@@ -49,7 +49,10 @@ double kt2;
 double mu2;
 
 
-
+//////////////////////////////////////////
+/////// ATTENTION PLEASE!/////////////////
+ MINLOGKT2=(MINLOGKT2+MINLOGKT2+DKT2)/2;//
+//////////////////////////////////////////
 // for( int ix=0; ix<NX+1; ix++ ){
 //   logx = MINLOGX + ix*DX;
 //   x = exp(logx);
@@ -62,11 +65,11 @@ double mu2;
         mu2 = exp(logmu2);
      
             save.precision(8);
-            save<<setprecision(8)<<kt2<<"\t"<<mu2<<"\t"<<Tg(kt2,mu2)<<endl;
-            // cout.precision(8);
-            // cout<<setprecision(8)<<kt2<<"\t"<<mu2<<"\t"<<Tg(kt2,mu2)<<endl;
+             save<<setprecision(8)<<kt2<<"\t"<<mu2<<"\t"<<Tg(kt2,mu2)<<endl;
+             cout.precision(8);
+             // cout<<setprecision(8)<<kt2<<"\t"<<mu2<<"\t"<<endl;//Tg(kt2,mu2)<<endl;
         }
-        cout<<setprecision(2)<<(double)(ikt2)/(NKT2)*100 <<"%\t time sigma TG \t" << (double)(clock()-t)/(CLOCKS_PER_SEC) << "sek" << endl;
+        cout<<setprecision(8)<<(double)(ikt2)/(NKT2)*100 <<"%\t time sigma TG \t" << (double)(clock()-t)/(CLOCKS_PER_SEC) << "sek" << endl;
     }
 // }
     t1=clock()-t1;
@@ -78,7 +81,7 @@ double mu2;
 void draw_quarks_sudakov_factor()
 {
     fstream save;
-    string NAZWA="siatkaTQ_2";
+    string NAZWA="siatkaTQ_2_CZ_2";
 
         save.open(NAZWA,ios::out);
     clock_t t,t1;
@@ -116,6 +119,11 @@ double mu2;
 
 
 
+//////////////////////////////////////////
+/////// ATTENTION PLEASE!/////////////////
+ MINLOGKT2=(MINLOGKT2+MINLOGKT2+DKT2)/2;//
+//////////////////////////////////////////
+
 // for( int ix=0; ix<NX+1; ix++ ){
 //   logx = MINLOGX + ix*DX;
 //   x = exp(logx);
@@ -131,7 +139,7 @@ double mu2;
             save<<setprecision(8)<<kt2<<"\t"<<mu2<<"\t"<<Tq(kt2,mu2)<<endl;
             // cout<<setprecision(8)<<kt2<<"\t"<<mu2<<"\t"<<Tq(kt2,mu2)<<endl;
         }
-        cout<<setprecision(2)<<(double)(ikt2)/(NKT2)*100 <<"%\t time sigma TQ \t" << (double)(clock()-t)/(CLOCKS_PER_SEC) << "sek" << endl;
+        cout<<setprecision(8)<<(double)(ikt2)/(NKT2)*100 <<"%\t time sigma TQ \t" << (double)(clock()-t)/(CLOCKS_PER_SEC) << "sek" << endl;
     }
 // }
     t1=clock()-t1;
