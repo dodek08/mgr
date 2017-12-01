@@ -35,7 +35,7 @@ void read_Ts()
     cout<<pdfs->xfxQ2(1, 0.1, 2*2)<<endl;*/ //cos jak zlota regula Fermiego
     fstream f;
     double tmp1,tmp2,tmp3;
-    f.open("siatkaTG", ios::in | ios::out);
+    f.open("siatkaTG_2_T", ios::in | ios::out);
     if (!f.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
 
     while(!f.eof())
@@ -83,7 +83,7 @@ void read_Ts()
     XMAX=(*max_element(Mured.begin(),Mured.end()));
     XMIN=(*min_element(Mured.begin(),Mured.end()));
 
-    f.open("siatkaTQ", ios::in | ios::out);
+    f.open("siatkaTQ_2", ios::in | ios::out);
     if (!f.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
 
     while(!f.eof())
@@ -227,7 +227,7 @@ void draw_gluons()
 {
     
    cout<<mu0<<endl;
-    string NAZWA = "siatki/GLUON_test_";
+    string NAZWA = "siatki/GLUON_test_wycinek_";
     stringstream stream;
     stream << fixed << setprecision(2) << "marcina" <<endl;
     string s = NAZWA + stream.str();
@@ -240,54 +240,54 @@ void draw_gluons()
 
 //kod od marcina generujacy siatke
 
- double MINX = 1.0e-6;
-double MAXX = 0.99;
-double MINKT2 = pow( 0.035, 2.0) ;
-double MAXKT2 = pow( 1.0e4, 2.0 );
-double MINMU2 = 1.79;
-double MAXMU2 = pow( 1.0e4, 2.0 );
-double MINLOGX, MINLOGKT2, MINLOGMU2;
-double MAXLOGX, MAXLOGKT2, MAXLOGMU2;
-int NX, NKT2, NMU2;
-double DX, DKT2, DMU2;
+//  double MINX = 1.0e-6;
+// double MAXX = 0.99;
+// double MINKT2 = pow( 0.035, 2.0) ;
+// double MAXKT2 = pow( 1.0e4, 2.0 );
+// double MINMU2 = 1.79;
+// double MAXMU2 = pow( 1.0e4, 2.0 );
+// double MINLOGX, MINLOGKT2, MINLOGMU2;
+// double MAXLOGX, MAXLOGKT2, MAXLOGMU2;
+// int NX, NKT2, NMU2;
+// double DX, DKT2, DMU2;
 
-MINLOGX = log( MINX );
-MAXLOGX = log( MAXX );
-MINLOGKT2 = log( MINKT2 );
-MAXLOGKT2 = log( MAXKT2 );
-MINLOGMU2 = log( MINMU2 );
-MAXLOGMU2 = log( MAXMU2 );
-NX = 60;
-NKT2 = 140;
-NMU2 = 120;
-DX = ( MAXLOGX - MINLOGX ) / NX;
-DKT2 = ( MAXLOGKT2 - MINLOGKT2 ) / NKT2;
-DMU2 = ( MAXLOGMU2 - MINLOGMU2 ) / NMU2;
-double logx;
-double logkt2;
-double logmu2;
-double x;
-double kt2;
-double mu2;
+// MINLOGX = log( MINX );
+// MAXLOGX = log( MAXX );
+// MINLOGKT2 = log( MINKT2 );
+// MAXLOGKT2 = log( MAXKT2 );
+// MINLOGMU2 = log( MINMU2 );
+// MAXLOGMU2 = log( MAXMU2 );
+// NX = 60;
+// NKT2 = 140;
+// NMU2 = 120;
+// DX = ( MAXLOGX - MINLOGX ) / NX;
+// DKT2 = ( MAXLOGKT2 - MINLOGKT2 ) / NKT2;
+// DMU2 = ( MAXLOGMU2 - MINLOGMU2 ) / NMU2;
+// double logx;
+// double logkt2;
+// double logmu2;
+// double x;
+// double kt2;
+// double mu2;
 
 
 
-for( int ix=0; ix<NX+1; ix++ ){
-  logx = MINLOGX + ix*DX;
-  x = exp(logx);
-  for( int ikt2=0; ikt2<NKT2+1; ikt2++ ){
-    logkt2 = MINLOGKT2 + ikt2*DKT2;
-        kt2 = exp(logkt2);
-        t=clock();
-    for( int imu2=0; imu2<NMU2+1; imu2++ ){
-     logmu2 = MINLOGMU2 + imu2*DMU2;
-        mu2 = exp(logmu2);
+// for( int ix=0; ix<NX+1; ix++ ){
+//   logx = MINLOGX + ix*DX;
+//   x = exp(logx);
+//   for( int ikt2=0; ikt2<NKT2+1; ikt2++ ){
+//     logkt2 = MINLOGKT2 + ikt2*DKT2;
+//         kt2 = exp(logkt2);
+//         t=clock();
+//     for( int imu2=0; imu2<NMU2+1; imu2++ ){
+//      logmu2 = MINLOGMU2 + imu2*DMU2;
+//         mu2 = exp(logmu2);
      
-            save<<x<<"\t"<<kt2<<"\t"<<mu2<<"\t"<<Tg(kt2,mu2)<<endl;
-        }
-        cout << "time sigma kt2 " << (double)(clock()-t)/(CLOCKS_PER_SEC) << "sek" << endl;
-    }
-}
+//             save<<x<<"\t"<<kt2<<"\t"<<mu2<<"\t"<<Tg(kt2,mu2)<<endl;
+//         }
+//         cout << "time sigma kt2 " << (double)(clock()-t)/(CLOCKS_PER_SEC) << "sek" << endl;
+//     }
+// }
 
 // double XTMP=exp(-13.815511);
 // double KT2TMP=exp(-6.7048144);
@@ -295,6 +295,9 @@ for( int ix=0; ix<NX+1; ix++ ){
 //  cout<<fa(XTMP, KT2TMP, exp(0.58221562))<<endl;
 //  cout<<fa(XTMP, KT2TMP, exp(2.3660621))<<endl;
 //  cout<<fa(XTMP, KT2TMP, exp(4.1499086))<<endl;
+ // cout<<Tgs(KT2TMP,exp(0.58221562))<<"\t"<<Tg(KT2TMP,exp(0.58221562))<<endl;
+ // cout<<Tgs(KT2TMP,exp(2.3660621))<<"\t"<<Tg(KT2TMP,exp(2.3660621))<<endl;
+ // cout<<Tgs(KT2TMP,exp(4.1499086))<<"\t"<<Tg(KT2TMP,exp(4.1499086))<<endl;
 // double XTMP=exp(-0.010050336);
 // double KT2TMP=exp(15.908131);
 // cout<<fa(XTMP, KT2TMP, exp(14.852988))<<endl;
@@ -303,189 +306,74 @@ for( int ix=0; ix<NX+1; ix++ ){
 
 
 
+vector<double> xs =
+{
+    -13.815511,
+-12.434965,
+-11.054419,
+-9.673872,
+-8.293326,
+-6.912780,
+-5.532234,
+-4.151688,
+-2.771142,
+-1.390596,
+-0.010050
+};
 
+vector<double> kt2s =
+{
+    -6.704814,
+-4.192265,
+-1.679715,
+0.832834,
+3.345384,
+5.857933,
+8.370483,
+10.883032,
+13.395582,
+15.908131,
+// 18.420681
+};
 
-    /*for(double & x : xs)
-    {
+vector<double> mu2s = 
+{
+    0.582216,
+2.366062,
+4.149909,
+5.933755,
+7.717602,
+9.501448,
+11.285295,
+13.069141,
+14.852988,
+16.636834,
+// 18.420681
+};
+
+double x1,val1,mu21;
+
+    // for(double & x : xs)
+    // {
+    //     x1=exp(x);
 
     for(double & val : kt2s)
     {
+        val1=exp(val);
         for(double & mu2 : mu2s)
         {
-            
-            save<<x<<"\t"<<val<<"\t"<<mu2<<"\t"<<fa(x,val,mu2)<<endl;
+            mu21=exp(mu2);
+            save<</*x<<"\t"<<*/val<<"\t"<<mu2<<"\t"<<Tgs(val1,mu21)/Tg(val1,mu21)<<endl;
         }
     }
     cout<<s<<endl;
     t=clock()-t;
     cout<<"time sigma x: "<<((double)t)/CLOCKS_PER_SEC<<endl;
-    } */
+    // } 
     save.close();
 
 
-/*    string NAZWA="siatki/d/d_";    
-    clock_t t;
-    for(double & x : xs)
-    {
-    stringstream stream;
-    stream << fixed << setprecision(2) << x <<endl;
-    string s = NAZWA + stream.str();
-    cout<<s<<endl;
-    fstream save;
-    save.open(s,ios::out);
-    if (!save.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
-    t=clock();
 
-    for(double & val : kt2s)
-    {
-        for(double & mu2 : mu2s)
-        {
-            
-            save<<x<<"\t"<<val<<"\t"<<mu2<<"\t"<<fd(x,val,mu2)<<endl;
-        }
-    }
-    cout<<s<<endl;
-    t=clock()-t;
-    cout<<"time sigma x: "<<((double)t)/CLOCKS_PER_SEC<<endl;
-    save.close();
-    } 
-
-    NAZWA="siatki/u/u_";    
-
-    for(double & x : xs)
-    {
-    stringstream stream;
-    stream << fixed << setprecision(2) << x <<endl;
-    string s = NAZWA + stream.str();
-    cout<<s<<endl;
-    fstream save;
-    save.open(s,ios::out);
-    if (!save.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
-    t=clock();
-
-    for(double & val : kt2s)
-    {
-        for(double & mu2 : mu2s)
-        {
-            
-            save<<x<<"\t"<<val<<"\t"<<mu2<<"\t"<<fu(x,val,mu2)<<endl;
-        }
-    }
-    cout<<s<<endl;
-    t=clock()-t;
-    cout<<"time sigma x: "<<((double)t)/CLOCKS_PER_SEC<<endl;
-    save.close();
-    } 
-
- NAZWA="siatki/s/s_";    
-
-    for(double & x : xs)
-    {
-    stringstream stream;
-    stream << fixed << setprecision(2) << x <<endl;
-    string s = NAZWA + stream.str();
-    cout<<s<<endl;
-    fstream save;
-    save.open(s,ios::out);
-    if (!save.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
-    t=clock();
-
-    for(double & val : kt2s)
-    {
-        for(double & mu2 : mu2s)
-        {
-            
-            save<<x<<"\t"<<val<<"\t"<<mu2<<"\t"<<fs(x,val,mu2)<<endl;
-        }
-    }
-    cout<<s<<endl;
-    t=clock()-t;
-    cout<<"time sigma x: "<<((double)t)/CLOCKS_PER_SEC<<endl;
-    save.close();
-    } 
-    NAZWA="siatki/di/di_";    
-
-    for(double & x : xs)
-    {
-    stringstream stream;
-    stream << fixed << setprecision(2) << x <<endl;
-    string s = NAZWA + stream.str();
-    cout<<s<<endl;
-    fstream save;
-    save.open(s,ios::out);
-    if (!save.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
-    t=clock();
-
-    for(double & val : kt2s)
-    {
-        for(double & mu2 : mu2s)
-        {
-            
-            save<<x<<"\t"<<val<<"\t"<<mu2<<"\t"<<fdi(x,val,mu2)<<endl;
-        }
-    }
-    cout<<s<<endl;
-    t=clock()-t;
-    cout<<"time sigma x: "<<((double)t)/CLOCKS_PER_SEC<<endl;
-    save.close();
-    } 
-
-    NAZWA="siatki/ui/ui_";    
-
-
-    for(double & x : xs)
-    {
-    stringstream stream;
-    stream << fixed << setprecision(2) << x <<endl;
-    string s = NAZWA + stream.str();
-    cout<<s<<endl;
-    fstream save;
-    save.open(s,ios::out);
-    if (!save.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
-    t=clock();
-
-    for(double & val : kt2s)
-    {
-        for(double & mu2 : mu2s)
-        {
-            
-            save<<x<<"\t"<<val<<"\t"<<mu2<<"\t"<<fui(x,val,mu2)<<endl;
-        }
-    }
-    cout<<s<<endl;
-    t=clock()-t;
-    cout<<"time sigma x: "<<((double)t)/CLOCKS_PER_SEC<<endl;
-    save.close();
-    } 
-
-    NAZWA="siatki/si/si_";    
-
-
-    for(double & x : xs)
-    {
-    stringstream stream;
-    stream << fixed << setprecision(2) << x <<endl;
-    string s = NAZWA + stream.str();
-    cout<<s<<endl;
-    fstream save;
-    save.open(s,ios::out);
-    if (!save.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
-    t=clock();
-
-    for(double & val : kt2s)
-    {
-        for(double & mu2 : mu2s)
-        {
-            
-            save<<x<<"\t"<<val<<"\t"<<mu2<<"\t"<<fsi(x,val,mu2)<<endl;
-        }
-    }
-    cout<<s<<endl;
-    t=clock()-t;
-    cout<<"time sigma x: "<<((double)t)/CLOCKS_PER_SEC<<endl;
-    save.close();
-    } 
-*/
 }
 
 double a(const double & x, const double & kt2)
@@ -503,37 +391,37 @@ double fad(const double & x, const double & la2, const double & mu2)
 double ui(const double & x, const double & kt2)
 {
     // return 2*Ns*pow(x,-lambdas)*pow((1-x),betas)*log(kt2/lambda0);
-    return pdfs->xfxQ2(-2,x,kt2)*log(kt2/lambda0);
+    return pdfs->xfxQ2(-2,x,kt2);//*log(kt2/lambda0);
 }
 
 double di(const double & x, const double & kt2)
 {
     // return 2*Ns*pow(x,-lambdas)*pow((1-x),betas)*log(kt2/lambda0);
-    return pdfs->xfxQ2(-1,x,kt2)*log(kt2/lambda0);
+    return pdfs->xfxQ2(-1,x,kt2);//*log(kt2/lambda0);
 }
 
 double si(const double & x, const double & kt2)
 {
     // return Ns*pow(x,-lambdas)*pow((1-x),betas)*log(kt2/lambda0);
-    return pdfs->xfxQ2(-3,x,kt2)*log(kt2/lambda0);
+    return pdfs->xfxQ2(-3,x,kt2);//*log(kt2/lambda0);
 }
 
 double u(const double & x, const double & kt2)
 {
     // return ui(x,kt2)+Nu*pow(x,alfau)*pow((1-x),betau)*log(kt2/lambda0);
-    return pdfs->xfxQ2(2,x,kt2)*log(kt2/lambda0);
+    return pdfs->xfxQ2(2,x,kt2);//*log(kt2/lambda0);
 }
 
 double d(const double & x, const double & kt2)
 {
     // return di(x,kt2)+Nd*pow(x,alfad)*pow((1-x),betad)*log(kt2/lambda0);
-    return pdfs->xfxQ2(1,x,kt2)*log(kt2/lambda0);
+    return pdfs->xfxQ2(1,x,kt2);//*log(kt2/lambda0);
 }
 
 double ss(const double & x, const double & kt2)
 {
     // return si(x,kt2);
-    return pdfs->xfxQ2(3,x,kt2)*log(kt2/lambda0);
+    return pdfs->xfxQ2(3,x,kt2);//*log(kt2/lambda0);
 }
 
 double fuid(const double & x, const double & la2, const double & mu2)
