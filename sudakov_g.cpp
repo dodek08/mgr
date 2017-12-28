@@ -19,7 +19,7 @@ vector<double> u2s; //dostepne wartosci u2 z pliku
 vector<double> kt2su; //wektor wykorzystanych kt2
 vector<double> u2su; //wektor wykorzystanych u2
 map<double,double> as_2;//mapa przechowujaca as_2(u^2)
-size_t calls = 1000000; // liczba iteracji
+size_t calls = 10000000; // liczba iteracji
 
 // const LHAPDF::PDF* pdf = LHAPDF::mkPDF("CT10nlo", 0); //wazne!
 const LHAPDF::PDF* pdf = LHAPDF::mkPDF("CT10nlo", 0);
@@ -141,17 +141,18 @@ double Tg(const double & kt2, const double & u2)
 {
 
     //zaimplementowac przyblizenie dla malych mu2
-  if(kt2>=u2)
-  return 1.;
-  vector<double>::iterator test=find(u2s.begin(), u2s.end(), u2);
-  // gsl_rng_set(r, chrono::system_clock::now().time_since_epoch().count());
-  // clock_t t;
-  // t=clock();
+double kt22;
+  if(sqrt(kt2)<sqrt(1.79))
+  	kt22=1.79;
+  else
+  	kt22=kt2;
+  if(kt22>=u2)
+  	return 1.;
   double result=0., error=0.;		// result and error
   struct pars pms={u2};
   H.params=&pms;
   s = gsl_monte_vegas_alloc(2);
-  double xl[2]={kt2, 0.};
+  double xl[2]={kt22, 0.};
   double xu[2]={u2,1.};
   gsl_monte_vegas_integrate (&H, xl, xu, 2, calls/10, r, s, &result, &error);
   //s->stage=1;
@@ -169,9 +170,6 @@ double Tg(const double & kt2, const double & u2)
   while ((fabs (s->chisq - 1.0) > 0.35) ); //w celu uzyskania najwiekszej dokladnosci
   gsl_monte_vegas_free(s);
 
-  // t=clock()-t;
-  // cout<<"time TG: "<<((double)t)/CLOCKS_PER_SEC<<endl;
-  //cout<<result<<endl;
   return exp(-result);
 }
 
@@ -193,9 +191,22 @@ int find_index_gt(const vector<double> & vec, const double & val)
     int left=0;
     int index=(right+left)/2;
     bool not_match=true;
+    if (val>vec[right-2])
+    {
+      index = right;
+      not_match = false;
+      // cout<< "val>vec"<<endl;
+    }
+    if (val<vec[0])
+    {
+      index  = 1;
+      not_match = false;
+      // cout<<"val<vec"<<endl;
+    }
     while(not_match)
     {
         index=(right+left)/2;
+        // cout<<index<<"\t"<<vec[index]<<endl;
         if (vec[index]>=val and vec[index-1]<val)
             {
             not_match=false;

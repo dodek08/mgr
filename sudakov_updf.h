@@ -69,6 +69,10 @@ using namespace std;
 
 void draw_gluons(); //wylicza kilkadziesiat punktow z rozkladu gluonów
 void read_Ts();
+vector<double> subset_with_sort(vector<double>&);
+ostream& operator<<(ostream& os,const vector<double>&);
+
+
 
 double Tgs(const double & kt2, const double & mu2);
 double Tqs(const double & kt2, const double & mu2);

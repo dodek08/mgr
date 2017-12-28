@@ -4,7 +4,7 @@
 #include "Blad.h"
 
 
-double h=0.001; //przy rozniczkowaniu numerycznym
+double h=0.1; //przy rozniczkowaniu numerycznym
 const LHAPDF::PDF* pdfs = LHAPDF::mkPDF("CT10nlo", 0); //wazne!
 
 double mu0 = LHAPDF::mkPDF("CT10nlo", 0)->q2Min()+0.1;
@@ -15,13 +15,13 @@ multimap<tuple<double,double>,double> TQ;
 vector<double> Mu;
 vector<double> Kt2;
 
-vector<double> Mured; //(Mureduced czyli z unikalnymi wartosciami X
+vector<double> Mured; //(Mureduced czyli z unikalnymi wartosciami
 vector<double> Kt2red;
 
 vector<double> qMu;
 vector<double> qKt2;
 
-vector<double> qMured; //(Mureduced czyli z unikalnymi wartosciami X
+vector<double> qMured; //(Mureduced czyli z unikalnymi wartosciami
 vector<double> qKt2red;
 
 double XMAX, XMIN, KT2MAX, KT2MIN, KTRANGE;
@@ -35,7 +35,7 @@ void read_Ts()
     cout<<pdfs->xfxQ2(1, 0.1, 2*2)<<endl;*/ //cos jak zlota regula Fermiego
     fstream f;
     double tmp1,tmp2,tmp3;
-    f.open("siatkaTG_2_T", ios::in | ios::out);
+    f.open("CT10nlo_sudakov_g_ext.dat", ios::in | ios::out);
     if (!f.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
 
     while(!f.eof())
@@ -52,36 +52,14 @@ void read_Ts()
 
     KT2MAX=(*max_element(Kt2.begin(),Kt2.end()));
     KT2MIN=(*min_element(Kt2.begin(),Kt2.end()));
-    sort(Kt2.begin(),Kt2.end());
-    vector<double>::iterator it=Kt2.begin();
-    Kt2red.push_back(*it++);
-    while(it!=Kt2.end())
-    {
-        if(*it!=*(it-1))
-        {
-                Kt2red.push_back(*it);
-                // cout<<Kt2red.back()<<endl;
-        }
-        it++;
-    }
+    Kt2red=subset_with_sort(Kt2);
     KTRANGE=KT2MAX-KT2MIN;
-   
-    XMAX=(*max_element(Mu.begin(),Mu.end()));
-    XMIN=(*min_element(Mu.begin(),Mu.end()));
-    sort(Mu.begin(),Mu.end());
-    vector<double>::iterator it2=Mu.begin();
-    Mured.push_back(*it2++);
-    while(it2!=Mu.end())
-    {
-        if(*it2!=*(it2-1))
-        {
-                Mured.push_back(*it2);
-                // cout<<Mured.back()<<endl;
-        }
-        it2++;
-    }
+    cout<<Kt2red<<endl;
+    cout<<endl;
+    Mured=subset_with_sort(Mu);
     XMAX=(*max_element(Mured.begin(),Mured.end()));
     XMIN=(*min_element(Mured.begin(),Mured.end()));
+    cout<<Mured<<endl;
 
     f.open("siatkaTQ_2", ios::in | ios::out);
     if (!f.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
@@ -97,31 +75,9 @@ void read_Ts()
         qMu.push_back(tmp2);
     }
     f.close();
-    sort(qKt2.begin(),qKt2.end());
-    vector<double>::iterator it3=qKt2.begin();
-    qKt2red.push_back(*it++);
-    while(it3!=qKt2.end())
-    {
-        if(*it3!=*(it3-1))
-        {
-                qKt2red.push_back(*it3);
-                // cout<<Kt2red.back()<<endl;
-        }
-        it3++;
-    }
 
-    sort(qMu.begin(),qMu.end());
-    vector<double>::iterator it21=qMu.begin();
-    qMured.push_back(*it21++);
-    while(it21!=qMu.end())
-    {
-        if(*it21!=*(it21-1))
-        {
-                qMured.push_back(*it21);
-                // cout<<Mured.back()<<endl;
-        }
-        it21++;
-    }
+    qKt2red=subset_with_sort(qKt2);
+    qMured=subset_with_sort(qMu);
 }
 
 
@@ -176,8 +132,8 @@ double Tqs(const double & kt2, const double & mu2)
 
 double Tgs(const double & kt2, const double & mu2)
 {
-    if(mu2<XMIN or mu2>XMAX)
-        throw Blad("out of range w Tg",mu2,kt2,XMIN,XMAX);
+    // if(mu2<XMIN or mu2>XMAX)
+    //     throw Blad("out of range w Tg",mu2,kt2,XMIN,XMAX);
     int tab[3]={0}; //table of indexes
     //unsigned int i=1;
 
@@ -192,28 +148,37 @@ double Tgs(const double & kt2, const double & mu2)
     }
     else
     {
+
+        double kth, ktl, muh, mul;
         tab[0]=find_index_gt(Mured,mu2);
         tab[1]=tab[0]-1;
         tab[2]=find_index_gt(Kt2red,kt2);
         tab[3]=tab[2]-1;
+        muh = Mured[tab[0]];
+        mul = Mured[tab[1]];
+        kth = Kt2red[tab[2]];
+        ktl = Kt2red[tab[3]];
         //tables of point around the choosen by the user
-        double lf[] = {Mured[tab[1]], Kt2red[tab[3]], TG.find(make_tuple(Kt2red[tab[1]], Mured[tab[3]]))->second};
-        double rf[] = {Mured[tab[0]], Kt2red[tab[3]], TG.find(make_tuple(Kt2red[tab[0]], Mured[tab[3]]))->second};
-        double lr[] = {Mured[tab[1]], Kt2red[tab[2]], TG.find(make_tuple(Kt2red[tab[1]], Mured[tab[2]]))->second};
-        double rr[] = {Mured[tab[0]], Kt2red[tab[2]], TG.find(make_tuple(Kt2red[tab[0]], Mured[tab[2]]))->second};
+        double lf[] = {mul, ktl, TG.find(make_tuple(ktl, mul))->second};
+        double rf[] = {muh, ktl, TG.find(make_tuple(ktl, muh))->second};
+        double lr[] = {mul, kth, TG.find(make_tuple(kth, mul))->second};
+        double rr[] = {muh, kth, TG.find(make_tuple(kth, muh))->second};
+
+        // cout<<"LF \t"<<mul<<"\t"<<ktl<<"\t"<<TG.find(make_tuple(ktl, mul))->second<<"\t"<<Tg(ktl,mul)<<endl;
+        // cout<<"RF \t"<<muh<<"\t"<<ktl<<"\t"<<TG.find(make_tuple(ktl, muh))->second<<"\t"<<Tg(ktl,muh)<<endl;
+        // cout<<"LR \t"<<mul<<"\t"<<kth<<"\t"<<TG.find(make_tuple(kth, mul))->second<<"\t"<<Tg(kth,mul)<<endl;
+        // cout<<"RR \t"<<muh<<"\t"<<kth<<"\t"<<TG.find(make_tuple(kth, muh))->second<<"\t"<<Tg(kth,muh)<<endl;
         //interpolation
         double a,b,c,d,f,g; //y=ax+b y1=cx+d y2=fx+g
-        a = (lf[2]-rf[2])/(lf[0]-rf[0]);
-        c = (lr[2]-rr[2])/(lr[0]-rr[0]);
-        if(a==0 and c==0)
-            return 0.0;
-        b = lf[2]-a*lf[0];
-        d = lr[2]-a*lr[0];
-        double y = a*mu2+b;
-        //double y1 = c*x+d;
-        f = (y-(c*mu2+d))/(lf[1]-lr[1]);
-        g = y-f*lf[1];
-        double ret= f*kt2+g;
+        a = (rf[2]-rr[2])/(rf[1]-rr[1]);
+        c = (lf[2]-lr[2])/(rf[1]-rr[1]);
+        b = rf[2]-a*rf[1];
+        d = lf[2]-c*lf[1];
+        double y = a*kt2+b;
+        double y1 = c*kt2+d;
+        f = (y-y1)/(rf[0]-lf[0]);
+        g = y1-f*lf[0];
+        double ret= f*mu2+g;
         if (ret<0)
             return 0.0;
         else
@@ -222,6 +187,33 @@ double Tgs(const double & kt2, const double & mu2)
         }
 }
 
+ostream& operator<<(ostream& os, const vector<double>& v)
+{
+    for (double val : v)
+    {
+        os<<val<<"\n";
+    }
+    return os;
+}
+
+vector<double> subset_with_sort(vector<double>& v)
+{
+    vector<double> ret;
+    sort(v.begin(),v.end());
+    vector<double>::iterator it=v.begin();
+    ret.push_back(*it++);
+    while(it!=v.end())
+    {
+        if(*it!=*(it-1))
+        {
+                ret.push_back(*it);
+                // cout<<Kt2red.back()<<endl;
+        }
+        it++;
+    }
+
+    return ret;
+}
 
 void draw_gluons()
 {
@@ -289,13 +281,14 @@ void draw_gluons()
 //     }
 // }
 
-// double XTMP=exp(-13.815511);
-// double KT2TMP=exp(-6.7048144);
+ double XTMP=exp(-13.815511);
+ double KT2TMP=exp(-6.7048144);
 
-//  cout<<fa(XTMP, KT2TMP, exp(0.58221562))<<endl;
-//  cout<<fa(XTMP, KT2TMP, exp(2.3660621))<<endl;
-//  cout<<fa(XTMP, KT2TMP, exp(4.1499086))<<endl;
- // cout<<Tgs(KT2TMP,exp(0.58221562))<<"\t"<<Tg(KT2TMP,exp(0.58221562))<<endl;
+  // cout<<fa(XTMP, KT2TMP, exp(0.58221562))<<endl;
+  // cout<<fa(XTMP, KT2TMP, exp(2.3660621))<<endl;
+   cout<<fa(XTMP, KT2TMP, exp(4.1499086))<<endl;
+ cout<<Tgs(KT2TMP,exp(0.58221562))<<"\t"<<Tg(KT2TMP,exp(0.58221562))<<endl;
+ cout<<Tgs( 0.001224, 1156679.92215151)<<"\t"<<Tg( 0.001224, 1156679.92215151)<<endl;
  // cout<<Tgs(KT2TMP,exp(2.3660621))<<"\t"<<Tg(KT2TMP,exp(2.3660621))<<endl;
  // cout<<Tgs(KT2TMP,exp(4.1499086))<<"\t"<<Tg(KT2TMP,exp(4.1499086))<<endl;
 // double XTMP=exp(-0.010050336);
@@ -333,7 +326,7 @@ vector<double> kt2s =
 10.883032,
 13.395582,
 15.908131,
-// 18.420681
+18.420681
 };
 
 vector<double> mu2s = 
@@ -348,14 +341,14 @@ vector<double> mu2s =
 13.069141,
 14.852988,
 16.636834,
-// 18.420681
+18.420681
 };
 
 double x1,val1,mu21;
 
-    // for(double & x : xs)
-    // {
-    //     x1=exp(x);
+    for(double & x : xs)
+    {
+        x1=exp(x);
 
     for(double & val : kt2s)
     {
@@ -363,13 +356,13 @@ double x1,val1,mu21;
         for(double & mu2 : mu2s)
         {
             mu21=exp(mu2);
-            save<</*x<<"\t"<<*/val<<"\t"<<mu2<<"\t"<<Tgs(val1,mu21)/Tg(val1,mu21)<<endl;
+            save<<x<<" "<<val<<" "<<mu2<<" "<<fa(x1,val1,mu21)<<endl;
         }
     }
     cout<<s<<endl;
     t=clock()-t;
     cout<<"time sigma x: "<<((double)t)/CLOCKS_PER_SEC<<endl;
-    // } 
+    } 
     save.close();
 
 
