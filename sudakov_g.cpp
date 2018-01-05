@@ -27,8 +27,13 @@ const LHAPDF::PDF* pdf = LHAPDF::mkPDF("CT10nlo", 0);
 
 double Tq(const double & kt2, const double & u2)
 {
-  if(kt2>=u2)
-  return 1.;
+  double kt22;
+  if(sqrt(kt2)<sqrt(1.79))
+  	kt22=1.79;
+  else
+  	kt22=kt2;
+  if(kt22>=u2)
+  	return 1.;
   clock_t t;
   t=clock();
   double result=0., error=0.;       // result and error

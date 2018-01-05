@@ -103,24 +103,25 @@ double Tqs(const double & kt2, const double & mu2)
         tab[1]=tab[0]-1;
         tab[2]=find_index_gt(qKt2red,kt2);
         tab[3]=tab[2]-1;
+        muh = qMured[tab[0]];
+        mul = qMured[tab[1]];
+        kth = qKt2red[tab[2]];
+        ktl = qKt2red[tab[3]];
         //tables of point around the choosen by the user
-        double lf[] = {qMured[tab[1]], qKt2red[tab[3]], TQ.find(make_tuple(qKt2red[tab[1]], qMured[tab[3]]))->second};
-        double rf[] = {qMured[tab[0]], qKt2red[tab[3]], TQ.find(make_tuple(qKt2red[tab[0]], qMured[tab[3]]))->second};
-        double lr[] = {qMured[tab[1]], qKt2red[tab[2]], TQ.find(make_tuple(qKt2red[tab[1]], qMured[tab[2]]))->second};
-        double rr[] = {qMured[tab[0]], qKt2red[tab[2]], TQ.find(make_tuple(qKt2red[tab[0]], qMured[tab[2]]))->second};
-        //interpolation
+        double lf[] = {mul, ktl, TQ.find(make_tuple(ktl, mul))->second};
+        double rf[] = {muh, ktl, TQ.find(make_tuple(ktl, muh))->second};
+        double lr[] = {mul, kth, TQ.find(make_tuple(kth, mul))->second};
+        double rr[] = {muh, kth, TQ.find(make_tuple(kth, muh))->second};//interpolation
         double a,b,c,d,f,g; //y=ax+b y1=cx+d y2=fx+g
-        a = (lf[2]-rf[2])/(lf[0]-rf[0]);
-        c = (lr[2]-rr[2])/(lr[0]-rr[0]);
-        if(a==0 and c==0)
-            return 0.0;
-        b = lf[2]-a*lf[0];
-        d = lr[2]-a*lr[0];
-        double y = a*mu2+b;
-        //double y1 = c*x+d;
-        f = (y-(c*mu2+d))/(lf[1]-lr[1]);
-        g = y-f*lf[1];
-        double ret= f*kt2+g;
+        a = (rf[2]-rr[2])/(rf[1]-rr[1]);
+        c = (lf[2]-lr[2])/(rf[1]-rr[1]);
+        b = rf[2]-a*rf[1];
+        d = lf[2]-c*lf[1];
+        double y = a*kt2+b;
+        double y1 = c*kt2+d;
+        f = (y-y1)/(rf[0]-lf[0]);
+        g = y1-f*lf[0];
+        double ret= f*mu2+g;
         if (ret<0)
             return 0.0;
         else
