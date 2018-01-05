@@ -25,10 +25,14 @@ const LHAPDF::PDF* pdf = LHAPDF::mkPDF("CT10nlo", 0); //wazne!
 
 double Tq(const double & kt2, const double & u2)
 {
-  if(kt2>=u2)
-  return 1.;
-  // clock_t t;
-  // t=clock();
+	double kt22;
+  if(sqrt(kt2)<sqrt(1.79))
+  	kt22=1.79;
+  else
+  	kt22=kt2;
+  if(kt22>=u2)
+  	return 1.;
+
   double result=0., error=0.;       // result and error
   struct pars pms={u2};
   I.params=&pms;
@@ -51,9 +55,6 @@ double Tq(const double & kt2, const double & u2)
   while ((fabs (s->chisq - 1.0) > 0.35) ); //w celu uzyskania najwiekszej dokladnosci
   gsl_monte_vegas_free(s);
 
-  // t=clock()-t;
-  // cout<<"time TQ: "<<((double)t)/CLOCKS_PER_SEC<<endl;
-  //cout<<result<<endl;
   return exp(-result);
 }
 
@@ -139,17 +140,18 @@ double Tg(const double & kt2, const double & u2)
 {
 
     //zaimplementowac przyblizenie dla malych mu2
-  if(kt2>=u2)
-  return 1.;
-  vector<double>::iterator test=find(u2s.begin(), u2s.end(), u2);
-  // gsl_rng_set(r, chrono::system_clock::now().time_since_epoch().count());
-  // clock_t t;
-  // t=clock();
+double kt22;
+  if(sqrt(kt2)<sqrt(1.79))
+  	kt22=1.79;
+  else
+  	kt22=kt2;
+  if(kt22>=u2)
+  	return 1.;
   double result=0., error=0.;		// result and error
   struct pars pms={u2};
   H.params=&pms;
   s = gsl_monte_vegas_alloc(2);
-  double xl[2]={kt2, 0.};
+  double xl[2]={kt22, 0.};
   double xu[2]={u2,1.};
   gsl_monte_vegas_integrate (&H, xl, xu, 2, calls/10, r, s, &result, &error);
   //s->stage=1;
@@ -167,9 +169,6 @@ double Tg(const double & kt2, const double & u2)
   while ((fabs (s->chisq - 1.0) > 0.35) ); //w celu uzyskania najwiekszej dokladnosci
   gsl_monte_vegas_free(s);
 
-  // t=clock()-t;
-  // cout<<"time TG: "<<((double)t)/CLOCKS_PER_SEC<<endl;
-  //cout<<result<<endl;
   return exp(-result);
 }
 

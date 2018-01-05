@@ -12,7 +12,7 @@ double h=0.1; //przy rozniczkowaniu numerycznym
 void draw_gluons()
 {
     fstream save;
-    string NAZWA="siatkaTG_2_CZ_2";
+    string NAZWA="COMPLETE_TG_";
 
     save.open(NAZWA,ios::out);
     clock_t t,t1;
@@ -38,6 +38,11 @@ MAXLOGMU2 = log( MAXMU2 );
 NX = 60;
 NKT2 = 140;
 NMU2 = 120;
+
+///////////////////
+NKT2=NKT2*2;
+NMU2=NMU2*2;
+
 DX = ( MAXLOGX - MINLOGX ) / NX;
 DKT2 = ( MAXLOGKT2 - MINLOGKT2 ) / NKT2;
 DMU2 = ( MAXLOGMU2 - MINLOGMU2 ) / NMU2;
@@ -51,7 +56,7 @@ double mu2;
 
 //////////////////////////////////////////
 /////// ATTENTION PLEASE!/////////////////
- MINLOGKT2=(MINLOGKT2+MINLOGKT2+DKT2)/2;//
+
 //////////////////////////////////////////
 // for( int ix=0; ix<NX+1; ix++ ){
 //   logx = MINLOGX + ix*DX;
@@ -81,7 +86,7 @@ double mu2;
 void draw_quarks_sudakov_factor()
 {
     fstream save;
-    string NAZWA="siatkaTQ_2_CZ_2";
+    string NAZWA="COMPLETE_TQ_3_";
 
         save.open(NAZWA,ios::out);
     clock_t t,t1;
@@ -107,6 +112,12 @@ MAXLOGMU2 = log( MAXMU2 );
 NX = 60;
 NKT2 = 140;
 NMU2 = 120;
+
+
+///////////////////
+NKT2=NKT2*2;
+NMU2=NMU2*2;
+
 DX = ( MAXLOGX - MINLOGX ) / NX;
 DKT2 = ( MAXLOGKT2 - MINLOGKT2 ) / NKT2;
 DMU2 = ( MAXLOGMU2 - MINLOGMU2 ) / NMU2;
@@ -119,17 +130,14 @@ double mu2;
 
 
 
-//////////////////////////////////////////
-/////// ATTENTION PLEASE!/////////////////
- MINLOGKT2=(MINLOGKT2+MINLOGKT2+DKT2)/2;//
-//////////////////////////////////////////
 
 // for( int ix=0; ix<NX+1; ix++ ){
 //   logx = MINLOGX + ix*DX;
 //   x = exp(logx);
-  for( int ikt2=0; ikt2<NKT2+1; ikt2++ ){
+  for( int ikt2=212; ikt2<NKT2+1; ikt2++ ){
     logkt2 = MINLOGKT2 + ikt2*DKT2;
         kt2 = exp(logkt2);
+        // cout<<kt2<<"\t"<<ikt2<<endl;
         t=clock();
     for( int imu2=0; imu2<NMU2+1; imu2++ ){
      logmu2 = MINLOGMU2 + imu2*DMU2;
