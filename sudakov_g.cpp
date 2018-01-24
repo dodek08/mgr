@@ -278,6 +278,14 @@ inline double totPqq(const double & delta, const double & z)
         return 0.;
 }
 
+inline double Pqq(const double & z)
+{
+        double ret = Cq*(1+z*z)/(1-z);
+        if(ret!=ret)
+            throw Blad("nan w Pqq!", z, z, z, z);
+    else
+        return ret;
+}
 
 inline double Pqg(const double & z)
 {

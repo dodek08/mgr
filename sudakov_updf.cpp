@@ -35,7 +35,7 @@ void read_Ts()
     cout<<pdfs->xfxQ2(1, 0.1, 2*2)<<endl;*/ //cos jak zlota regula Fermiego
     fstream f;
     double tmp1,tmp2,tmp3;
-    f.open("CT10nlo_sudakov_g_ext.dat", ios::in | ios::out);
+    f.open("COMPLETE_TG_", ios::in | ios::out);
     if (!f.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
 
     while(!f.eof())
@@ -61,7 +61,7 @@ void read_Ts()
     XMIN=(*min_element(Mured.begin(),Mured.end()));
     cout<<Mured<<endl;
 
-    f.open("siatkaTQ_2", ios::in | ios::out);
+    f.open("COMPLETE_TQ_", ios::in | ios::out);
     if (!f.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
 
     while(!f.eof())

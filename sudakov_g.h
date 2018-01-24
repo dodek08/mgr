@@ -69,6 +69,7 @@ double theta(const double & delta, const double & z); //wykorzystane funkcje Hea
 inline double Pgg(const double & z);    // Pgg Kimber 1.41
 inline double totPgg(const double & z);    // Pgg Kimber 1.41
 inline double totPqq(const double & delta, const double & z);    // Pqq notatki Marcina
+inline double Pqq(const double & z);    // Pqq notatki Marcina
 inline double Pqg(const double & z);    // Pqg Kimber 1.43
 double interpolacja(const double & kt2);
 int find_index_gt(const vector<double> & vec, const double& val); // funkcja pomocnicza do wyszukiwania indeksow
