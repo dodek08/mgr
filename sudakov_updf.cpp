@@ -7,12 +7,12 @@
 double h=0.1; //przy rozniczkowaniu numerycznym
  const LHAPDF::PDF* pdfs = LHAPDF::mkPDF("CT10nlo", 0); //wazne!
  double timetg=997.;
- double timetq=997.; 
+ double timetq=997.;
 
 void draw_gluons()
 {
     fstream save;
-    string NAZWA="COMPLETE_TG_";
+    string NAZWA="siatki/rozklad_gluonu";
 
     save.open(NAZWA,ios::out);
     clock_t t,t1;
@@ -40,8 +40,6 @@ NKT2 = 140;
 NMU2 = 120;
 
 ///////////////////
-NKT2=NKT2*2;
-NMU2=NMU2*2;
 
 DX = ( MAXLOGX - MINLOGX ) / NX;
 DKT2 = ( MAXLOGKT2 - MINLOGKT2 ) / NKT2;
@@ -58,9 +56,9 @@ double mu2;
 /////// ATTENTION PLEASE!/////////////////
 
 //////////////////////////////////////////
-// for( int ix=0; ix<NX+1; ix++ ){
-//   logx = MINLOGX + ix*DX;
-//   x = exp(logx);
+ // for( int ix=0; ix<NX+1; ix++ ){
+ //   logx = MINLOGX + ix*DX;
+ //   x = exp(logx);
   for( int ikt2=0; ikt2<NKT2+1; ikt2++ ){
     logkt2 = MINLOGKT2 + ikt2*DKT2;
         kt2 = exp(logkt2);
@@ -68,15 +66,15 @@ double mu2;
     for( int imu2=0; imu2<NMU2+1; imu2++ ){
      logmu2 = MINLOGMU2 + imu2*DMU2;
         mu2 = exp(logmu2);
-     
+
             save.precision(8);
              save<<setprecision(8)<<kt2<<"\t"<<mu2<<"\t"<<Tg(kt2,mu2)<<endl;
              cout.precision(8);
              // cout<<setprecision(8)<<kt2<<"\t"<<mu2<<"\t"<<endl;//Tg(kt2,mu2)<<endl;
         }
-        cout<<setprecision(8)<<(double)(ikt2)/(NKT2)*100 <<"%\t time sigma TG \t" << (double)(clock()-t)/(CLOCKS_PER_SEC) << "sek" << endl;
+        //cout<<setprecision(8)<<(double)(ikt2)/(NKT2)*100 <<"%\t time sigma TG \t" << (double)(clock()-t)/(CLOCKS_PER_SEC) << "sek" << endl;
     }
-// }
+ // }
     t1=clock()-t1;
     // cout<<"time TG: "<<((double)t1)/CLOCKS_PER_SEC<<endl;
     timetg=((double)t1)/CLOCKS_PER_SEC;
@@ -142,7 +140,7 @@ double mu2;
     for( int imu2=0; imu2<NMU2+1; imu2++ ){
      logmu2 = MINLOGMU2 + imu2*DMU2;
         mu2 = exp(logmu2);
-     
+
             save.precision(8);
             save<<setprecision(8)<<kt2<<"\t"<<mu2<<"\t"<<Tq(kt2,mu2)<<endl;
             // cout<<setprecision(8)<<kt2<<"\t"<<mu2<<"\t"<<Tq(kt2,mu2)<<endl;
@@ -165,7 +163,7 @@ void print_time()
 double a(const double & x, const double & kt2)
 {
     // return Ng*pow(x,-lambdag)*pow((1-x),Bg)*log(kt2/lambda0);
-    return pdfs->xfxQ2(21,x,kt2)*log(kt2/lambda0); //PDF parton id (21=gluon)
+    return pdfs->xfxQ2(21,x,kt2)//*log(kt2/lambda0); //PDF parton id (21=gluon)
     //Marcin nie mnozy przez log(kt2/lambda0) tylko od razu rozklad z biblioteki * Sudakov
 }
 
