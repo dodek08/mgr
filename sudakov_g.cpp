@@ -19,7 +19,7 @@ vector<double> u2s; //dostepne wartosci u2 z pliku
 vector<double> kt2su; //wektor wykorzystanych kt2
 vector<double> u2su; //wektor wykorzystanych u2
 map<double,double> as_2;//mapa przechowujaca as_2(u^2)
-size_t calls = 10000000; // liczba iteracji
+size_t calls = 1000000; // liczba iteracji
 
 // const LHAPDF::PDF* pdf = LHAPDF::mkPDF("CT10nlo", 0); //wazne!
 const LHAPDF::PDF* pdf = LHAPDF::mkPDF("CT10nlo", 0);

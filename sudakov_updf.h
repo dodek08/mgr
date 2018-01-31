@@ -72,7 +72,10 @@ void read_Ts();
 vector<double> subset_with_sort(vector<double>&);
 ostream& operator<<(ostream& os,const vector<double>&);
 
-
+double kt2max();
+double kt2min();
+double mu2min();
+double mu2max();
 
 double Tgs(const double & kt2, const double & mu2);
 double Tqs(const double & kt2, const double & mu2);

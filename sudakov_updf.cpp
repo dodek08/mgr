@@ -24,9 +24,29 @@ vector<double> qKt2;
 vector<double> qMured; //(Mureduced czyli z unikalnymi wartosciami
 vector<double> qKt2red;
 
-double XMAX, XMIN, KT2MAX, KT2MIN, KTRANGE;
+double MU2MAX, MU2MIN, KT2MAX, KT2MIN, KTRANGE;
 double Xindexgt;
 
+
+double kt2max()
+{
+	return KT2MAX;
+}
+
+double kt2min()
+{
+	return KT2MIN;
+}
+
+double mu2max()
+{
+	return MU2MAX;
+}
+
+double mu2min()
+{
+	return MU2MIN;
+}
 
 void read_Ts()
 {
@@ -54,12 +74,9 @@ void read_Ts()
     KT2MIN=(*min_element(Kt2.begin(),Kt2.end()));
     Kt2red=subset_with_sort(Kt2);
     KTRANGE=KT2MAX-KT2MIN;
-    cout<<Kt2red<<endl;
-    cout<<endl;
     Mured=subset_with_sort(Mu);
-    XMAX=(*max_element(Mured.begin(),Mured.end()));
-    XMIN=(*min_element(Mured.begin(),Mured.end()));
-    cout<<Mured<<endl;
+    MU2MAX=(*max_element(Mured.begin(),Mured.end()));
+    MU2MIN=(*min_element(Mured.begin(),Mured.end()));
 
     f.open("COMPLETE_TQ_", ios::in | ios::out);
     if (!f.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
@@ -83,7 +100,7 @@ void read_Ts()
 
 double Tqs(const double & kt2, const double & mu2)
 {
-    if(mu2<XMIN or mu2>XMAX)
+    if(mu2<MU2MIN or mu2>MU2MAX)
         throw Blad("out of range w Tq",mu2,kt2,0.,0.);
     int tab[3]={0}; //table of indexes
     //unsigned int i=1;
@@ -99,6 +116,7 @@ double Tqs(const double & kt2, const double & mu2)
     }
     else
     {
+        double kth, ktl, muh, mul;
         tab[0]=find_index_gt(qMured,mu2);
         tab[1]=tab[0]-1;
         tab[2]=find_index_gt(qKt2red,kt2);
@@ -133,8 +151,8 @@ double Tqs(const double & kt2, const double & mu2)
 
 double Tgs(const double & kt2, const double & mu2)
 {
-    // if(mu2<XMIN or mu2>XMAX)
-    //     throw Blad("out of range w Tg",mu2,kt2,XMIN,XMAX);
+    // if(mu2<MU2MIN or mu2>MU2MAX)
+    //     throw Blad("out of range w Tg",mu2,kt2,MU2MIN,MU2MAX);
     int tab[3]={0}; //table of indexes
     //unsigned int i=1;
 
@@ -220,19 +238,149 @@ void draw_gluons()
 {
     
    cout<<mu0<<endl;
-    string NAZWA = "siatki/GLUON_test_wycinek_";
+    string NAZWA = "siatki/rozklad_gluonu_CT10nlo";
     stringstream stream;
-    stream << fixed << setprecision(2) << "marcina" <<endl;
+    // stream << fixed << setprecision(2) << "marcina" <<endl;
     string s = NAZWA + stream.str();
     cout<<s<<endl;
     fstream save;
     save.open(s,ios::out);
     if (!save.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
-    clock_t t;
-    t=clock();
 
 //kod od marcina generujacy siatke
 
+ double MINX = 1.0e-6;
+double MAXX = 0.99;
+double MINKT2 = pow( 0.035, 2.0) ;
+double MAXKT2 = pow( 1.0e4, 2.0 );
+double MINMU2 = 1.79;
+double MAXMU2 = pow( 1.0e4, 2.0 );
+double MINLOGX, MINLOGKT2, MINLOGMU2;
+double MAXLOGX, MAXLOGKT2, MAXLOGMU2;
+int NX, NKT2, NMU2;
+double DX, DKT2, DMU2;
+
+MINLOGX = log( MINX );
+MAXLOGX = log( MAXX );
+MINLOGKT2 = log( MINKT2 );
+MAXLOGKT2 = log( MAXKT2 );
+MINLOGMU2 = log( MINMU2 );
+MAXLOGMU2 = log( MAXMU2 );
+NX = 60;
+NKT2 = 140;
+NMU2 = 120;
+DX = ( MAXLOGX - MINLOGX ) / NX;
+DKT2 = ( MAXLOGKT2 - MINLOGKT2 ) / NKT2;
+DMU2 = ( MAXLOGMU2 - MINLOGMU2 ) / NMU2;
+double logx;
+double logkt2;
+double logmu2;
+double x;
+double kt2;
+double mu2;
+
+
+
+for( int ix=0; ix<NX+1; ix++ ){
+  logx = MINLOGX + ix*DX;
+  x = exp(logx);
+  for( int ikt2=0; ikt2<NKT2+1; ikt2++ ){
+    logkt2 = MINLOGKT2 + ikt2*DKT2;
+        kt2 = exp(logkt2);
+        // t=clock();
+    for( int imu2=0; imu2<NMU2+1; imu2++ ){
+     logmu2 = MINLOGMU2 + imu2*DMU2;
+        mu2 = exp(logmu2);
+     
+            save<<x<<"\t"<<kt2<<"\t"<<mu2<<"\t"<<fa(x,kt2,mu2)<<endl;
+        }
+        // cout << "time sigma kt2 " << (double)(clock()-t)/(CLOCKS_PER_SEC) << "sek" << endl;
+    }
+}
+
+ // double XTMP=exp(-13.815511);
+ // double KT2TMP=exp(-6.7048144);
+
+  // cout<<fa(XTMP, KT2TMP, exp(0.58221562))<<endl;
+  // cout<<fa(XTMP, KT2TMP, exp(2.3660621))<<endl;
+   // cout<<fa(XTMP, KT2TMP, exp(4.1499086))<<endl;
+ // cout<<Tgs(KT2TMP,exp(0.58221562))<<"\t"<<Tg(KT2TMP,exp(0.58221562))<<endl;
+ // cout<<Tgs( 0.001224, 1156679.92215151)<<"\t"<<Tg( 0.001224, 1156679.92215151)<<endl;
+ // cout<<Tgs(KT2TMP,exp(2.3660621))<<"\t"<<Tg(KT2TMP,exp(2.3660621))<<endl;
+ // cout<<Tgs(KT2TMP,exp(4.1499086))<<"\t"<<Tg(KT2TMP,exp(4.1499086))<<endl;
+// double XTMP=exp(-0.010050336);
+// double KT2TMP=exp(15.908131);
+// cout<<fa(XTMP, KT2TMP, exp(14.852988))<<endl;
+
+
+
+
+
+// vector<double> xs =
+// {
+//     -13.815511,
+// -12.434965,
+// -11.054419,
+// -9.673872,
+// -8.293326,
+// -6.912780,
+// -5.532234,
+// -4.151688,
+// -2.771142,
+// -1.390596,
+// -0.010050
+// };
+
+// vector<double> kt2s =
+// {
+//     -6.704814,
+// -4.192265,
+// -1.679715,
+// 0.832834,
+// 3.345384,
+// 5.857933,
+// 8.370483,
+// 10.883032,
+// 13.395582,
+// 15.908131,
+// 18.420681
+// };
+
+// vector<double> mu2s = 
+// {
+//     0.582216,
+// 2.366062,
+// 4.149909,
+// 5.933755,
+// 7.717602,
+// 9.501448,
+// 11.285295,
+// 13.069141,
+// 14.852988,
+// 16.636834,
+// 18.420681
+// };
+
+// double x1,val1,mu21;
+
+//     for(double & x : xs)
+//     {
+//         x1=exp(x);
+
+//     for(double & val : kt2s)
+//     {
+//         val1=exp(val);
+//         for(double & mu2 : mu2s)
+//         {
+//             mu21=exp(mu2);
+//             save<<x<<" "<<val<<" "<<mu2<<" "<<fa(x1,val1,mu21)<<endl;
+//         }
+//     }
+//     cout<<s<<endl;
+//     t=clock()-t;
+//     cout<<"time sigma x: "<<((double)t)/CLOCKS_PER_SEC<<endl;
+//     } 
+//     save.close();
 //  double MINX = 1.0e-6;
 // double MAXX = 0.99;
 // double MINKT2 = pow( 0.035, 2.0) ;
@@ -276,96 +424,11 @@ void draw_gluons()
 //      logmu2 = MINLOGMU2 + imu2*DMU2;
 //         mu2 = exp(logmu2);
      
-//             save<<x<<"\t"<<kt2<<"\t"<<mu2<<"\t"<<Tg(kt2,mu2)<<endl;
+//             save<<x<<"\t"<<kt2<<"\t"<<mu2<<"\t"<<fa(x,kt2,mu2)<<endl;
 //         }
-//         cout << "time sigma kt2 " << (double)(clock()-t)/(CLOCKS_PER_SEC) << "sek" << endl;
+//         // cout << "time sigma kt2 " << (double)(clock()-t)/(CLOCKS_PER_SEC) << "sek" << endl;
 //     }
 // }
-
- double XTMP=exp(-13.815511);
- double KT2TMP=exp(-6.7048144);
-
-  // cout<<fa(XTMP, KT2TMP, exp(0.58221562))<<endl;
-  // cout<<fa(XTMP, KT2TMP, exp(2.3660621))<<endl;
-   cout<<fa(XTMP, KT2TMP, exp(4.1499086))<<endl;
- cout<<Tgs(KT2TMP,exp(0.58221562))<<"\t"<<Tg(KT2TMP,exp(0.58221562))<<endl;
- cout<<Tgs( 0.001224, 1156679.92215151)<<"\t"<<Tg( 0.001224, 1156679.92215151)<<endl;
- // cout<<Tgs(KT2TMP,exp(2.3660621))<<"\t"<<Tg(KT2TMP,exp(2.3660621))<<endl;
- // cout<<Tgs(KT2TMP,exp(4.1499086))<<"\t"<<Tg(KT2TMP,exp(4.1499086))<<endl;
-// double XTMP=exp(-0.010050336);
-// double KT2TMP=exp(15.908131);
-// cout<<fa(XTMP, KT2TMP, exp(14.852988))<<endl;
-
-
-
-
-
-vector<double> xs =
-{
-    -13.815511,
--12.434965,
--11.054419,
--9.673872,
--8.293326,
--6.912780,
--5.532234,
--4.151688,
--2.771142,
--1.390596,
--0.010050
-};
-
-vector<double> kt2s =
-{
-    -6.704814,
--4.192265,
--1.679715,
-0.832834,
-3.345384,
-5.857933,
-8.370483,
-10.883032,
-13.395582,
-15.908131,
-18.420681
-};
-
-vector<double> mu2s = 
-{
-    0.582216,
-2.366062,
-4.149909,
-5.933755,
-7.717602,
-9.501448,
-11.285295,
-13.069141,
-14.852988,
-16.636834,
-18.420681
-};
-
-double x1,val1,mu21;
-
-    for(double & x : xs)
-    {
-        x1=exp(x);
-
-    for(double & val : kt2s)
-    {
-        val1=exp(val);
-        for(double & mu2 : mu2s)
-        {
-            mu21=exp(mu2);
-            save<<x<<" "<<val<<" "<<mu2<<" "<<fa(x1,val1,mu21)<<endl;
-        }
-    }
-    cout<<s<<endl;
-    t=clock()-t;
-    cout<<"time sigma x: "<<((double)t)/CLOCKS_PER_SEC<<endl;
-    } 
-    save.close();
-
 
 
 }
