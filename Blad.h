@@ -5,8 +5,6 @@
 #ifndef BLAD
 #define BLAD
 
-#include <iostream>
-
 using namespace std;
 
 //klasa wyjatku

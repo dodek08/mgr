@@ -46,8 +46,9 @@ struct pars2 {double x; double Q2; double mq2; };
 
 double mu_2_v(const double & kt2, const double & Kt2, const double & mq2); //value of mu2 Kimber 3.15
 double D1(const double & Kt2, const double & B, const double & Q2, const double & mq2); //Kimber 3.13
-double D2(const double & fi, const double & B, const double & Q2, const double & mq2); //Kimber 3.14
-double inv_z(const double & fi, const double & Kt2, const double & B, const double & Q2, const double & mq2); // 1/z, Kimber 3.10
-double heaviside(const double & x, const double & fi, const double & Kt2, const double & B, const double & Q2, const double & mq2);
+double D2(const double & Kt2, const double & kt2, const double & fi, const double & B, const double & Q2, const double & mq2); //Kimber 3.14
+double z(const double & Kt2, const double & kt2, const double & fi, const double & B, const double & Q2, const double & mq2); // 1/z, Kimber 3.10
+double heaviside(const double & val); //theta(1-x/z)!
 
+double fgk(const double &, const double&);
 #endif
