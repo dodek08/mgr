@@ -4,6 +4,7 @@
 
 #ifndef BLAD
 #define BLAD
+#include <iostream>
 
 using namespace std;
 

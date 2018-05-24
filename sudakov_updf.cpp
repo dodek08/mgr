@@ -5,9 +5,9 @@
 
 
 double h=0.1; //przy rozniczkowaniu numerycznym
-const LHAPDF::PDF* pdfs = LHAPDF::mkPDF("CT10nlo", 0); //wazne!
+LHAPDF::PDF* pdfs;// = LHAPDF::mkPDF("CT14nlo", 0); //wazne!
 
-double mu0 = LHAPDF::mkPDF("CT10nlo", 0)->q2Min()+0.1;
+double mu0;// = LHAPDF::mkPDF("CT14nlo", 0)->q2Min()+0.1;
 
 multimap<tuple<double,double>,double> TG;
 multimap<tuple<double,double>,double> TQ;
@@ -27,6 +27,46 @@ vector<double> qKt2red;
 double MU2MAX, MU2MIN, KT2MAX, KT2MIN, KTRANGE;
 double Xindexgt;
 
+double beta_g = 0;
+double n_g = 1;
+double lambda_g = 0;
+
+void set_beta_g(const double & val)
+{
+    beta_g = val;
+}
+
+double get_beta_g()
+{
+    return beta_g;
+}
+
+
+void set_n_g(const double & val)
+{
+    n_g = val;
+}
+
+double get_n_g()
+{
+    return n_g;
+}
+
+void set_lambda_g(const double & val)
+{
+    lambda_g = val;
+}
+
+double get_lambda_g()
+{
+    return lambda_g;
+}
+
+void set_pdf_name_sudakov_updf(string siatka)
+{
+ pdfs = LHAPDF::mkPDF(siatka, 0);
+ mu0 =  LHAPDF::mkPDF(siatka, 0)->q2Min()+0.1;
+}
 
 double kt2max()
 {
@@ -100,8 +140,8 @@ void read_Ts()
 
 double Tqs(const double & kt2, const double & mu2)
 {
-    if(mu2<MU2MIN or mu2>MU2MAX)
-        throw Blad("out of range w Tq",mu2,kt2,0.,0.);
+    // if(mu2<MU2MIN or mu2>MU2MAX)
+        // throw Blad("out of range w Tq",mu2,kt2,0.,0.);
     int tab[3]={0}; //table of indexes
     //unsigned int i=1;
 
@@ -234,17 +274,14 @@ vector<double> subset_with_sort(vector<double>& v)
     return ret;
 }
 
-void draw_gluons()
+void draw_gluons(const int & pid)
 {
     
-   cout<<mu0<<endl;
-    string NAZWA = "siatki/rozklad_gluonu_CT10nlo";
-    stringstream stream;
-    // stream << fixed << setprecision(2) << "marcina" <<endl;
-    string s = NAZWA + stream.str();
-    cout<<s<<endl;
+    
+   // cout<<mu0<<endl;
+    string NAZWA = "siatki/rozklad_CT10nlo_pid_" + to_string(pid);
     fstream save;
-    save.open(s,ios::out);
+    save.open(NAZWA,ios::out);
     if (!save.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
 
 //kod od marcina generujacy siatke
@@ -278,9 +315,28 @@ double logmu2;
 double x;
 double kt2;
 double mu2;
+        clock_t t = clock();
 
-
-
+if(pid != 21)
+{
+    for( int ix=0; ix<NX+1; ix++ ){
+  logx = MINLOGX + ix*DX;
+  x = exp(logx);
+  for( int ikt2=0; ikt2<NKT2+1; ikt2++ ){
+    logkt2 = MINLOGKT2 + ikt2*DKT2;
+        kt2 = exp(logkt2);
+        // t=clock();
+    for( int imu2=0; imu2<NMU2+1; imu2++ ){
+     logmu2 = MINLOGMU2 + imu2*DMU2;
+        mu2 = exp(logmu2);
+     
+            save<<x<<"\t"<<kt2<<"\t"<<mu2<<"\t"<<fq_pid(x,kt2,mu2,pid)<<endl;
+        }
+        // cout << "time sigma kt2 " << (double)(clock()-t)/(CLOCKS_PER_SEC) << "sek" << endl;
+    }
+}
+}
+else
 for( int ix=0; ix<NX+1; ix++ ){
   logx = MINLOGX + ix*DX;
   x = exp(logx);
@@ -298,6 +354,8 @@ for( int ix=0; ix<NX+1; ix++ ){
     }
 }
 
+    save.close();
+     cout << "time sigma \t"<<pid<<"\t" << (double)(clock()-t)/(CLOCKS_PER_SEC) << "sek" << endl;
  // double XTMP=exp(-13.815511);
  // double KT2TMP=exp(-6.7048144);
 
@@ -433,6 +491,34 @@ for( int ix=0; ix<NX+1; ix++ ){
 
 }
 
+double q_pid(const double & x, const double & kt2, const int & pid)
+{
+    return pdfs->xfxQ2(pid,x,kt2);
+}
+
+double fq_pid_d(const double & x, const double & la2, const double & mu2, const int & pid)
+{
+    // if (pid == 21)
+    // {
+    //     return pdfs->xfxQ2(pid,x,la2)*Tgs(la2,mu2);
+    // }
+    // else
+    return pdfs->xfxQ2(pid,x,la2)*Tqs(la2,mu2);
+}
+
+double fq_pid(const double & x, const double & kt2, const double & mu2, const int & pid)
+{
+    if(sqrt(kt2)<sqrt(mu0))
+    {
+        // if(pid == 21)
+        //     return pdfs->xfxQ2(pid,x,mu0)*Tgs(mu0,mu2)/mu0;
+        // else
+        return pdfs->xfxQ2(pid,x,mu0)*Tqs(mu0,mu2)/mu0;
+    }
+    else
+    return (fq_pid_d(x,kt2+h,mu2,pid)-fq_pid_d(x,kt2-h,mu2,pid))/(2*h);
+}
+
 double a(const double & x, const double & kt2)
 {
     // return Ng*pow(x,-lambdag)*pow((1-x),Bg)*log(kt2/lambda0);
@@ -518,7 +604,7 @@ double fa(const double & x, const double & kt2, const double & mu2)
         return pdfs->xfxQ2(21,x,mu0)*Tgs(mu0,mu2)/mu0;
     }
     else
-    return (fad(x,kt2+h,mu2)-fad(x,kt2-h,mu2))/(2*h);
+    return (n_g*pow(x,lambda_g)*pow((1.-x),beta_g))*(fad(x,kt2+h,mu2)-fad(x,kt2-h,mu2))/(2*h);
 }
 
 double fu(const double & x, const double & kt2, const double & mu2)

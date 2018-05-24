@@ -35,13 +35,18 @@
 
 using namespace std;
 
-double FL(const double &, const double &);
-double fl_u(double *args, size_t dim, void *params);
-double FT(const double &, const double &);
-double ft_u(double *args, size_t dim, void *params);
+double FL_g(const double &, const double &, size_t);
+double FL_g(const double &, const double &);
+double fl_u_g(double *args, size_t dim, void *params);
+double FT_g(const double &, const double &, size_t);
+double FT_g(const double &, const double &);
+double F2_q(const double &, const double &);
+double ft_u_g(double *args, size_t dim, void *params);
+double f2_u_q(double *args, size_t dim, void *params);
 void warm_up_f2();
 void cool_down(); //uwalnia pamiec
 struct pars2 {double x; double Q2; double mq2; };
+struct parsf2 {double x; double Q2; int pid; };
 
 
 double mu_2_v(const double & kt2, const double & Kt2, const double & mq2); //value of mu2 Kimber 3.15
@@ -51,4 +56,8 @@ double z(const double & Kt2, const double & kt2, const double & fi, const double
 double heaviside(const double & val); //theta(1-x/z)!
 
 double fgk(const double &, const double&);
+void set_pdf_name_sudakov_f2(string);
+
+
+
 #endif

@@ -69,7 +69,7 @@ double theta(const double & delta, const double & z); //wykorzystane funkcje Hea
 inline double Pgg(const double & z);    // Pgg Kimber 1.41
 inline double totPgg(const double & z);    // Pgg Kimber 1.41
 inline double totPqq(const double & delta, const double & z);    // Pqq notatki Marcina
-inline double Pqq(const double & z);    // Pqq notatki Marcina
+double Pqq(const double & z);    // Pqq notatki Marcina
 inline double Pqg(const double & z);    // Pqg Kimber 1.43
 double interpolacja(const double & kt2);
 int find_index_gt(const vector<double> & vec, const double& val); // funkcja pomocnicza do wyszukiwania indeksow
@@ -84,5 +84,5 @@ double ftq(double *args, size_t dim, void *params); //funkcja wymagana przez bib
 void warm_up(); //ustawia generator i strukture do calkowania z gsl
 void cool_down(); //uwalnia pamiec
 struct pars {double u2; }; // co dac jako parametr jak calkuje sie po wszystkim? nullptr! czyli 0, wtedy tylko trzeba go w funkcji zwracajacej double przekazywanej do gsl_monte_function np zrzutowac na void, zeby nie bylo, ze sie nie uzywa zmiennej. Ale to akurat nie ten przypadek, ze wzgledu na delte trzeba przekazac u2
-
+void set_pdf_name_sudakov_g(string);
 #endif

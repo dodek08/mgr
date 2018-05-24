@@ -22,8 +22,11 @@ map<double,double> as_2;//mapa przechowujaca as_2(u^2)
 size_t calls = 1000000; // liczba iteracji
 
 // const LHAPDF::PDF* pdf = LHAPDF::mkPDF("CT10nlo", 0); //wazne!
-const LHAPDF::PDF* pdf = LHAPDF::mkPDF("CT10nlo", 0);
-
+LHAPDF::PDF* pdf;
+void set_pdf_name_sudakov_g(string siatka)
+{
+pdf = LHAPDF::mkPDF(siatka, 0);
+}
 
 double Tq(const double & kt2, const double & u2)
 {
@@ -278,7 +281,7 @@ inline double totPqq(const double & delta, const double & z)
         return 0.;
 }
 
-inline double Pqq(const double & z)
+double Pqq(const double & z)
 {
         double ret = Cq*(1+z*z)/(1-z);
         if(ret!=ret)

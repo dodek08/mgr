@@ -66,8 +66,16 @@
 
 using namespace std;
 //czesc do rozkladow
+void set_pdf_name_sudakov_updf(string);
 
-void draw_gluons(); //wylicza kilkadziesiat punktow z rozkladu gluonów
+void set_beta_g(const double &);
+double get_beta_g();
+void set_n_g(const double &);
+double get_n_g();
+void set_lambda_g(const double &);
+double get_lambda_g();
+
+void draw_gluons(const int & pid); //wylicza kilkadziesiat punktow z rozkladu gluonów
 void read_Ts();
 vector<double> subset_with_sort(vector<double>&);
 ostream& operator<<(ostream& os,const vector<double>&);
@@ -79,6 +87,11 @@ double mu2max();
 
 double Tgs(const double & kt2, const double & mu2);
 double Tqs(const double & kt2, const double & mu2);
+
+
+double q_pid(const double&, const double&, const int&);
+double fq_pid_d(const double & x, const double & la2, const double & mu2, const int & pid);
+double fq_pid(const double & x, const double & kt2, const double & mu2, const int & pid);
 
 double a(const double &, const double &);
 double fad(const double &, const double &, const double &);
