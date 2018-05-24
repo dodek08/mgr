@@ -49,7 +49,6 @@ string NAZWA =  /*to_string(213) +*/ siatka + to_string(lp)/*+to_string(l2)*/;
 	// for(double lambda_g = l2*-1; lambda_g>(l2+1)*-1; lambda_g-=0.1)
 	// {
      // double n_g = -0.4-lp*0.05;
-
 		// for(double beta_g = 0; beta_g<2; beta_g+=0.5)
 		// {
 double beta_g = lp*0.1*-1.0;
