@@ -12,8 +12,12 @@ int main(int argc, char* argv[])
         warm_up_f2();
         read_Ts();
         string siatka = argv[1];
-        int lp = atoi(argv[2]);
+        // int lp = atoi(argv[2]);
         // int l2 = atoi(argv[3]);
+        // int l3 = atoi(argv[4]);
+        double n_g = atof(argv[2]);
+        double lambda_g = atof(argv[3]);
+        double beta_g = atof(argv[4]);
         set_pdf_name_sudakov_g(siatka);
         set_pdf_name_sudakov_cs(siatka);
         set_pdf_name_sudakov_f2(siatka);
@@ -21,11 +25,11 @@ int main(int argc, char* argv[])
         clock_t start = clock();
         cout<<setprecision(10)<<endl;
 
-
 Wyniki HERA("HERA1+2_NCep_920.dat");
 cout<<HERA.nazwa<<endl;
-cout<<lp<<"\t"<</*l2<<*/endl;
-cout<<"n_g"<<"\t"<<"lambda_g"<<"\t"<<"beta_g"<<"\t"<<"X2"<<"\t"<<"av_my_err"<</*"\t"<<"f2_full"<<*/endl;
+// cout<<lp<<"\t"<</*l2<<*/endl;
+// cout<<"n_g"<<"\t"<<"lambda_g"<<"\t"<<"beta_g"<<"\t"<<"X2"<<"\t"<<"av_my_err"<</*"\t"<<"f2_full"<<*/endl;
+cout<<"x"<<"\t"<<"Q2"<<"\t"<<"cs_calc"<<"\t"<<"cs_data"<<"\t"<<"err"<<endl;
 
 vector<double>::iterator x = HERA.x.begin();
 vector<double>::iterator Q2 = HERA.Q2.begin();
@@ -35,36 +39,38 @@ vector<double>::iterator err = HERA.totnoproc.begin();
 double av_my_err=0;
 double X2 =0;
 int licznik =1;
-set_n_g(1);
-set_beta_g(1);
-set_lambda_g(1);
+// set_n_g(-31);
+// set_beta_g(0.5);
+// set_lambda_g(0.5);
+// set_n_g(-0.6);
+// set_beta_g(4.5);
+// set_lambda_g(-0.9);
 
-string NAZWA =  /*to_string(213) +*/ siatka + to_string(lp)/*+to_string(l2)*/;
-    fstream save;
-    save.open(NAZWA,ios::out);
-    if (!save.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
 
-// for(double n_g = lp*0.1; n_g<lp*0.01+ 0.1; n_g+=0.01)
+// for(double beta_g = lp-59; beta_g>lp-60; beta_g-=0.1)
 // {
-	// for(double lambda_g = l2*-1; lambda_g>(l2+1)*-1; lambda_g-=0.1)
+	// for(double lambda_g = l2-1; lambda_g>(l2-2); lambda_g-=0.1)
+	// for(double lambda_g = -0.4; lambda_g>-1.4; lambda_g-=0.1)
 	// {
-     // double n_g = -0.4-lp*0.05;
+     // double n_g = lp*0.3-6;
+     // double beta_g = l2*0.6-2;
 		// for(double beta_g = 0; beta_g<2; beta_g+=0.5)
 		// {
-double beta_g = lp*0.1*-1.0;
- for(double n_g = -.5; n_g>-0.65; n_g-=0.05)
-{
- for(double lambda_g = -0.8; lambda_g>-0.95; lambda_g-=0.05)
-	{
+// double beta_g = lp*0.5;
+//  for(double n_g = -.5; n_g>-0.65; n_g-=0.05)
+// {
+//  for(double lambda_g = -0.8; lambda_g>-0.95; lambda_g-=0.05)
+// 	{
 set_n_g(n_g);
 set_lambda_g(lambda_g);
 set_beta_g(beta_g);
+// cout<<get_n_g()<<"\t"<<get_lambda_g()<<"\t"<<get_beta_g()<<endl;
+
 while(x!=HERA.x.end())
 {
-	if(*x>0.025 and *x<0.2 and *Q2<5000)
+	if(*Q2>=2 and *x<0.01)
 	{
 		// cout<<licznik<<"\t";
-	 // cout<<*x<<"\t"<<*Q2<<"\t"<<*y<<"\t"<<endl;
 	// double cs = cs_tau_f2(*x++,*Q2++,*y++);
 	double fl = FT_g(*x,*Q2);
 	double ft = FL_g(*x,*Q2);
@@ -73,14 +79,15 @@ while(x!=HERA.x.end())
 	// double f2_full = fl+ft+f2;
 	// double f2_data = *Q2/(4.*M_PI*M_PI*0.2)*(*sigma);
 	// cout<<get_n_g()<<"\t"<<get_lambda_g()<<"\t"<<get_beta_g()<<"\t";
-	// cout<<abs(cs/(*sigma++)-1.)<<endl;
-	//cout<<cs<<"\t"<<*sigma++<<"\t"<<f2_full<<endl;
-	X2 += (cs-*sigma)*(cs-*sigma)/(((*err)*(*sigma))*((*err)*(*sigma)));
+	// cout<<(*x)<<"\t"<<(*Q2)<<"\t"<<cs<<"\t"<<(*sigma)<<"\t"<<(*err)<<endl;
+
+	X2 += ((cs-*sigma)*(cs-*sigma))/((*err*0.01)*(*sigma)*(*err*0.01)*(*sigma));
 	av_my_err += abs(cs/(*sigma)-1.);
 	x++;
 	y++;
 	Q2++;
 	sigma++;
+	err++;
 	licznik++;
 	}
 	else
@@ -89,19 +96,30 @@ while(x!=HERA.x.end())
 	y++;
 	Q2++;
 	sigma++;
+	err++;
 	}
 }
+
+string NAZWA = "ch2.dat";
+    fstream save;
+    save.open(NAZWA,ios::out);
+    if (!save.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
+
+// X2=n_g*n_g+lambda_g*lambda_g+beta_g*beta_g+1.;
+
 x = HERA.x.begin();
 Q2 = HERA.Q2.begin();
 y = HERA.y.begin();
 sigma = HERA.sigma.begin();
-save<<get_n_g()<<"\t"<<get_lambda_g()<<"\t"<<get_beta_g()<<"\t";
-save<<X2<<"\t"<<av_my_err/(licznik*1.)<<endl;
+err = HERA.totnoproc.begin();
+// save<<get_n_g()<<"\t"<<get_lambda_g()<<"\t"<<get_beta_g()<<"\t";
+// save<<X2<<"\t"<<av_my_err/(licznik*1.)<<endl;
+save<<X2<<endl;
 licznik = 0;
 X2=0;
 av_my_err=0;
-}
-}
+
+// }
 // }
 // vector<double>::iterator iter = v.begin();
 //     for(double & x : xs)

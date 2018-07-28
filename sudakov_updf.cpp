@@ -4,6 +4,8 @@
 #include "Blad.h"
 
 
+#define FIT
+
 double h=0.1; //przy rozniczkowaniu numerycznym
 LHAPDF::PDF* pdfs;// = LHAPDF::mkPDF("CT14nlo", 0); //wazne!
 
@@ -604,7 +606,11 @@ double fa(const double & x, const double & kt2, const double & mu2)
         return pdfs->xfxQ2(21,x,mu0)*Tgs(mu0,mu2)/mu0;
     }
     else
+    #ifdef FIT
     return (n_g*pow(x,lambda_g)*pow((1.-x),beta_g))*(fad(x,kt2+h,mu2)-fad(x,kt2-h,mu2))/(2*h);
+    #ifndef FIT 
+    return (fad(x,kt2+h,mu2)-fad(x,kt2-h,mu2))/(2*h);
+
 }
 
 double fu(const double & x, const double & kt2, const double & mu2)
