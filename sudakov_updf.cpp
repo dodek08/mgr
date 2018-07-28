@@ -608,8 +608,9 @@ double fa(const double & x, const double & kt2, const double & mu2)
     else
     #ifdef FIT
     return (n_g*pow(x,lambda_g)*pow((1.-x),beta_g))*(fad(x,kt2+h,mu2)-fad(x,kt2-h,mu2))/(2*h);
-    #ifndef FIT 
+    #else
     return (fad(x,kt2+h,mu2)-fad(x,kt2-h,mu2))/(2*h);
+    #endif
 
 }
 
@@ -681,3 +682,4 @@ double fsi(const double & x, const double & kt2, const double & mu2)
 	}
 	return ret;
 }
+
