@@ -112,11 +112,11 @@ void read_ccfm()
 
     while(!f.eof())
     {
-        f>>tmp0
+        f>>tmp0; //x
         f>>tmp1; //kt2
         f>>tmp2;    //mu2
         f>>tmp3;    //TG
-        ccfm.insert(pair<tuple<double,double>,double>(make_tuple(exp(tmp0),exp(tmp1),exp(tmp2)*exp(tmp2)),tmp3));
+        ccfm.insert(pair<tuple<double,double,double>,double>(make_tuple(exp(tmp0),exp(tmp1),exp(tmp2)*exp(tmp2)),tmp3));
 
         ccfm_X.push_back(exp(tmp0));
         ccfm_Kt2.push_back(exp(tmp1));
@@ -150,7 +150,7 @@ double ccfm_s(const double & x, const double & kt2, const double & mu2)
     else
     {
         double xl, xh;
-        x_ind = find_index_gt(ccfm_Xred, x)
+        x_ind = find_index_gt(ccfm_Xred, x);
         xl = ccfm_Xred[x_ind-1];
         xh = ccfm_Xred[x_ind];
         double kth, ktl, muh, mul;
