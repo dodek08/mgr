@@ -150,7 +150,7 @@ double ccfm_s(const double & x, const double & kt2, const double & mu2)
     else
     {
         double xl, xh;
-        x_ind = find_index_gt(ccfm_Xred, x);
+        int x_ind = find_index_gt(ccfm_Xred, x);
         xl = ccfm_Xred[x_ind-1];
         xh = ccfm_Xred[x_ind];
         double kth, ktl, muh, mul;
@@ -178,19 +178,19 @@ double ccfm_s(const double & x, const double & kt2, const double & mu2)
         g = y1-f*lf[0];
         double ret1= f*mu2+g;
         //punkt drugi
-        lf[] = {mul, ktl, ccfm.find(make_tuple(xh, ktl, mul))->second};
-        rf[] = {muh, ktl, ccfm.find(make_tuple(xh, ktl, muh))->second};
-        lr[] = {mul, kth, ccfm.find(make_tuple(xh, kth, mul))->second};
-        rr[] = {muh, kth, ccfm.find(make_tuple(xh, kth, muh))->second};//interpolation
+        double lf2[] = {mul, ktl, ccfm.find(make_tuple(xh, ktl, mul))->second};
+        double rf2[] = {muh, ktl, ccfm.find(make_tuple(xh, ktl, muh))->second};
+        double lr2[] = {mul, kth, ccfm.find(make_tuple(xh, kth, mul))->second};
+        double rr2[] = {muh, kth, ccfm.find(make_tuple(xh, kth, muh))->second};//interpolation
         //y=ax+b y1=cx+d y2=fx+g
-        a = (rf[2]-rr[2])/(rf[1]-rr[1]);
-        c = (lf[2]-lr[2])/(rf[1]-rr[1]);
-        b = rf[2]-a*rf[1];
-        d = lf[2]-c*lf[1];
+        a = (rf2[2]-rr2[2])/(rf2[1]-rr2[1]);
+        c = (lf2[2]-lr2[2])/(rf2[1]-rr2[1]);
+        b = rf2[2]-a*rf2[1];
+        d = lf2[2]-c*lf2[1];
         y = a*kt2+b;
         y1 = c*kt2+d;
-        f = (y-y1)/(rf[0]-lf[0]);
-        g = y1-f*lf[0];
+        f = (y-y1)/(rf2[0]-lf2[0]);
+        g = y1-f*lf2[0];
         double ret2= f*mu2+g;
         //interpolacja miedzy xl a xh
         a = (ret2 - ret1)/(xh - xl);
