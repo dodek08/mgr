@@ -13,6 +13,15 @@ double mu0;// = LHAPDF::mkPDF("CT14nlo", 0)->q2Min()+0.1;
 
 multimap<tuple<double,double>,double> TG;
 multimap<tuple<double,double>,double> TQ;
+multimap<tuple<double,double,double>,double> ccfm;
+
+vector<double> ccfm_X;
+vector<double> ccfm_Mu;
+vector<double> ccfm_Kt2;
+
+vector<double> ccfm_Xred;
+vector<double> ccfm_Mured; //(Mureduced czyli z unikalnymi wartosciami
+vector<double> ccfm_Kt2red;
 
 vector<double> Mu;
 vector<double> Kt2;
@@ -89,6 +98,113 @@ double mu2min()
 {
 	return MU2MIN;
 }
+
+
+void read_ccfm()
+{
+/*    cout<<setprecision(8)<<pdfs->alphasQ2(2*2)<<endl;
+    cout<<setprecision(8)<<pdfs->alphasQ(2)<<endl;
+    cout<<pdfs->xfxQ2(1, 0.1, 2*2)<<endl;*/ //cos jak zlota regula Fermiego
+    fstream f;
+    double tmp0,tmp1,tmp2,tmp3;
+    f.open("ccfm.dat", ios::in | ios::out);
+    if (!f.is_open()){ throw Blad("zly plik wejscia ccfm, nie istnieje lub zle wprowadzony");}
+
+    while(!f.eof())
+    {
+        f>>tmp0
+        f>>tmp1; //kt2
+        f>>tmp2;    //mu2
+        f>>tmp3;    //TG
+        ccfm.insert(pair<tuple<double,double>,double>(make_tuple(exp(tmp0),exp(tmp1),exp(tmp2)*exp(tmp2)),tmp3));
+
+        ccfm_X.push_back(exp(tmp0));
+        ccfm_Kt2.push_back(exp(tmp1));
+        ccfm_Mu.push_back(exp(tmp2)*exp(tmp2));
+    }
+    f.close();
+
+    ccfm_Kt2red=subset_with_sort(ccfm_Kt2);
+    ccfm_Xred=subset_with_sort(ccfm_X);
+    ccfm_Mured=subset_with_sort(ccfm_Mu);
+}
+
+
+
+double ccfm_s(const double & x, const double & kt2, const double & mu2)
+{
+    // if(mu2<MU2MIN or mu2>MU2MAX)
+        // throw Blad("out of range w Tq",mu2,kt2,0.,0.);
+    int tab[3]={0}; //table of indexes
+    //unsigned int i=1;
+
+    multimap<tuple<double,double>,double,double>::iterator it=TQ.find(make_tuple(kt2,mu2));
+
+    if(it!=TQ.end() or (qMu.back()==mu2 and qKt2.back()==kt2))
+    {
+        if (it->second<0)
+            return 0.0;
+        else
+            return it->second;
+    }
+    else
+    {
+        double xl, xh;
+        x_ind = find_index_gt(ccfm_Xred, x)
+        xl = ccfm_Xred[x_ind-1];
+        xh = ccfm_Xred[x_ind];
+        double kth, ktl, muh, mul;
+        tab[0]=find_index_gt(ccfm_Mured,mu2);
+        tab[1]=tab[0]-1;
+        tab[2]=find_index_gt(ccfm_Kt2red,kt2);
+        tab[3]=tab[2]-1;
+        muh = qMured[tab[0]];
+        mul = qMured[tab[1]];
+        kth = qKt2red[tab[2]];
+        ktl = qKt2red[tab[3]];
+        //punkt pierwszy
+        double lf[] = {mul, ktl, ccfm.find(make_tuple(xl, ktl, mul))->second};
+        double rf[] = {muh, ktl, ccfm.find(make_tuple(xl, ktl, muh))->second};
+        double lr[] = {mul, kth, ccfm.find(make_tuple(xl, kth, mul))->second};
+        double rr[] = {muh, kth, ccfm.find(make_tuple(xl, kth, muh))->second};//interpolation
+        double a,b,c,d,f,g; //y=ax+b y1=cx+d y2=fx+g
+        a = (rf[2]-rr[2])/(rf[1]-rr[1]);
+        c = (lf[2]-lr[2])/(rf[1]-rr[1]);
+        b = rf[2]-a*rf[1];
+        d = lf[2]-c*lf[1];
+        double y = a*kt2+b;
+        double y1 = c*kt2+d;
+        f = (y-y1)/(rf[0]-lf[0]);
+        g = y1-f*lf[0];
+        double ret1= f*mu2+g;
+        //punkt drugi
+        lf[] = {mul, ktl, ccfm.find(make_tuple(xh, ktl, mul))->second};
+        rf[] = {muh, ktl, ccfm.find(make_tuple(xh, ktl, muh))->second};
+        lr[] = {mul, kth, ccfm.find(make_tuple(xh, kth, mul))->second};
+        rr[] = {muh, kth, ccfm.find(make_tuple(xh, kth, muh))->second};//interpolation
+        //y=ax+b y1=cx+d y2=fx+g
+        a = (rf[2]-rr[2])/(rf[1]-rr[1]);
+        c = (lf[2]-lr[2])/(rf[1]-rr[1]);
+        b = rf[2]-a*rf[1];
+        d = lf[2]-c*lf[1];
+        y = a*kt2+b;
+        y1 = c*kt2+d;
+        f = (y-y1)/(rf[0]-lf[0]);
+        g = y1-f*lf[0];
+        double ret2= f*mu2+g;
+        //interpolacja miedzy xl a xh
+        a = (ret2 - ret1)/(xh - xl);
+        b = ret1 - xl*a;
+        double ret = a*x + b;
+
+        if (ret<0)
+            return 0.0;
+        else
+          //  cout<<difftime(stop,start)<<endl;
+        return ret;
+        }
+}
+
 
 void read_Ts()
 {
@@ -358,138 +474,6 @@ for( int ix=0; ix<NX+1; ix++ ){
 
     save.close();
      cout << "time sigma \t"<<pid<<"\t" << (double)(clock()-t)/(CLOCKS_PER_SEC) << "sek" << endl;
- // double XTMP=exp(-13.815511);
- // double KT2TMP=exp(-6.7048144);
-
-  // cout<<fa(XTMP, KT2TMP, exp(0.58221562))<<endl;
-  // cout<<fa(XTMP, KT2TMP, exp(2.3660621))<<endl;
-   // cout<<fa(XTMP, KT2TMP, exp(4.1499086))<<endl;
- // cout<<Tgs(KT2TMP,exp(0.58221562))<<"\t"<<Tg(KT2TMP,exp(0.58221562))<<endl;
- // cout<<Tgs( 0.001224, 1156679.92215151)<<"\t"<<Tg( 0.001224, 1156679.92215151)<<endl;
- // cout<<Tgs(KT2TMP,exp(2.3660621))<<"\t"<<Tg(KT2TMP,exp(2.3660621))<<endl;
- // cout<<Tgs(KT2TMP,exp(4.1499086))<<"\t"<<Tg(KT2TMP,exp(4.1499086))<<endl;
-// double XTMP=exp(-0.010050336);
-// double KT2TMP=exp(15.908131);
-// cout<<fa(XTMP, KT2TMP, exp(14.852988))<<endl;
-
-
-
-
-
-// vector<double> xs =
-// {
-//     -13.815511,
-// -12.434965,
-// -11.054419,
-// -9.673872,
-// -8.293326,
-// -6.912780,
-// -5.532234,
-// -4.151688,
-// -2.771142,
-// -1.390596,
-// -0.010050
-// };
-
-// vector<double> kt2s =
-// {
-//     -6.704814,
-// -4.192265,
-// -1.679715,
-// 0.832834,
-// 3.345384,
-// 5.857933,
-// 8.370483,
-// 10.883032,
-// 13.395582,
-// 15.908131,
-// 18.420681
-// };
-
-// vector<double> mu2s = 
-// {
-//     0.582216,
-// 2.366062,
-// 4.149909,
-// 5.933755,
-// 7.717602,
-// 9.501448,
-// 11.285295,
-// 13.069141,
-// 14.852988,
-// 16.636834,
-// 18.420681
-// };
-
-// double x1,val1,mu21;
-
-//     for(double & x : xs)
-//     {
-//         x1=exp(x);
-
-//     for(double & val : kt2s)
-//     {
-//         val1=exp(val);
-//         for(double & mu2 : mu2s)
-//         {
-//             mu21=exp(mu2);
-//             save<<x<<" "<<val<<" "<<mu2<<" "<<fa(x1,val1,mu21)<<endl;
-//         }
-//     }
-//     cout<<s<<endl;
-//     t=clock()-t;
-//     cout<<"time sigma x: "<<((double)t)/CLOCKS_PER_SEC<<endl;
-//     } 
-//     save.close();
-//  double MINX = 1.0e-6;
-// double MAXX = 0.99;
-// double MINKT2 = pow( 0.035, 2.0) ;
-// double MAXKT2 = pow( 1.0e4, 2.0 );
-// double MINMU2 = 1.79;
-// double MAXMU2 = pow( 1.0e4, 2.0 );
-// double MINLOGX, MINLOGKT2, MINLOGMU2;
-// double MAXLOGX, MAXLOGKT2, MAXLOGMU2;
-// int NX, NKT2, NMU2;
-// double DX, DKT2, DMU2;
-
-// MINLOGX = log( MINX );
-// MAXLOGX = log( MAXX );
-// MINLOGKT2 = log( MINKT2 );
-// MAXLOGKT2 = log( MAXKT2 );
-// MINLOGMU2 = log( MINMU2 );
-// MAXLOGMU2 = log( MAXMU2 );
-// NX = 60;
-// NKT2 = 140;
-// NMU2 = 120;
-// DX = ( MAXLOGX - MINLOGX ) / NX;
-// DKT2 = ( MAXLOGKT2 - MINLOGKT2 ) / NKT2;
-// DMU2 = ( MAXLOGMU2 - MINLOGMU2 ) / NMU2;
-// double logx;
-// double logkt2;
-// double logmu2;
-// double x;
-// double kt2;
-// double mu2;
-
-
-
-// for( int ix=0; ix<NX+1; ix++ ){
-//   logx = MINLOGX + ix*DX;
-//   x = exp(logx);
-//   for( int ikt2=0; ikt2<NKT2+1; ikt2++ ){
-//     logkt2 = MINLOGKT2 + ikt2*DKT2;
-//         kt2 = exp(logkt2);
-//         t=clock();
-//     for( int imu2=0; imu2<NMU2+1; imu2++ ){
-//      logmu2 = MINLOGMU2 + imu2*DMU2;
-//         mu2 = exp(logmu2);
-     
-//             save<<x<<"\t"<<kt2<<"\t"<<mu2<<"\t"<<fa(x,kt2,mu2)<<endl;
-//         }
-//         // cout << "time sigma kt2 " << (double)(clock()-t)/(CLOCKS_PER_SEC) << "sek" << endl;
-//     }
-// }
-
 
 }
 
