@@ -11,6 +11,7 @@ int main(int argc, char* argv[])
         warm_up();
         warm_up_f2();
         read_Ts();
+        read_ccfm();
         string siatka = argv[1];
         // int lp = atoi(argv[2]);
         // int l2 = atoi(argv[3]);
@@ -72,15 +73,16 @@ while(x!=HERA.x.end())
 	{
 		// cout<<licznik<<"\t";
 	// double cs = cs_tau_f2(*x++,*Q2++,*y++);
-	double fl = FT_g(*x,*Q2);
-	double ft = FL_g(*x,*Q2);
-	double f2 = F2_q(*x,*Q2);
-	double cs = (fl+ft+f2)-(*y*(*y))/(1.+(1.-*y)*(1.-*y))*fl;
+	// double fl = FT_g(*x,*Q2);
+	// double ft = FL_g(*x,*Q2);
+	// double f2 = F2_q(*x,*Q2);
+	// double cs = (fl+ft+f2)-(*y*(*y))/(1.+(1.-*y)*(1.-*y))*fl;
 	// double f2_full = fl+ft+f2;
 	// double f2_data = *Q2/(4.*M_PI*M_PI*0.2)*(*sigma);
 	// cout<<get_n_g()<<"\t"<<get_lambda_g()<<"\t"<<get_beta_g()<<"\t";
 	// cout<<(*x)<<"\t"<<(*Q2)<<"\t"<<cs<<"\t"<<(*sigma)<<"\t"<<(*err)<<endl;
-
+	double cs =1.0;// xD
+	cout<<(*x)<<"\t"<<(*Q2)<<"\t"<<(*Q2)*(*Q2)<<"\t"<<ccfm_s((*x),(*Q2),(*Q2)*(*Q2))<<endl;
 	X2 += ((cs-*sigma)*(cs-*sigma))/((*err*0.01)*(*sigma)*(*err*0.01)*(*sigma));
 	av_my_err += abs(cs/(*sigma)-1.);
 	x++;
