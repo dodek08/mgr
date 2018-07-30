@@ -127,6 +127,11 @@ void read_ccfm()
     ccfm_Kt2red=subset_with_sort(ccfm_Kt2);
     ccfm_Xred=subset_with_sort(ccfm_X);
     ccfm_Mured=subset_with_sort(ccfm_Mu);
+    cout<<ccfm_Xred<<endl;
+    cout<<endl;
+    cout<<ccfm_Kt2red<<endl;
+    cout<<endl;
+    cout<<ccfm_Mured<<endl;
 }
 
 
@@ -158,10 +163,10 @@ double ccfm_s(const double & x, const double & kt2, const double & mu2)
         tab[1]=tab[0]-1;
         tab[2]=find_index_gt(ccfm_Kt2red,kt2);
         tab[3]=tab[2]-1;
-        muh = qMured[tab[0]];
-        mul = qMured[tab[1]];
-        kth = qKt2red[tab[2]];
-        ktl = qKt2red[tab[3]];
+        muh = ccfm_Mured[tab[0]];
+        mul = ccfm_Mured[tab[1]];
+        kth = ccfm_Kt2red[tab[2]];
+        ktl = ccfm_Kt2red[tab[3]];
         //punkt pierwszy
         double lf[] = {mul, ktl, ccfm.find(make_tuple(xl, ktl, mul))->second};
         double rf[] = {muh, ktl, ccfm.find(make_tuple(xl, ktl, muh))->second};
