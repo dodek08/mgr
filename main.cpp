@@ -31,7 +31,8 @@ cout<<HERA.nazwa<<endl;
 // cout<<lp<<"\t"<</*l2<<*/endl;
 // cout<<"n_g"<<"\t"<<"lambda_g"<<"\t"<<"beta_g"<<"\t"<<"X2"<<"\t"<<"av_my_err"<</*"\t"<<"f2_full"<<*/endl;
 cout<<"x"<<"\t"<<"Q2"<<"\t"<<"cs_calc"<<"\t"<<"cs_data"<<"\t"<<"err"<<endl;
-
+double alpha =7.297e-3;
+double xmp0 = 0.93827;
 vector<double>::iterator x = HERA.x.begin();
 vector<double>::iterator Q2 = HERA.Q2.begin();
 vector<double>::iterator y = HERA.y.begin();
@@ -69,7 +70,7 @@ set_beta_g(beta_g);
 
 while(x!=HERA.x.end())
 {
-	if(*Q2>=2 and *x<0.01)
+	if(*Q2>=1.5 and *x<0.01)
 	{
 		// cout<<licznik<<"\t";
 	// double cs = cs_tau_f2(*x++,*Q2++,*y++);
@@ -81,9 +82,15 @@ while(x!=HERA.x.end())
 	// double f2_data = *Q2/(4.*M_PI*M_PI*0.2)*(*sigma);
 	// cout<<get_n_g()<<"\t"<<get_lambda_g()<<"\t"<<get_beta_g()<<"\t";
 	// cout<<(*x)<<"\t"<<(*Q2)<<"\t"<<cs<<"\t"<<(*sigma)<<"\t"<<(*err)<<endl;
-	double cs =1.0;// xD
-	cout<<(*x)<<"\t"<<(*Q2)<<"\t"<<(*Q2)*(*Q2)<<"\t"<<ccfm_s((*x),(*Q2),(*Q2)*(*Q2))<<"\t"<<fa((*x),(*Q2),(*Q2)*(*Q2))<<endl;
-	X2 += ((cs-*sigma)*(cs-*sigma))/((*err*0.01)*(*sigma)*(*err*0.01)*(*sigma));
+	// double cs =1.0;// xD
+	// cout<<(*x)<<"\t"<<(*Q2)<<"\t"<<(*Q2)*(*Q2)<<"\t"<<ccfm_s((*x),(*Q2),(*Q2)*(*Q2))<<"\t"<<fa((*x),(*Q2),(*Q2)*(*Q2))<<endl;
+	double fac = pow((*Q2),2)*(1-(*x))/
+(4*pow(M_PI,2)*alpha*((*Q2)+pow(2*(*x)*xmp0,2)));
+            double units = 10.0 * pow(197.3271,2);
+            fac = fac /(units * 1.e-3)
+            double F2_data = fac*(*cs);
+            double err_data = fac*(*err);
+	// X2 += ((cs-*sigma)*(cs-*sigma))/((*err*0.01)*(*sigma)*(*err*0.01)*(*sigma));
 	av_my_err += abs(cs/(*sigma)-1.);
 	x++;
 	y++;
