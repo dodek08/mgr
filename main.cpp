@@ -88,7 +88,7 @@ while(x!=HERA.x.end())
 (4*pow(M_PI,2)*alpha*((*Q2)+pow(2*(*x)*xmp0,2)));
             double units = 10.0 * pow(197.3271,2);
             fac = fac /(units * 1.e-3);
-            double F2_data = fac*(*cs);
+            double F2_data = fac*(*sigm);
             double err_data = fac*(*err);
 	// X2 += ((cs-*sigma)*(cs-*sigma))/((*err*0.01)*(*sigma)*(*err*0.01)*(*sigma));
 	// av_my_err += abs(cs/(*sigma)-1.);
