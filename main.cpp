@@ -74,9 +74,9 @@ while(x!=HERA.x.end())
 	{
 		// cout<<licznik<<"\t";
 	// double cs = cs_tau_f2(*x++,*Q2++,*y++);
-	// double fl = FT_g(*x,*Q2);
-	// double ft = FL_g(*x,*Q2);
-	// double f2 = F2_q(*x,*Q2);
+	double fl = FT_g(*x,*Q2);
+	double ft = FL_g(*x,*Q2);
+	double f2 = F2_q(*x,*Q2);
 	// double cs = (fl+ft+f2)-(*y*(*y))/(1.+(1.-*y)*(1.-*y))*fl;
 	// double f2_full = fl+ft+f2;
 	// double f2_data = *Q2/(4.*M_PI*M_PI*0.2)*(*sigma);
@@ -87,11 +87,12 @@ while(x!=HERA.x.end())
 	double fac = pow((*Q2),2)*(1-(*x))/
 (4*pow(M_PI,2)*alpha*((*Q2)+pow(2*(*x)*xmp0,2)));
             double units = 10.0 * pow(197.3271,2);
-            fac = fac /(units * 1.e-3)
+            fac = fac /(units * 1.e-3);
             double F2_data = fac*(*cs);
             double err_data = fac*(*err);
 	// X2 += ((cs-*sigma)*(cs-*sigma))/((*err*0.01)*(*sigma)*(*err*0.01)*(*sigma));
-	av_my_err += abs(cs/(*sigma)-1.);
+	// av_my_err += abs(cs/(*sigma)-1.);
+    cout<<(*x)<<"\t"<<(*Q2)<<"\t"<<F2_data<<"\t"<<err_data<<"\t"<<f2<<"\t"<<fl+ft<<endl;
 	x++;
 	y++;
 	Q2++;
