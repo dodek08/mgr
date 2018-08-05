@@ -85,8 +85,9 @@ while(x!=HERA.x.end())
 	// cout<<(*x)<<"\t"<<(*Q2)<<"\t"<<cs<<"\t"<<(*sigma)<<"\t"<<(*err)<<endl;
 	// double cs =1.0;// xD
 	// cout<<(*x)<<"\t"<<(*Q2)<<"\t"<<(*Q2)*(*Q2)<<"\t"<<ccfm_s((*x),(*Q2),(*Q2)*(*Q2))<<"\t"<<fa((*x),(*Q2),(*Q2)*(*Q2))<<endl;
-	double fac = pow((*Q2),2)*(1-(*x))/
-(4*pow(M_PI,2)*alpha*((*Q2)+pow(2*(*x)*xmp0,2)));
+	// double fac = pow((*Q2),2)*(1-(*x))/
+// (4*pow(M_PI,2)*alpha*((*Q2)+pow(2*(*x)*xmp0,2)));
+	double fac = (*Q2)/(4*M_PI*M_PI*alpha);
             double units = 10.0 * pow(197.3271,2);
             fac = fac /(units * 1.e-3);
             double F2_data = fac*(*sigma);
