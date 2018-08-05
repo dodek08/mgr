@@ -89,7 +89,7 @@ while(x!=HERA.x.end())
             double units = 10.0 * pow(197.3271,2);
             fac = fac /(units * 1.e-3);
             double F2_data = fac*(*sigma);
-            double err_data = fac*(*err);
+            double err_data = fac*(*sigma)*(*err)*0.01;
 	// X2 += ((cs-*sigma)*(cs-*sigma))/((*err*0.01)*(*sigma)*(*err*0.01)*(*sigma));
 	// av_my_err += abs(cs/(*sigma)-1.);
     cout<<(*x)<<"\t"<<(*Q2)<<"\t"<<F2_data<<"\t"<<err_data<<"\t"<<f2<<"\t"<<fl+ft<<endl;
