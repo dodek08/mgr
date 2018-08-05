@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
         warm_up();
         warm_up_f2();
         read_Ts();
-        read_ccfm();
+        // read_ccfm();
         string siatka = argv[1];
         // int lp = atoi(argv[2]);
         // int l2 = atoi(argv[3]);
