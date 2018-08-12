@@ -32,8 +32,8 @@ cout<<HERA.nazwa<<endl;
 // cout<<"n_g"<<"\t"<<"lambda_g"<<"\t"<<"beta_g"<<"\t"<<"X2"<<"\t"<<"av_my_err"<</*"\t"<<"f2_full"<<*/endl;
 // cout<<"x"<<"\t"<<"Q2"<<"\t"<<"cs_calc"<<"\t"<<"cs_data"<<"\t"<<"err"<<endl;
 cout<<"x"<<"\t"<<"Q2"<<"\t"<<"cs_data"<<"\t"<<"err"<<"\t"<<"cs_calc"<<"\t"<<"F2_q"<<"\t"<<"FlFt"<<endl;
-double alpha =7.297e-3;
-double xmp0 = 0.93827;
+// double alpha =7.297e-3;
+// double xmp0 = 0.93827;
 vector<double>::iterator x = HERA.x.begin();
 vector<double>::iterator Q2 = HERA.Q2.begin();
 vector<double>::iterator y = HERA.y.begin();
@@ -129,7 +129,7 @@ err = HERA.totnoproc.begin();
 save<<X2<<endl;
 licznik = 0;
 X2=0;
-av_my_err=0;
+// av_my_err=0;
 
 // }
 // }
