@@ -84,7 +84,7 @@ while(x!=HERA.x.end())
 	// cout<<get_n_g()<<"\t"<<get_lambda_g()<<"\t"<<get_beta_g()<<"\t";
 	// cout<<(*x)<<"\t"<<(*Q2)<<"\t"<<cs<<"\t"<<(*sigma)<<"\t"<<(*err)<<endl;
 	// double cs =1.0;// xD
-	// cout<<(*x)<<"\t"<<(*Q2)<<"\t"<<(*Q2)*(*Q2)<<"\t"<<ccfm_s((*x),(*Q2),(*Q2)*(*Q2))<<"\t"<<fa((*x),(*Q2),(*Q2)*(*Q2))<<endl;
+	cout<<(*x)<<"\t"<<(*Q2)<<"\t"<<(*Q2)*(*Q2)<<"\t"<<ccfm_s((*x),(*Q2),(*Q2)*(*Q2))<<"\t"<<fa((*x),(*Q2),(*Q2)*(*Q2))<<endl;
 	// double fac = pow((*Q2),2)*(1-(*x))/
 // (4*pow(M_PI,2)*alpha*((*Q2)+pow(2*(*x)*xmp0,2)));
 	// double fac = (*Q2)/(4*M_PI*M_PI*alpha);
@@ -92,9 +92,9 @@ while(x!=HERA.x.end())
  //            fac = fac /(units * 1.e-3);
  //            double F2_data = fac*(*sigma);
  //            double err_data = fac*(*sigma)*(*err)*0.01;
-	// X2 += ((cs-*sigma)*(cs-*sigma))/((*err*0.01)*(*sigma)*(*err*0.01)*(*sigma));
+	X2 += ((cs-*sigma)*(cs-*sigma))/((*err*0.01)*(*sigma)*(*err*0.01)*(*sigma));
 	// av_my_err += abs(cs/(*sigma)-1.);
-    cout<<(*x)<<"\t"<<(*Q2)<<"\t"<<*sigma<<"\t"<<*err<<"\t"<<cs<<"\t"<<f2<<"\t"<<fl<<"\t"<<ft<<endl;
+    // cout<<(*x)<<"\t"<<(*Q2)<<"\t"<<*sigma<<"\t"<<*err<<"\t"<<cs<<"\t"<<f2<<"\t"<<fl<<"\t"<<ft<<endl;
 	x++;
 	y++;
 	Q2++;
@@ -126,7 +126,7 @@ sigma = HERA.sigma.begin();
 err = HERA.totnoproc.begin();
 // save<<get_n_g()<<"\t"<<get_lambda_g()<<"\t"<<get_beta_g()<<"\t";
 // save<<X2<<"\t"<<av_my_err/(licznik*1.)<<endl;
-save<<X2<<endl;
+save<<X2/(229.-2.)<<endl;
 licznik = 0;
 X2=0;
 // av_my_err=0;
