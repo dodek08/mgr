@@ -126,7 +126,7 @@ sigma = HERA.sigma.begin();
 err = HERA.totnoproc.begin();
 // save<<get_n_g()<<"\t"<<get_lambda_g()<<"\t"<<get_beta_g()<<"\t";
 // save<<X2<<"\t"<<av_my_err/(licznik*1.)<<endl;
-save<<X2/(227.0)<<endl;
+save<<X2/227.0<<endl;
 licznik = 0;
 X2=0;
 // av_my_err=0;
