@@ -42,6 +42,9 @@ vector<double>::iterator err = HERA.totnoproc.begin();
 double av_my_err=0;
 double X2 =0;
 int licznik =1;
+
+draw_gluons(21);
+
 // set_n_g(-31);
 // set_beta_g(0.5);
 // set_lambda_g(0.5);
@@ -75,10 +78,10 @@ while(x!=HERA.x.end())
 	{
 		// cout<<licznik<<"\t";
 	// double cs = cs_tau_f2(*x++,*Q2++,*y++);
-	double fl = FT_g(*x,*Q2);
-	double ft = FL_g(*x,*Q2);
-	double f2 = F2_q(*x,*Q2);
-	double cs = (fl+ft+f2);//-(*y*(*y))/(1.+(1.-*y)*(1.-*y))*fl;
+	// double fl = FT_g(*x,*Q2);
+	// double ft = FL_g(*x,*Q2);
+	// double f2 = F2_q(*x,*Q2);
+	// double cs = (fl+ft+f2);//-(*y*(*y))/(1.+(1.-*y)*(1.-*y))*fl;
 	// double f2_full = fl+ft+f2;
 	// double f2_data = *Q2/(4.*M_PI*M_PI*0.2)*(*sigma);
 	// cout<<get_n_g()<<"\t"<<get_lambda_g()<<"\t"<<get_beta_g()<<"\t";
@@ -94,7 +97,7 @@ while(x!=HERA.x.end())
  //            double err_data = fac*(*sigma)*(*err)*0.01;
 	X2 += ((cs-*sigma)*(cs-*sigma))/((*err*0.01)*(*sigma)*(*err*0.01)*(*sigma));
 	// av_my_err += abs(cs/(*sigma)-1.);
-    cout<<(*x)<<"\t"<<(*Q2)<<"\t"<<*sigma<<"\t"<<*err<<"\t"<<cs<<"\t"<<f2<<"\t"<<fl<<"\t"<<ft<<endl;
+    // cout<<(*x)<<"\t"<<(*Q2)<<"\t"<<*sigma<<"\t"<<*err<<"\t"<<cs<<"\t"<<f2<<"\t"<<fl<<"\t"<<ft<<endl;
 	x++;
 	y++;
 	Q2++;
