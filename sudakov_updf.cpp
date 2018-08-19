@@ -404,7 +404,7 @@ void draw_gluons(const int & pid)
     
     
    // cout<<mu0<<endl;
-    string NAZWA = "siatki/rozklad_CT10nlo_pid_" + to_string(pid);
+    string NAZWA = "siatki/rozklad_"+namexd+"_pid_" + to_string(pid);
     fstream save;
     save.open(NAZWA,ios::out);
     if (!save.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
