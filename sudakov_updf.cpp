@@ -504,6 +504,7 @@ for( int ix=0; ix<NX+1; ix++ ){
 
 }
 }
+}
 
 double q_pid(const double & x, const double & kt2, const int & pid)
 {
