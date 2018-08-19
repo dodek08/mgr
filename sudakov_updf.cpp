@@ -10,6 +10,7 @@ double h=0.1; //przy rozniczkowaniu numerycznym
 LHAPDF::PDF* pdfs;// = LHAPDF::mkPDF("CT14nlo", 0); //wazne!
 
 double mu0;// = LHAPDF::mkPDF("CT14nlo", 0)->q2Min()+0.1;
+string namexd;
 
 multimap<tuple<double,double>,double> TG;
 multimap<tuple<double,double>,double> TQ;
@@ -77,6 +78,7 @@ void set_pdf_name_sudakov_updf(string siatka)
 {
  pdfs = LHAPDF::mkPDF(siatka, 0);
  mu0 =  LHAPDF::mkPDF(siatka, 0)->q2Min()+0.1;
+ namexd = siatka;
 }
 
 double kt2max()
@@ -461,9 +463,7 @@ if(pid != 21)
 }
 else
 {
-    cout<<"dddddddddd"<<endl;
-    cout<<pdfs->name()<<endl;   
-    NAZWA = "siatki/wykres_rozklad_CT10nlo_pid_" + to_string(pid);
+    NAZWA = "siatki/wykres_rozklad_"+namexd+"_pid_" + to_string(pid);
     fstream save2;
     save2.open(NAZWA,ios::out);
     if (!save.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
