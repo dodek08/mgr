@@ -483,6 +483,7 @@ else
     }
     }
     save2.close();
+
 for( int ix=0; ix<NX+1; ix++ ){
   logx = MINLOGX + ix*DX;
   x = exp(logx);
@@ -498,11 +499,11 @@ for( int ix=0; ix<NX+1; ix++ ){
         }
         // cout << "time sigma kt2 " << (double)(clock()-t)/(CLOCKS_PER_SEC) << "sek" << endl;
     }
-
-    save.close();
      cout << "time x =\t"<<x<<"\t" << (double)(clock()-t)/(CLOCKS_PER_SEC) << " sek" << endl;
 
 }
+    save.close();
+
 }
 }
 
