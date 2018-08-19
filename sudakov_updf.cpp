@@ -462,6 +462,7 @@ if(pid != 21)
 else
 {
     cout<<"dddddddddd"<<endl;
+    cout<<pdfs.name()<<endl;   
     NAZWA = "siatki/wykres_rozklad_CT10nlo_pid_" + to_string(pid);
     fstream save2;
     save2.open(NAZWA,ios::out);
