@@ -496,11 +496,11 @@ for( int ix=0; ix<NX+1; ix++ ){
      
             save<<x<<"\t"<<kt2<<"\t"<<mu2<<"\t"<<fa(x,kt2,mu2)<<endl;
         }
-        cout << "time sigma kt2 " << (double)(clock()-t)/(CLOCKS_PER_SEC) << "sek" << endl;
+        // cout << "time sigma kt2 " << (double)(clock()-t)/(CLOCKS_PER_SEC) << "sek" << endl;
     }
 
     save.close();
-     cout << "time sigma \t"<<pid<<"\t" << (double)(clock()-t)/(CLOCKS_PER_SEC) << "sek" << endl;
+     cout << "time x =\t"<<x<<"\t" << (double)(clock()-t)/(CLOCKS_PER_SEC) << " sek" << endl;
 
 }
 }
