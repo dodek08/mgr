@@ -461,6 +461,10 @@ if(pid != 21)
 }
 else
 {
+    NAZWA = "siatki/wykres_rozklad_CT10nlo_pid_" + to_string(pid);
+    fstream save2;
+    save2.open(NAZWA,ios::out);
+    if (!save.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
     vector<double> xss = {0.00001,0.0001,0.001,0.01,0.1};
     vector<double> mu2s = {10,100,1000,100000,1000000};
     for( double x : xss)
@@ -473,30 +477,31 @@ else
     for(double mu2 : mu2s)
     {
      
-            save<<x<<"\t"<<kt2<<"\t"<<mu2<<"\t"<<fa(x,kt2,mu2)<<endl;
+            save2<<x<<"\t"<<kt2<<"\t"<<mu2<<"\t"<<fa(x,kt2,mu2)<<endl;
     }
     }
     }
-// for( int ix=0; ix<NX+1; ix++ ){
-//   logx = MINLOGX + ix*DX;
-//   x = exp(logx);
-//   for( int ikt2=0; ikt2<NKT2+1; ikt2++ ){
-//     logkt2 = MINLOGKT2 + ikt2*DKT2;
-//         kt2 = exp(logkt2);
-//         // t=clock();
-//     for( int imu2=0; imu2<NMU2+1; imu2++ ){
-//      logmu2 = MINLOGMU2 + imu2*DMU2;
-//         mu2 = exp(logmu2);
+    save2.close();
+for( int ix=0; ix<NX+1; ix++ ){
+  logx = MINLOGX + ix*DX;
+  x = exp(logx);
+  for( int ikt2=0; ikt2<NKT2+1; ikt2++ ){
+    logkt2 = MINLOGKT2 + ikt2*DKT2;
+        kt2 = exp(logkt2);
+        // t=clock();
+    for( int imu2=0; imu2<NMU2+1; imu2++ ){
+     logmu2 = MINLOGMU2 + imu2*DMU2;
+        mu2 = exp(logmu2);
      
-//             save<<x<<"\t"<<kt2<<"\t"<<mu2<<"\t"<<fa(x,kt2,mu2)<<endl;
-//         }
-        // cout << "time sigma kt2 " << (double)(clock()-t)/(CLOCKS_PER_SEC) << "sek" << endl;
+            save<<x<<"\t"<<kt2<<"\t"<<mu2<<"\t"<<fa(x,kt2,mu2)<<endl;
+        }
+        cout << "time sigma kt2 " << (double)(clock()-t)/(CLOCKS_PER_SEC) << "sek" << endl;
     }
-
 
     save.close();
      cout << "time sigma \t"<<pid<<"\t" << (double)(clock()-t)/(CLOCKS_PER_SEC) << "sek" << endl;
 
+}
 }
 
 double q_pid(const double & x, const double & kt2, const int & pid)
