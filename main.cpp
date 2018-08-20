@@ -78,10 +78,10 @@ while(x!=HERA.x.end())
 	{
 		// cout<<licznik<<"\t";
 	// double cs = cs_tau_f2(*x++,*Q2++,*y++);
-	// double fl = FT_g(*x,*Q2);
-	// double ft = FL_g(*x,*Q2);
-	// double f2 = F2_q(*x,*Q2);
-	// double cs = (fl+ft+f2);//-(*y*(*y))/(1.+(1.-*y)*(1.-*y))*fl;
+	double fl = FT_g(*x,*Q2);
+	double ft = FL_g(*x,*Q2);
+	double f2 = F2_q(*x,*Q2);
+	double cs = (fl+ft+f2);//-(*y*(*y))/(1.+(1.-*y)*(1.-*y))*fl;
 	// double f2_full = fl+ft+f2;
 	// double f2_data = *Q2/(4.*M_PI*M_PI*0.2)*(*sigma);
 	// cout<<get_n_g()<<"\t"<<get_lambda_g()<<"\t"<<get_beta_g()<<"\t";
