@@ -95,9 +95,9 @@ while(x!=HERA.x.end())
  //            fac = fac /(units * 1.e-3);
  //            double F2_data = fac*(*sigma);
  //            double err_data = fac*(*sigma)*(*err)*0.01;
-	// X2 += ((cs-*sigma)*(cs-*sigma))/((*err*0.01)*(*sigma)*(*err*0.01)*(*sigma));
+	X2 += ((cs-*sigma)*(cs-*sigma))/((*err*0.01)*(*sigma)*(*err*0.01)*(*sigma));
 	// av_my_err += abs(cs/(*sigma)-1.);
-    // cout<<(*x)<<"\t"<<(*Q2)<<"\t"<<*sigma<<"\t"<<*err<<"\t"<<cs<<"\t"<<f2<<"\t"<<fl<<"\t"<<ft<<endl;
+    cout<<(*x)<<"\t"<<(*Q2)<<"\t"<<*sigma<<"\t"<<*err<<"\t"<<cs<<"\t"<<f2<<"\t"<<fl<<"\t"<<ft<<endl;
 	x++;
 	y++;
 	Q2++;
