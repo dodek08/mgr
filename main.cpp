@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
         clock_t start = clock();
         cout<<setprecision(10)<<endl;
 
-string NAZWA = siatka+str(n_g)+str(lambda_g)+str(beta_g);
+string NAZWA = siatka+argv[2]+argv[3]+argv[4];
     fstream save;
     save.open(NAZWA,ios::out);
     if (!save.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
