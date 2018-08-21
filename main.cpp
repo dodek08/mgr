@@ -55,7 +55,7 @@ set_lambda_g(lambda_g);
 set_beta_g(beta_g);
 // cout<<get_n_g()<<"\t"<<get_lambda_g()<<"\t"<<get_beta_g()<<endl;
 
-for(double n_tmp = 0; n<.1; n+=0.01)
+for(double n_tmp = 0; n_tmp<.1; n_tmp+=0.01)
 {set_n_g(n_g+n_tmp);
 
 while(x!=HERA.x.end())
