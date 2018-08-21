@@ -55,9 +55,9 @@ set_lambda_g(lambda_g);
 set_beta_g(beta_g);
 // cout<<get_n_g()<<"\t"<<get_lambda_g()<<"\t"<<get_beta_g()<<endl;
 
-for(double lambda_tmp = 0; lambda_tmp<.1; lambda_tmp+=0.01)
+for(double lambda_tmp = 0; lambda_tmp<1; lambda_tmp+=0.1)
 {set_lambda_g(lambda_g+lambda_tmp);
-	for (double beta_tmp = 0; beta_tmp<.1; beta_tmp+=0.01)
+	for (double beta_tmp = 0; beta_tmp<1; beta_tmp+=0.1)
 	{
 		set_beta_g(beta_g+beta_tmp);
 
