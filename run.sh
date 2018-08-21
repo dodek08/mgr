@@ -23,3 +23,5 @@ module load plgrid/libs/gsl/2.4
 
 srun -N 1 --ntasks-per-node=1 -p plgrid -t 22:00 ./main.out $1 $2 $3 $4
 
+##dddd
+
