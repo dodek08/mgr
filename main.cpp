@@ -119,7 +119,7 @@ save<<X2<<endl;
 licznik = 0;
 X2=0;
 
-
+}
 }
 
     save.close();
