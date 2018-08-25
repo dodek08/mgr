@@ -17,8 +17,8 @@ int main(int argc, char* argv[])
         // int l2 = atoi(argv[3]);
         // int l3 = atoi(argv[4]);
         double n_g = atof(argv[2]);
-        double lambda_g = atof(argv[3])-10;
-        double beta_g = atof(argv[4])-10;
+        double lambda_g = atof(argv[3]);
+        double beta_g = atof(argv[4]);
         set_pdf_name_sudakov_g(siatka);
         set_pdf_name_sudakov_cs(siatka);
         set_pdf_name_sudakov_f2(siatka);
@@ -55,8 +55,8 @@ set_lambda_g(lambda_g);
 set_beta_g(beta_g);
 // cout<<get_n_g()<<"\t"<<get_lambda_g()<<"\t"<<get_beta_g()<<endl;
 
-for(double lambda_tmp = 0; lambda_tmp<1; lambda_tmp+=0.1)
-{set_lambda_g(lambda_g+lambda_tmp);
+// for(double lambda_tmp = 0; lambda_tmp<1; lambda_tmp+=0.1)
+// {set_lambda_g(lambda_g+lambda_tmp);
 	for (double beta_tmp = 0; beta_tmp<1; beta_tmp+=0.1)
 	{
 		set_beta_g(beta_g+beta_tmp);
@@ -84,7 +84,7 @@ while(x!=HERA.x.end())
  //            fac = fac /(units * 1.e-3);
  //            double F2_data = fac*(*sigma);
  //            double err_data = fac*(*sigma)*(*err)*0.01;
-	cout<<get_n_g()<<"\t"<<get_lambda_g()<<"\t"<<get_beta_g()<<endl;
+	// cout<<get_n_g()<<"\t"<<get_lambda_g()<<"\t"<<get_beta_g()<<endl;
 	X2 += ((cs-*sigma)*(cs-*sigma))/((*err*0.01)*(*sigma)*(*err*0.01)*(*sigma));
 	// av_my_err += abs(cs/(*sigma)-1.);
     // cout<<(*x)<<"\t"<<(*Q2)<<"\t"<<*sigma<<"\t"<<*err<<"\t"<<cs<<"\t"<<f2<<"\t"<<fl<<"\t"<<ft<<endl;
@@ -120,7 +120,7 @@ licznik = 0;
 X2=0;
 
 }
-}
+// }
 
     save.close();
 
