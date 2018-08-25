@@ -15,6 +15,7 @@ string namexd;
 multimap<tuple<double,double>,double> TG;
 multimap<tuple<double,double>,double> TQ;
 multimap<tuple<double,double,double>,double> ccfm;
+multimap<tuple<double,double,double>,double> pb;
 
 vector<double> ccfm_X;
 vector<double> ccfm_Mu;
@@ -23,6 +24,14 @@ vector<double> ccfm_Kt2;
 vector<double> ccfm_Xred;
 vector<double> ccfm_Mured; //(Mureduced czyli z unikalnymi wartosciami
 vector<double> ccfm_Kt2red;
+
+vector<double> pb_X;
+vector<double> pb_Mu;
+vector<double> pb_Kt2;
+
+vector<double> pb_Xred;
+vector<double> pb_Mured; //(Mureduced czyli z unikalnymi wartosciami
+vector<double> pb_Kt2red;
 
 vector<double> Mu;
 vector<double> Kt2;
@@ -136,6 +145,114 @@ void read_ccfm()
     cout<<ccfm_Mured<<endl;
 }
 
+void read_pb()
+{
+/*    cout<<setprecision(8)<<pdfs->alphasQ2(2*2)<<endl;
+    cout<<setprecision(8)<<pdfs->alphasQ(2)<<endl;
+    cout<<pdfs->xfxQ2(1, 0.1, 2*2)<<endl;*/ //cos jak zlota regula Fermiego
+    fstream f;
+    double tmp0,tmp1,tmp2,tmp3;
+    f.open("PB-TMDNLO-HERAI+II-2018-aspt.dat", ios::in | ios::out);
+    if (!f.is_open()){ throw Blad("zly plik wejscia PB, nie istnieje lub zle wprowadzony");}
+
+    while(!f.eof())
+    {
+        f>>tmp0; //x
+        f>>tmp1; //kt2
+        f>>tmp2;    //mu2
+        f>>tmp3;    //TG
+        pb_.insert(pair<tuple<double,double,double>,double>(make_tuple(exp(tmp0),exp(tmp1),exp(tmp2)*exp(tmp2)),tmp3));
+
+        pb_X.push_back(exp(tmp0));
+        pb_Kt2.push_back(exp(tmp1));
+        pb_Mu.push_back(exp(tmp2)*exp(tmp2));
+    }
+    f.close();
+
+    pb_Kt2red=subset_with_sort(pb_Kt2);
+    pb_Xred=subset_with_sortpb(pb_X);
+    pb_Mured=subset_with_sort(pb_Mu);
+    cout<<pb_Xred<<endl;
+    cout<<endl;
+    cout<<pb_Kt2red<<endl;
+    cout<<endl;
+    cout<<pb_Mured<<endl;
+}
+
+
+double pb_s(const double & x, const double & kt2, const double & mu2)
+{
+    // if(mu2<MU2MIN or mu2>MU2MAX)
+        // throw Blad("out of range w Tq",mu2,kt2,0.,0.);
+    int tab[3]={0}; //table of indexes
+    //unsigned int i=1;
+
+    // multimap<tuple<double,double>,double,double>::iterator it=pb.find(make_tuple(x,kt2,mu2));
+
+    // if(it!=pb.end() or (pb_Mu.back()==mu2 and pb_Kt2.back()==kt2))
+    // {
+    //     if (it->second<0)
+    //         return 0.0;
+    //     else
+    //         return it->second;
+    // }
+    // else
+    // {
+        double xl, xh;
+        int x_ind = find_index_gt(pb_Xred, x);
+        xl = pb_Xred[x_ind-1];
+        xh = pb_Xred[x_ind];
+        double kth, ktl, muh, mul;
+        tab[0]=find_index_gt(pb_Mured,mu2);
+        tab[1]=tab[0]-1;
+        tab[2]=find_index_gt(pb_Kt2red,kt2);
+        tab[3]=tab[2]-1;
+        muh = pb_Mured[tab[0]];
+        mul = pb_Mured[tab[1]];
+        kth = pb_Kt2red[tab[2]];
+        ktl = pb_Kt2red[tab[3]];
+        //punkt pierwszy
+        double lf[] = {mul, ktl, pb.find(make_tuple(xl, ktl, mul))->second};
+        double rf[] = {muh, ktl, pb.find(make_tuple(xl, ktl, muh))->second};
+        double lr[] = {mul, kth, pb.find(make_tuple(xl, kth, mul))->second};
+        double rr[] = {muh, kth, pb.find(make_tuple(xl, kth, muh))->second};//interpolation
+        double a,b,c,d,f,g; //y=ax+b y1=cx+d y2=fx+g
+        a = (rf[2]-rr[2])/(rf[1]-rr[1]);
+        c = (lf[2]-lr[2])/(rf[1]-rr[1]);
+        b = rf[2]-a*rf[1];
+        d = lf[2]-c*lf[1];
+        double y = a*kt2+b;
+        double y1 = c*kt2+d;
+        f = (y-y1)/(rf[0]-lf[0]);
+        g = y1-f*lf[0];
+        double ret1= f*mu2+g;
+        //punkt drugi
+        double lf2[] = {mul, ktl, pb.find(make_tuple(xh, ktl, mul))->second};
+        double rf2[] = {muh, ktl, pb.find(make_tuple(xh, ktl, muh))->second};
+        double lr2[] = {mul, kth, pb.find(make_tuple(xh, kth, mul))->second};
+        double rr2[] = {muh, kth, pb.find(make_tuple(xh, kth, muh))->second};//interpolation
+        //y=ax+b y1=cx+d y2=fx+g
+        a = (rf2[2]-rr2[2])/(rf2[1]-rr2[1]);
+        c = (lf2[2]-lr2[2])/(rf2[1]-rr2[1]);
+        b = rf2[2]-a*rf2[1];
+        d = lf2[2]-c*lf2[1];
+        y = a*kt2+b;
+        y1 = c*kt2+d;
+        f = (y-y1)/(rf2[0]-lf2[0]);
+        g = y1-f*lf2[0];
+        double ret2= f*mu2+g;
+        //interpolacja miedzy xl a xh
+        a = (ret2 - ret1)/(xh - xl);
+        b = ret1 - xl*a;
+        double ret = a*x + b;
+
+        if (ret<0)
+            return 0.0;
+        else
+          //  cout<<difftime(stop,start)<<endl;
+        return ret;
+        // }
+}
 
 
 double ccfm_s(const double & x, const double & kt2, const double & mu2)
@@ -145,18 +262,18 @@ double ccfm_s(const double & x, const double & kt2, const double & mu2)
     int tab[3]={0}; //table of indexes
     //unsigned int i=1;
 
-    multimap<tuple<double,double>,double,double>::iterator it=TQ.find(make_tuple(kt2,mu2));
+    // multimap<tuple<double,double>,double,double>::iterator it=TQ.find(make_tuple(kt2,mu2));
 
-    if(it!=TQ.end() or (qMu.back()==mu2 and qKt2.back()==kt2))
-    {
-        if (it->second<0)
-            return 0.0;
-        else
-            return it->second;
-    }
-    else
-    {
-        double xl, xh;
+    // if(it!=TQ.end() or (qMu.back()==mu2 and qKt2.back()==kt2))
+    // {
+    //     if (it->second<0)
+    //         return 0.0;
+    //     else
+    //         return it->second;
+    // }
+    // else
+    // {
+    //     double xl, xh;
         int x_ind = find_index_gt(ccfm_Xred, x);
         xl = ccfm_Xred[x_ind-1];
         xh = ccfm_Xred[x_ind];
@@ -209,7 +326,7 @@ double ccfm_s(const double & x, const double & kt2, const double & mu2)
         else
           //  cout<<difftime(stop,start)<<endl;
         return ret;
-        }
+        // }
 }
 
 

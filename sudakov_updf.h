@@ -68,6 +68,10 @@ using namespace std;
 void read_ccfm();
 double ccfm_s(const double & x, const double & kt2, const double & mu2);
 
+void read_pb();
+double pb_s(const double & x, const double & kt2, const double & mu2);
+
+
 //czesc do rozkladow
 void set_pdf_name_sudakov_updf(string);
 
