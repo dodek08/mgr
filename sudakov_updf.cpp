@@ -161,7 +161,7 @@ void read_pb()
         f>>tmp1; //kt2
         f>>tmp2;    //mu2
         f>>tmp3;    //TG
-        pb_.insert(pair<tuple<double,double,double>,double>(make_tuple(exp(tmp0),exp(tmp1),exp(tmp2)*exp(tmp2)),tmp3));
+        pb.insert(pair<tuple<double,double,double>,double>(make_tuple(exp(tmp0),exp(tmp1),exp(tmp2)*exp(tmp2)),tmp3));
 
         pb_X.push_back(exp(tmp0));
         pb_Kt2.push_back(exp(tmp1));
@@ -170,7 +170,7 @@ void read_pb()
     f.close();
 
     pb_Kt2red=subset_with_sort(pb_Kt2);
-    pb_Xred=subset_with_sortpb(pb_X);
+    pb_Xred=subset_with_sort(pb_X);
     pb_Mured=subset_with_sort(pb_Mu);
     cout<<pb_Xred<<endl;
     cout<<endl;
@@ -273,7 +273,7 @@ double ccfm_s(const double & x, const double & kt2, const double & mu2)
     // }
     // else
     // {
-    //     double xl, xh;
+        double xl, xh;
         int x_ind = find_index_gt(ccfm_Xred, x);
         xl = ccfm_Xred[x_ind-1];
         xh = ccfm_Xred[x_ind];
