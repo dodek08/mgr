@@ -120,18 +120,17 @@ void read_ccfm()
     double tmp0,tmp1,tmp2,tmp3;
     f.open("ccfm.dat", ios::in | ios::out);
     if (!f.is_open()){ throw Blad("zly plik wejscia ccfm, nie istnieje lub zle wprowadzony");}
-
     while(!f.eof())
     {
         f>>tmp0; //x
         f>>tmp1; //kt2
         f>>tmp2;    //mu2
         f>>tmp3;    //TG
-        ccfm.insert(pair<tuple<double,double,double>,double>(make_tuple(exp(tmp0),exp(tmp1),exp(tmp2)*exp(tmp2)),tmp3));
+        ccfm.insert(pair<tuple<double,double,double>,double>(make_tuple(exp(tmp0),exp(tmp1),exp(tmp2),tmp3));
 
         ccfm_X.push_back(exp(tmp0));
         ccfm_Kt2.push_back(exp(tmp1));
-        ccfm_Mu.push_back(exp(tmp2)*exp(tmp2));
+        ccfm_Mu.push_back(exp(tmp2);
     }
     f.close();
 
@@ -152,7 +151,7 @@ void read_pb()
     cout<<pdfs->xfxQ2(1, 0.1, 2*2)<<endl;*/ //cos jak zlota regula Fermiego
     fstream f;
     double tmp0,tmp1,tmp2,tmp3;
-    f.open("PB-TMDNLO-HERAI+II-2018-aspt.dat", ios::in | ios::out);
+    f.open("parton-branching.dat", ios::in | ios::out);
     if (!f.is_open()){ throw Blad("zly plik wejscia PB, nie istnieje lub zle wprowadzony");}
 
     while(!f.eof())
@@ -161,11 +160,11 @@ void read_pb()
         f>>tmp1; //kt2
         f>>tmp2;    //mu2
         f>>tmp3;    //TG
-        pb.insert(pair<tuple<double,double,double>,double>(make_tuple(exp(tmp0),exp(tmp1),exp(tmp2)*exp(tmp2)),tmp3));
+        pb.insert(pair<tuple<double,double,double>,double>(make_tuple(exp(tmp0),exp(tmp1),exp(tmp2)),tmp3));
 
         pb_X.push_back(exp(tmp0));
         pb_Kt2.push_back(exp(tmp1));
-        pb_Mu.push_back(exp(tmp2)*exp(tmp2));
+        pb_Mu.push_back(exp(tmp2));
     }
     f.close();
 
