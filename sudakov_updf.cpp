@@ -300,6 +300,7 @@ double ccfm_s(const double & x, const double & kt2, const double & mu2)
         g = y1-f*lf[0];
         double ret1= f*mu2+g;
         cout<<ret1<<"\t"<<a<<"\t"<<b<<"\t"<<c<<"\t"<<d<<endl;
+        cout<<lf[2]<<"\t"<<rf[2]<<"\t"<<lr[2]<<"\t"<<rr[2]<<"\t"<<endl;
         //punkt drugi
         double lf2[] = {mul, ktl, ccfm.find(make_tuple(xh, ktl, mul))->second};
         double rf2[] = {muh, ktl, ccfm.find(make_tuple(xh, ktl, muh))->second};
