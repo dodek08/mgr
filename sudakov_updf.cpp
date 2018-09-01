@@ -319,6 +319,7 @@ double ccfm_s(const double & x, const double & kt2, const double & mu2)
         double ret = a*x + b;
 
         if (ret<0)
+            cout<<ret<<endl;
             return 0.0;
         else
           //  cout<<difftime(stop,start)<<endl;
