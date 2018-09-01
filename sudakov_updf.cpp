@@ -4,8 +4,6 @@
 #include "Blad.h"
 
 
-#define FIT
-
 double h=0.1; //przy rozniczkowaniu numerycznym
 LHAPDF::PDF* pdfs;// = LHAPDF::mkPDF("CT14nlo", 0); //wazne!
 
@@ -126,7 +124,7 @@ void read_ccfm()
         f>>tmp1; //kt2
         f>>tmp2;    //mu2
         f>>tmp3;    //TG
-        ccfm.insert(pair<tuple<double,double,double>,double>(make_tuple(exp(tmp0),exp(tmp1),exp(tmp2)),tmp3));
+        ccfm.insert(pair<tuple<double,double,double>,double>(make_tuple(exp(tmp0),exp(tmp1),exp(tmp2)*exp(tmp2)),tmp3));
 
         ccfm_X.push_back(exp(tmp0));
         ccfm_Kt2.push_back(exp(tmp1));
@@ -160,7 +158,7 @@ void read_pb()
         f>>tmp1; //kt2
         f>>tmp2;    //mu2
         f>>tmp3;    //TG
-        pb.insert(pair<tuple<double,double,double>,double>(make_tuple(exp(tmp0),exp(tmp1),exp(tmp2)),tmp3));
+        pb.insert(pair<tuple<double,double,double>,double>(make_tuple(exp(tmp0),exp(tmp1),exp(tmp2)*exp(tmp2)),tmp3));
 
         pb_X.push_back(exp(tmp0));
         pb_Kt2.push_back(exp(tmp1));
@@ -732,17 +730,19 @@ double fsd(const double & x, const double & la2, const double & mu2)
 
 double fa(const double & x, const double & kt2, const double & mu2)
 {
+    // if(sqrt(kt2)<sqrt(mu0))
+    // {
+    //     return (n_g*pow(x,lambda_g)*pow((1.-x),beta_g))*pdfs->xfxQ2(21,x,mu0)*Tgs(mu0,mu2)/mu0;
+    // }
+    // else
+    // return (n_g*pow(x,lambda_g)*pow((1.-x),beta_g))*(fad(x,kt2+h,mu2)-fad(x,kt2-h,mu2))/(2*h);
+
     if(sqrt(kt2)<sqrt(mu0))
     {
-        return pdfs->xfxQ2(21,x,mu0)*Tgs(mu0,mu2)/mu0;
+        return ccfm_s(x,kt2,mu0)*Tgs(mu0,mu2)/mu0;
     }
     else
-    #ifdef FIT
-    return (n_g*pow(x,lambda_g)*pow((1.-x),beta_g))*(fad(x,kt2+h,mu2)-fad(x,kt2-h,mu2))/(2*h);
-    #else
-    return (fad(x,kt2+h,mu2)-fad(x,kt2-h,mu2))/(2*h);
-    #endif
-
+    return (ccfm_s(x,kt2+h,mu2)*Tgs(kt2+h,mu2)-ccfm_s(x,kt2-h,mu2)*Tgs(kt2-h,mu2))/(2*h);
 }
 
 double fu(const double & x, const double & kt2, const double & mu2)
