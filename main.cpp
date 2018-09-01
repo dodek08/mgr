@@ -27,17 +27,17 @@ int main(int argc, char* argv[])
         clock_t start = clock();
         cout<<setprecision(10)<<endl;
 
-// string NAZWA = siatka+to_string(n_g)+to_string(lambda_g)+to_string(beta_g);
-    // fstream save;
-    // save.open(NAZWA,ios::out);
-    // if (!save.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
+string NAZWA = siatka+to_string(n_g)+to_string(lambda_g)+to_string(beta_g);
+    fstream save;
+    save.open(NAZWA,ios::out);
+    if (!save.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
 
 Wyniki HERA("HERA1+2_NCep_920.dat");
 cout<<HERA.nazwa<<endl;
 // cout<<lp<<"\t"<</*l2<<*/endl;
 // cout<<"n_g"<<"\t"<<"lambda_g"<<"\t"<<"beta_g"<<"\t"<<"X2"<<"\t"<<"av_my_err"<</*"\t"<<"f2_full"<<*/endl;
 // cout<<"x"<<"\t"<<"Q2"<<"\t"<<"cs_calc"<<"\t"<<"cs_data"<<"\t"<<"err"<<endl;
-cout<<"x"<<"\t"<<"Q2"<<"\t"<<"cs_data"<<"\t"<<"err"<<"\t"<<"cs_calc"<<"\t"<<"F2_q"<<"\t"<<"Fl"<<"\t"<<"Ft"<<endl;
+// cout<<"x"<<"\t"<<"Q2"<<"\t"<<"cs_data"<<"\t"<<"err"<<"\t"<<"cs_calc"<<"\t"<<"F2_q"<<"\t"<<"Fl"<<"\t"<<"Ft"<<endl;
 // double alpha =7.297e-3;
 // double xmp0 = 0.93827;
 vector<double>::iterator x = HERA.x.begin();
@@ -49,13 +49,18 @@ double av_my_err=0;
 double X2 =0;
 int licznik =1;
 
-draw_gluons(21);
+// draw_gluons(21);
 
 set_n_g(n_g);
 set_lambda_g(lambda_g);
 set_beta_g(beta_g);
 // cout<<get_n_g()<<"\t"<<get_lambda_g()<<"\t"<<get_beta_g()<<endl;
 
+
+
+for(double n_tmp = 0; n_tmp<1; n_tmp+=0.1)
+{
+	set_n_g(n_g+n_tmp);
 // for(double lambda_tmp = 0; lambda_tmp<1; lambda_tmp+=0.1)
 // {set_lambda_g(lambda_g+lambda_tmp);
 	// for (double beta_tmp = 0; beta_tmp<1; beta_tmp+=0.1)
@@ -107,20 +112,20 @@ while(x!=HERA.x.end())
 	}
 }
 
-string NAZWA = "ch2.dat";
+// string NAZWA = "ch2.dat";
 // X2=n_g*n_g+lambda_g*lambda_g+beta_g*beta_g+1.;
 
 
-    fstream save;
-    save.open(NAZWA,ios::out);
-    if (!save.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
+    // fstream save;
+    // save.open(NAZWA,ios::out);
+    // if (!save.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
 
 x = HERA.x.begin();
 Q2 = HERA.Q2.begin();
 y = HERA.y.begin();
 sigma = HERA.sigma.begin();
 err = HERA.totnoproc.begin();
-// save<<get_n_g()<<"\t"<<get_lambda_g()<<"\t"<<get_beta_g()<<"\t";
+save<<get_n_g()<<"\t"<<get_lambda_g()<<"\t"<<get_beta_g()<<"\t";
 // save<<X2<<"\t"<<av_my_err/(licznik*1.)<<endl;
 save<<X2<<endl;
 licznik = 0;
@@ -128,7 +133,7 @@ X2=0;
 
 // }
 // }
-
+}
     save.close();
 
         cout << "Czas wykonywania: " << (double)(clock()-start)/(CLOCKS_PER_SEC) << "sek" << endl;
