@@ -58,7 +58,7 @@ set_beta_g(beta_g);
 
 
 
-for(double n_tmp = 0.5; n_tmp<1; n_tmp+=0.1)
+for(double n_tmp = 0; n_tmp<0.1; n_tmp+=0.01)
 {
 	set_n_g(n_g+n_tmp);
 // for(double lambda_tmp = 0; lambda_tmp<1; lambda_tmp+=0.1)
