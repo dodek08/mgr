@@ -733,7 +733,7 @@ double fa(const double & x, const double & kt2, const double & mu2)
 {
     if(sqrt(kt2)<sqrt(mu0))
     {
-        return (n_g*pow(x,lambda_g)*pow((1.-x),beta_g))*pdfs->xfxQ2(21,x,mu0)*Tgs(mu0,mu2)/mu0;
+        return /*(n_g*pow(x,lambda_g)*pow((1.-x),beta_g))**/pdfs->xfxQ2(21,x,mu0)*Tgs(mu0,mu2)/mu0;
     }
     else
     return (n_g*pow(x,lambda_g)*pow((1.-x),beta_g))*(fad(x,kt2+h,mu2)-fad(x,kt2-h,mu2))/(2*h);
