@@ -48,7 +48,7 @@ double av_my_err=0;
 double X2 =0;
 int licznik =1;
 
-// draw_gluons(21);
+draw_gluons(21);
 
 set_n_g(n_g);
 set_lambda_g(lambda_g);
@@ -61,8 +61,8 @@ set_beta_g(beta_g);
 	// {
 	// 	set_beta_g(beta_g+beta_tmp);
 
-cout<<fa(0.0001,10,1000)<<endl;
-/*while(x!=HERA.x.end())
+
+while(x!=HERA.x.end())
 {
 	if(*Q2>=1.5 and *x<0.01)
 	{
@@ -104,7 +104,7 @@ cout<<fa(0.0001,10,1000)<<endl;
 	sigma++;
 	err++;
 	}
-}*/
+}
 
 string NAZWA = "ch2.dat";
 // X2=n_g*n_g+lambda_g*lambda_g+beta_g*beta_g+1.;
