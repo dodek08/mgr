@@ -12,6 +12,7 @@ int main(int argc, char* argv[])
         warm_up_f2();
         read_Ts();
         read_ccfm();
+        read_pb();
         string siatka = argv[1];
         // int lp = atoi(argv[2]);
         // int l2 = atoi(argv[3]);
@@ -36,7 +37,7 @@ cout<<HERA.nazwa<<endl;
 // cout<<lp<<"\t"<</*l2<<*/endl;
 // cout<<"n_g"<<"\t"<<"lambda_g"<<"\t"<<"beta_g"<<"\t"<<"X2"<<"\t"<<"av_my_err"<</*"\t"<<"f2_full"<<*/endl;
 // cout<<"x"<<"\t"<<"Q2"<<"\t"<<"cs_calc"<<"\t"<<"cs_data"<<"\t"<<"err"<<endl;
-// cout<<"x"<<"\t"<<"Q2"<<"\t"<<"cs_data"<<"\t"<<"err"<<"\t"<<"cs_calc"<<"\t"<<"F2_q"<<"\t"<<"Fl"<<"\t"<<"Ft"<<endl;
+cout<<"x"<<"\t"<<"Q2"<<"\t"<<"cs_data"<<"\t"<<"err"<<"\t"<<"cs_calc"<<"\t"<<"F2_q"<<"\t"<<"Fl"<<"\t"<<"Ft"<<endl;
 // double alpha =7.297e-3;
 // double xmp0 = 0.93827;
 vector<double>::iterator x = HERA.x.begin();

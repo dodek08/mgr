@@ -738,12 +738,19 @@ double fa(const double & x, const double & kt2, const double & mu2)
     // else
     // return (n_g*pow(x,lambda_g)*pow((1.-x),beta_g))*(fad(x,kt2+h,mu2)-fad(x,kt2-h,mu2))/(2*h);
 
+    // if(sqrt(kt2)<sqrt(mu0))
+    // {
+    //     return ccfm_s(x,kt2,mu0)*Tgs(mu0,mu2)/mu0;
+    // }
+    // else
+    // return (ccfm_s(x,kt2+h,mu2)*Tgs(kt2+h,mu2)-ccfm_s(x,kt2-h,mu2)*Tgs(kt2-h,mu2))/(2*h);
+
     if(sqrt(kt2)<sqrt(mu0))
     {
-        return ccfm_s(x,kt2,mu0)*Tgs(mu0,mu2)/mu0;
+        return pb_s(x,kt2,mu0)*Tgs(mu0,mu2)/mu0;
     }
     else
-    return (ccfm_s(x,kt2+h,mu2)*Tgs(kt2+h,mu2)-ccfm_s(x,kt2-h,mu2)*Tgs(kt2-h,mu2))/(2*h);
+    return (pb_s(x,kt2+h,mu2)*Tgs(kt2+h,mu2)-pb_s(x,kt2-h,mu2)*Tgs(kt2-h,mu2))/(2*h);
 }
 
 double fu(const double & x, const double & kt2, const double & mu2)
