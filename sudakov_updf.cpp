@@ -299,6 +299,7 @@ double ccfm_s(const double & x, const double & kt2, const double & mu2)
         f = (y-y1)/(rf[0]-lf[0]);
         g = y1-f*lf[0];
         double ret1= f*mu2+g;
+        cout<<ret1<<"\t"<<a<<"\t"<<b<<"\t"<<c<<"\t"<<d<<endl;
         //punkt drugi
         double lf2[] = {mul, ktl, ccfm.find(make_tuple(xh, ktl, mul))->second};
         double rf2[] = {muh, ktl, ccfm.find(make_tuple(xh, ktl, muh))->second};
