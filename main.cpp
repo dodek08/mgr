@@ -26,10 +26,10 @@ int main(int argc, char* argv[])
         clock_t start = clock();
         cout<<setprecision(10)<<endl;
 
-string NAZWA = siatka+to_string(n_g)+to_string(lambda_g)+to_string(beta_g);
-    fstream save;
-    save.open(NAZWA,ios::out);
-    if (!save.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
+// string NAZWA = siatka+to_string(n_g)+to_string(lambda_g)+to_string(beta_g);
+    // fstream save;
+    // save.open(NAZWA,ios::out);
+    // if (!save.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
 
 Wyniki HERA("HERA1+2_NCep_920.dat");
 cout<<HERA.nazwa<<endl;
@@ -48,7 +48,7 @@ double av_my_err=0;
 double X2 =0;
 int licznik =1;
 
-// draw_gluons(21);
+draw_gluons(21);
 
 set_n_g(n_g);
 set_lambda_g(lambda_g);
@@ -57,9 +57,9 @@ set_beta_g(beta_g);
 
 // for(double lambda_tmp = 0; lambda_tmp<1; lambda_tmp+=0.1)
 // {set_lambda_g(lambda_g+lambda_tmp);
-	for (double beta_tmp = 0; beta_tmp<1; beta_tmp+=0.1)
-	{
-		set_beta_g(beta_g+beta_tmp);
+	// for (double beta_tmp = 0; beta_tmp<1; beta_tmp+=0.1)
+	// {
+	// 	set_beta_g(beta_g+beta_tmp);
 
 while(x!=HERA.x.end())
 {
@@ -87,7 +87,7 @@ while(x!=HERA.x.end())
 	// cout<<get_n_g()<<"\t"<<get_lambda_g()<<"\t"<<get_beta_g()<<endl;
 	X2 += ((cs-*sigma)*(cs-*sigma))/((*err*0.01)*(*sigma)*(*err*0.01)*(*sigma));
 	// av_my_err += abs(cs/(*sigma)-1.);
-    // cout<<(*x)<<"\t"<<(*Q2)<<"\t"<<*sigma<<"\t"<<*err<<"\t"<<cs<<"\t"<<f2<<"\t"<<fl<<"\t"<<ft<<endl;
+    cout<<(*x)<<"\t"<<(*Q2)<<"\t"<<*sigma<<"\t"<<*err<<"\t"<<cs<<"\t"<<f2<<"\t"<<fl<<"\t"<<ft<<endl;
 	x++;
 	y++;
 	Q2++;
@@ -105,7 +105,7 @@ while(x!=HERA.x.end())
 	}
 }
 
-//string NAZWA = "ch2.dat";
+string NAZWA = "ch2.dat";
 // X2=n_g*n_g+lambda_g*lambda_g+beta_g*beta_g+1.;
 
 x = HERA.x.begin();
@@ -113,13 +113,13 @@ Q2 = HERA.Q2.begin();
 y = HERA.y.begin();
 sigma = HERA.sigma.begin();
 err = HERA.totnoproc.begin();
-save<<get_n_g()<<"\t"<<get_lambda_g()<<"\t"<<get_beta_g()<<"\t";
+// save<<get_n_g()<<"\t"<<get_lambda_g()<<"\t"<<get_beta_g()<<"\t";
 // save<<X2<<"\t"<<av_my_err/(licznik*1.)<<endl;
 save<<X2<<endl;
 licznik = 0;
 X2=0;
 
-}
+// }
 // }
 
     save.close();
