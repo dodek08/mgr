@@ -283,7 +283,6 @@ double ccfm_s(const double & x, const double & kt2, const double & mu2)
         mul = ccfm_Mured[tab[1]];
         kth = ccfm_Kt2red[tab[2]];
         ktl = ccfm_Kt2red[tab[3]];
-        cout<<xl<<"\t"<<xh<<"\t"<<ktl<<"\t"<<kth<<"\t"<<mul<<"\t"<<muh<<endl;
         //punkt pierwszy
         double lf[] = {mul, ktl, ccfm.find(make_tuple(xl, ktl, mul))->second};
         double rf[] = {muh, ktl, ccfm.find(make_tuple(xl, ktl, muh))->second};
@@ -299,8 +298,6 @@ double ccfm_s(const double & x, const double & kt2, const double & mu2)
         f = (y-y1)/(rf[0]-lf[0]);
         g = y1-f*lf[0];
         double ret1= f*mu2+g;
-        cout<<ret1<<"\t"<<a<<"\t"<<b<<"\t"<<c<<"\t"<<d<<endl;
-        cout<<lf[2]<<"\t"<<rf[2]<<"\t"<<lr[2]<<"\t"<<rr[2]<<"\t"<<endl;
         //punkt drugi
         double lf2[] = {mul, ktl, ccfm.find(make_tuple(xh, ktl, mul))->second};
         double rf2[] = {muh, ktl, ccfm.find(make_tuple(xh, ktl, muh))->second};
@@ -322,10 +319,8 @@ double ccfm_s(const double & x, const double & kt2, const double & mu2)
         double ret = a*x + b;
 
         if (ret<0)
-        {
-            cout<<ret<<endl;
             return 0.0;
-        }
+        
         else
           //  cout<<difftime(stop,start)<<endl;
         return ret;
