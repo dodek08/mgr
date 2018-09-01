@@ -128,7 +128,7 @@ void read_ccfm()
 
         ccfm_X.push_back(exp(tmp0));
         ccfm_Kt2.push_back(exp(tmp1));
-        ccfm_Mu.push_back(exp(tmp2));
+        ccfm_Mu.push_back(exp(tmp2)*exp(tmp2));
     }
     f.close();
 
@@ -162,7 +162,7 @@ void read_pb()
 
         pb_X.push_back(exp(tmp0));
         pb_Kt2.push_back(exp(tmp1));
-        pb_Mu.push_back(exp(tmp2));
+        pb_Mu.push_back(exp(tmp2)*exp(tmp2));
     }
     f.close();
 
