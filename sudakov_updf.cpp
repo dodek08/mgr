@@ -283,6 +283,7 @@ double ccfm_s(const double & x, const double & kt2, const double & mu2)
         mul = ccfm_Mured[tab[1]];
         kth = ccfm_Kt2red[tab[2]];
         ktl = ccfm_Kt2red[tab[3]];
+        cout<<xl<<"\t"<<xh<<"\t"<<ktl<<"\t"<<kth<<"\t"<<mul<<"\t"<<muh<<endl;
         //punkt pierwszy
         double lf[] = {mul, ktl, ccfm.find(make_tuple(xl, ktl, mul))->second};
         double rf[] = {muh, ktl, ccfm.find(make_tuple(xl, ktl, muh))->second};
