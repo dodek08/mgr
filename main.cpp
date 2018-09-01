@@ -108,6 +108,11 @@ while(x!=HERA.x.end())
 string NAZWA = "ch2.dat";
 // X2=n_g*n_g+lambda_g*lambda_g+beta_g*beta_g+1.;
 
+
+    fstream save;
+    save.open(NAZWA,ios::out);
+    if (!save.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
+
 x = HERA.x.begin();
 Q2 = HERA.Q2.begin();
 y = HERA.y.begin();
