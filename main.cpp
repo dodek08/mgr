@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
         clock_t start = clock();
         cout<<setprecision(10)<<endl;
 
-string NAZWA = to_string(1)+siatka+to_string(n_g)+to_string(lambda_g)+to_string(beta_g);
+string NAZWA = siatka+to_string(n_g)+to_string(lambda_g)+to_string(beta_g);
     fstream save;
     save.open(NAZWA,ios::out);
     if (!save.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
@@ -58,14 +58,14 @@ set_beta_g(beta_g);
 
 
 
-for(double n_tmp = 0; n_tmp<1; n_tmp+=0.2)
-{
-	set_n_g(n_g+n_tmp);
+// for(double n_tmp = 0; n_tmp<1; n_tmp+=0.2)
+// {
+// 	set_n_g(n_g+n_tmp);
 // for(double lambda_tmp = 0; lambda_tmp<1; lambda_tmp+=0.2)
 // {set_lambda_g(lambda_g+lambda_tmp);
-	// for (double beta_tmp = 0; beta_tmp<1; beta_tmp+=0.2)
-	// {
-	// 	set_beta_g(beta_g+beta_tmp);
+	for (double beta_tmp = 0; beta_tmp<1; beta_tmp+=0.2)
+	{
+		set_beta_g(beta_g+beta_tmp);
 
 
 while(x!=HERA.x.end())
