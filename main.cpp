@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
         // int l3 = atoi(argv[4]);
         double n_g = atof(argv[2]);
         double lambda_g = atof(argv[3]);
-        double beta_g = atof(argv[4])-5;
+        double beta_g = atof(argv[4]);
         set_pdf_name_sudakov_g(siatka);
         set_pdf_name_sudakov_cs(siatka);
         set_pdf_name_sudakov_f2(siatka);
@@ -58,14 +58,14 @@ set_beta_g(beta_g);
 
 
 
-// for(double n_tmp = 0; n_tmp<0.1; n_tmp+=0.01)
-// {
-	// set_n_g(n_g+n_tmp);
+for(double n_tmp = 0; n_tmp<1; n_tmp+=0.2)
+{
+	set_n_g(n_g+n_tmp);
 // for(double lambda_tmp = 0; lambda_tmp<1; lambda_tmp+=0.2)
 // {set_lambda_g(lambda_g+lambda_tmp);
-	for (double beta_tmp = 0; beta_tmp<1; beta_tmp+=0.2)
-	{
-		set_beta_g(beta_g+beta_tmp);
+	// for (double beta_tmp = 0; beta_tmp<1; beta_tmp+=0.2)
+	// {
+	// 	set_beta_g(beta_g+beta_tmp);
 
 
 while(x!=HERA.x.end())
