@@ -4,7 +4,7 @@
 #include "Blad.h"
 
 
-double h=0.1; //przy rozniczkowaniu numerycznym
+double h=0.001; //przy rozniczkowaniu numerycznym
 LHAPDF::PDF* pdfs;// = LHAPDF::mkPDF("CT14nlo", 0); //wazne!
 
 double mu0;// = LHAPDF::mkPDF("CT14nlo", 0)->q2Min()+0.1;
@@ -578,7 +578,11 @@ if(pid != 21)
 }
 else
 {
-    NAZWA = "siatki/wykres_rozklad_"+namexd+"_pid_" + to_string(pid);
+    NAZWA = "siatki/wykres_rozklad_" + namexd + "_pid_" + to_string(pid);
+    if (get_n_g()!=1)
+    {
+        NAZWA = "siatki/wykres_rozklad_fit_" + namexd + "_pid_" + to_string(pid);
+    }
     fstream save2;
     save2.open(NAZWA,ios::out);
     if (!save.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
@@ -731,12 +735,12 @@ double fsd(const double & x, const double & la2, const double & mu2)
 
 double fa(const double & x, const double & kt2, const double & mu2)
 {
-    if(sqrt(kt2)<sqrt(mu0))
-    {
-        return (n_g*pow(x,lambda_g)*pow((1.-x),beta_g))*pdfs->xfxQ2(21,x,mu0)*Tgs(mu0,mu2)/mu0;
-    }
-    else
-    return (n_g*pow(x,lambda_g)*pow((1.-x),beta_g))*(fad(x,kt2+h,mu2)-fad(x,kt2-h,mu2))/(2*h);
+    // if(sqrt(kt2)<sqrt(mu0))
+    // {
+    //     return (n_g*pow(x,lambda_g)*pow((1.-x),beta_g))*pdfs->xfxQ2(21,x,mu0)*Tgs(mu0,mu2)/mu0;
+    // }
+    // else
+    // return (n_g*pow(x,lambda_g)*pow((1.-x),beta_g))*(fad(x,kt2+h,mu2)-fad(x,kt2-h,mu2))/(2*h);
 
     // if(sqrt(kt2)<sqrt(mu0))
     // {
@@ -745,12 +749,12 @@ double fa(const double & x, const double & kt2, const double & mu2)
     // else
     // return (ccfm_s(x,kt2+h,mu2)*Tgs(kt2+h,mu2)-ccfm_s(x,kt2-h,mu2)*Tgs(kt2-h,mu2))/(2*h);
 
-    // if(sqrt(kt2)<sqrt(mu0))
-    // {
-    //     return pb_s(x,kt2,mu0)*Tgs(mu0,mu2)/mu0;
-    // }
-    // else
-    // return (pb_s(x,kt2+h,mu2)*Tgs(kt2+h,mu2)-pb_s(x,kt2-h,mu2)*Tgs(kt2-h,mu2))/(2*h);
+    if(sqrt(kt2)<sqrt(mu0))
+    {
+        return pb_s(x,kt2,mu0)*Tgs(mu0,mu2)/mu0;
+    }
+    else
+    return (pb_s(x,kt2+h,mu2)*Tgs(kt2+h,mu2)-pb_s(x,kt2-h,mu2)*Tgs(kt2-h,mu2))/(2*h);
 }
 
 double fu(const double & x, const double & kt2, const double & mu2)
