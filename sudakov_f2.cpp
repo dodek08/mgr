@@ -70,7 +70,7 @@ double F2_q(const double & x, const double & Q2)
     // while ((fabs (s2->chisq - 1.0) > 0.35) ); //more accurate
     gsl_monte_vegas_free(s2);
     // cout<<"F2"<<"\t"<<q<<"\t"<<result<<endl;
-    final_result+=/*Q2/(4*M_PI)**/cq2[q]*2./M_PI*result;
+    final_result+=/*Q2/(4*M_PI)**/cq2[q]/(2.*M_PI)*result;
   }
     // cout<<"F2 "<<x<<" "<<Q2<<"\t"<<final_result<<endl;
   return final_result;
