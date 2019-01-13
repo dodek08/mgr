@@ -126,9 +126,9 @@ void read_ccfm()
         f>>tmp3;    //TG
         ccfm.insert(pair<tuple<double,double,double>,double>(make_tuple(tmp0,tmp1,tmp2),tmp3));
 
-        ccfm_X.push_back(exp(tmp0));
-        ccfm_Kt2.push_back(exp(tmp1));
-        ccfm_Mu.push_back(exp(tmp2)*exp(tmp2));
+        ccfm_X.push_back(tmp0);
+        ccfm_Kt2.push_back(tmp1);
+        ccfm_Mu.push_back(tmp2);
     }
     f.close();
 
