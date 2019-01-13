@@ -116,15 +116,15 @@ void read_ccfm()
     cout<<pdfs->xfxQ2(1, 0.1, 2*2)<<endl;*/ //cos jak zlota regula Fermiego
     fstream f;
     double tmp0,tmp1,tmp2,tmp3;
-    f.open("ccfm.dat", ios::in | ios::out);
-    if (!f.is_open()){ throw Blad("zly plik wejscia ccfm, nie istnieje lub zle wprowadzony");}
+    f.open("KShardscale2_dilute_linear.dat", ios::in | ios::out);
+    if (!f.is_open()){ throw Blad("zly plik wejscia KShardscale2_dilute_linear.dat, nie istnieje lub zle wprowadzony");}
     while(!f.eof())
     {
         f>>tmp0; //x
         f>>tmp1; //kt2
         f>>tmp2;    //mu2
         f>>tmp3;    //TG
-        ccfm.insert(pair<tuple<double,double,double>,double>(make_tuple(exp(tmp0),exp(tmp1),exp(tmp2)*exp(tmp2)),tmp3));
+        ccfm.insert(pair<tuple<double,double,double>,double>(make_tuple(tmp0,tmp1,tmp2),tmp3));
 
         ccfm_X.push_back(exp(tmp0));
         ccfm_Kt2.push_back(exp(tmp1));
