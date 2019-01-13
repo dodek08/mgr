@@ -116,23 +116,24 @@ void read_ccfm()
     cout<<pdfs->xfxQ2(1, 0.1, 2*2)<<endl;*/ //cos jak zlota regula Fermiego
     fstream f;
     double tmp0,tmp1,tmp2,tmp3;
-    f.open("KShardscale2_dilute_linear.dat", ios::in | ios::out);
+    // f.open("KShardscale2_dilute_linear.dat", ios::in | ios::out);
+    f.open("ccfm.dat", ios::in | ios::out);
     if (!f.is_open()){ throw Blad("zly plik wejscia KShardscale2_dilute_linear.dat, nie istnieje lub zle wprowadzony");}
     while(!f.eof())
     {
         f>>tmp0; //x
         f>>tmp1; //kt2
         f>>tmp2;    //mu2
-        f>>tmp3;    //TG
-        ccfm.insert(pair<tuple<double,double,double>,double>(make_tuple(tmp0,tmp1,tmp2),tmp3));
+        f>>tmp3;    //siatka
+        ccfm.insert(pair<tuple<double,double,double>,double>(make_tuple(exp(tmp0),exp(tmp1),exp(tmp2)*exp(tmp)),tmp3));
 
         // dla ccfm 
-        //ccfm_X.push_back(exp(tmp0));
-        // ccfm_Kt2.push_back(exp(tmp1));
-        // ccfm_Mu.push_back(exp(tmp2)*exp(tmp2));
-        ccfm_X.push_back(tmp0);
-        ccfm_Kt2.push_back(tmp1);
-        ccfm_Mu.push_back(tmp2);
+        ccfm_X.push_back(exp(tmp0));
+        ccfm_Kt2.push_back(exp(tmp1));
+        ccfm_Mu.push_back(exp(tmp2)*exp(tmp2));
+        // ccfm_X.push_back(tmp0);
+        // ccfm_Kt2.push_back(tmp1);
+        // ccfm_Mu.push_back(tmp2);
     }
     f.close();
 
@@ -761,6 +762,8 @@ double fa(const double & x, const double & kt2, const double & mu2)
     // }
     // else
     // return (pb_s(x,kt2+h,mu2)*Tgs(kt2+h,mu2)-pb_s(x,kt2-h,mu2)*Tgs(kt2-h,mu2))/(2*h);
+
+    // return pb_s(x,kt2,mu2);
 }
 
 double fu(const double & x, const double & kt2, const double & mu2)
