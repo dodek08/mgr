@@ -754,7 +754,7 @@ double fa(const double & x, const double & kt2, const double & mu2)
     // else
     // return (ccfm_s(x,kt2+h,mu2)*Tgs(kt2+h,mu2)-ccfm_s(x,kt2-h,mu2)*Tgs(kt2-h,mu2))/(2*h);
 
-    return ccfm_s(x,kt2,mu2);
+    // return ccfm_s(x,kt2,mu2);
 
     // if(sqrt(kt2)<sqrt(mu0))
     // {
@@ -763,7 +763,7 @@ double fa(const double & x, const double & kt2, const double & mu2)
     // else
     // return (pb_s(x,kt2+h,mu2)*Tgs(kt2+h,mu2)-pb_s(x,kt2-h,mu2)*Tgs(kt2-h,mu2))/(2*h);
 
-    // return pb_s(x,kt2,mu2);
+    return pb_s(x,kt2,mu2);
 }
 
 double fu(const double & x, const double & kt2, const double & mu2)
