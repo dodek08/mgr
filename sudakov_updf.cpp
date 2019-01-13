@@ -125,7 +125,7 @@ void read_ccfm()
         f>>tmp1; //kt2
         f>>tmp2;    //mu2
         f>>tmp3;    //siatka
-        ccfm.insert(pair<tuple<double,double,double>,double>(make_tuple(exp(tmp0),exp(tmp1),exp(tmp2)*exp(tmp)),tmp3));
+        ccfm.insert(pair<tuple<double,double,double>,double>(make_tuple(exp(tmp0),exp(tmp1),exp(tmp2)*exp(tmp2)),tmp3));
 
         // dla ccfm 
         ccfm_X.push_back(exp(tmp0));
