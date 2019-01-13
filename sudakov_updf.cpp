@@ -126,6 +126,10 @@ void read_ccfm()
         f>>tmp3;    //TG
         ccfm.insert(pair<tuple<double,double,double>,double>(make_tuple(tmp0,tmp1,tmp2),tmp3));
 
+        // dla ccfm 
+        //ccfm_X.push_back(exp(tmp0));
+        // ccfm_Kt2.push_back(exp(tmp1));
+        // ccfm_Mu.push_back(exp(tmp2)*exp(tmp2));
         ccfm_X.push_back(tmp0);
         ccfm_Kt2.push_back(tmp1);
         ccfm_Mu.push_back(tmp2);
@@ -742,12 +746,14 @@ double fa(const double & x, const double & kt2, const double & mu2)
     // else
     // return (n_g*pow(x,lambda_g)*pow((1.-x),beta_g))*(fad(x,kt2+h,mu2)-fad(x,kt2-h,mu2))/(2*h);
 
-    if(sqrt(kt2)<sqrt(mu0))
-    {
-        return ccfm_s(x,kt2,mu0)*Tgs(mu0,mu2)/mu0;
-    }
-    else
-    return (ccfm_s(x,kt2+h,mu2)*Tgs(kt2+h,mu2)-ccfm_s(x,kt2-h,mu2)*Tgs(kt2-h,mu2))/(2*h);
+    // if(sqrt(kt2)<sqrt(mu0))
+    // {
+    //     return ccfm_s(x,kt2,mu0)*Tgs(mu0,mu2)/mu0;
+    // }
+    // else
+    // return (ccfm_s(x,kt2+h,mu2)*Tgs(kt2+h,mu2)-ccfm_s(x,kt2-h,mu2)*Tgs(kt2-h,mu2))/(2*h);
+
+    return ccfm_s(x,kt2,mu2);
 
     // if(sqrt(kt2)<sqrt(mu0))
     // {
