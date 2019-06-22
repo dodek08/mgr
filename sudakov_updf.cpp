@@ -740,12 +740,23 @@ double fsd(const double & x, const double & la2, const double & mu2)
 
 double fa(const double & x, const double & kt2, const double & mu2)
 {
-    if(sqrt(kt2)<sqrt(mu0))
-    {
-        return (n_g*pow(x,lambda_g)*pow((1.-x),beta_g))*pdfs->xfxQ2(21,x,mu0)*Tgs(mu0,mu2)/mu0;
-    }
+
+    double x0 = 041E-4;
+    double lambda = 277./1000.;
+    double sig0 = (2912./100.)/(389./1000.);
+    double als = 0.2;
+    double Qs2 = pow(x0/x,lambda);
+    double fgg = 3*sig0/(4*M_PI*M_PI*als)*kt2/Qs2*exp(-kt2/Qs2);
+    if(fgg!=fgg)
+        throw Blad("Blad w fa",x,kt2,Qs2,mu2);
     else
-    return (n_g*pow(x,lambda_g)*pow((1.-x),beta_g))*(fad(x,kt2+h,mu2)-fad(x,kt2-h,mu2))/(2*h);
+        return fgg;
+    // if(sqrt(kt2)<sqrt(mu0))
+    // {
+    //     return (n_g*pow(x,lambda_g)*pow((1.-x),beta_g))*pdfs->xfxQ2(21,x,mu0)*Tgs(mu0,mu2)/mu0;
+    // }
+    // else
+    // return (n_g*pow(x,lambda_g)*pow((1.-x),beta_g))*(fad(x,kt2+h,mu2)-fad(x,kt2-h,mu2))/(2*h);
 
     // if(sqrt(kt2)<sqrt(mu0))
     // {

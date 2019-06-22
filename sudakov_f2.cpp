@@ -109,7 +109,7 @@ double FL_g(const double & x, const double & Q2, size_t calls2=100000)
     final_result+=/*Q2/(4*M_PI)**/cq2[q]*result;
   }
    // cout<<"FL "<<x<<" "<<Q2<<"\t"<<final_result<<endl;
-  return final_result;
+  return final_result*100;
 
 }
 
@@ -145,7 +145,7 @@ double FT_g(const double & x, const double & Q2, size_t calls2=100000)
     final_result+=/*Q2/(4*M_PI)**/cq2[q]*result;
   }
   // cout<<"FT "<<x<<" "<<Q2<<"\t"<<final_result<<endl;
-  return final_result;
+  return final_result*100;
 
 }
 
@@ -234,7 +234,7 @@ void warm_up_f2()
   mq2['s'] = 0;//0.096*0.096;
   cq2['s'] = 1./9.;
   pids['s'] = 3;
-  mq2['c'] = 1.5;
+  mq2['c'] = 1.5*1.5;
   cq2['c'] = 4./9.;
   pids['c'] = 4;
   FL_u_g.f=&fl_u_g;
@@ -296,7 +296,8 @@ double fl_u_g(double *args, size_t dim, void *params)
     // ret = pdf2->alphasQ2(mu2)*fa(fp->x/invz,args[0],mu2)*(2.*fp->Q2*args[2]*args[2]*(1.-args[2])*(1.-args[2])*(1./d1-1./d2)*(1./d1-1./d2))/M_PI;
   	// ret = als*fp->Q2/(4*M_PI)*4*sqrt(kt2)*sqrt(Kt2)* 1./(2.*M_PI) *(4* fp->Q2 *B*B* (1. - B*B )*(1. - B*B )*(1./d1 - 1./d2)*(1./d1 - 1./d2))* fgk(fp->x/invz, kt)/kt2;
   	// ret = als*fp->Q2/(4*M_PI)*4*sqrt(args[0]*args[0])*sqrt(args[1]*args[1])* 1./(2.*M_PI) *(4* fp->Q2 *args[2]*args[2]* (1. - args[2] )*(1. - args[2] )*(1./d1 - 1./d2)*(1./d1 - 1./d2))* fgk(fp->x/invz, sqrt(args[0]*args[0]))/args[0]*args[0];
-    ret = pdf2->alphasQ2(mu2)*fp->Q2/(4*M_PI)*4.*args[0]*args[1]* 1./(2.*M_PI)*(4* fp->Q2 *args[2]*args[2]* (1. - args[2])*(1. - args[2])*(1./d1 - 1./d2)*(1./d1 - 1./d2))*fa(fp->x/invz, args[0]*args[0], mu2)/(args[0]*args[0]);
+    // ret = pdf2->alphasQ2(mu2)*fp->Q2/(4*M_PI)*4.*args[0]*args[1]* 1./(2.*M_PI)*(4* fp->Q2 *args[2]*args[2]* (1. - args[2])*(1. - args[2])*(1./d1 - 1./d2)*(1./d1 - 1./d2))*fa(fp->x/invz, args[0]*args[0], mu2)/(args[0]*args[0]);
+    ret = interpolacja(sqrt(mu2))*fp->Q2/(4*M_PI)*4.*args[0]*args[1]* 1./(2.*M_PI)*(4* fp->Q2 *args[2]*args[2]* (1. - args[2])*(1. - args[2])*(1./d1 - 1./d2)*(1./d1 - 1./d2))*fa(fp->x/invz, args[0]*args[0], mu2)/(args[0]*args[0]);
 
   }
   else
@@ -321,7 +322,8 @@ double ft_u_g(double *args, size_t dim, void *params)
     // ret = (  (args[2]*args[2] + (1.-B)*(1.-B))*( K2/d1 + ((K2+k2-2.*K*k*cos(fi))/(d2*d2)) - 2*(K2-kt*K*cos(fi))/(d1*d2)) + mq2*(1./d1 + 1/d2)*(1./d1 + 1/d2)   )*pdf2->alphasQ2(mu2)*fa(fp->x/invz,args[0],mu2)*heaviside(1.-x/invz)
     /// to jest to ostetnie "dobre" ret = ((args[2]*args[2] + (1.-args[2])*(1.-args[2]))*( args[1]/d1 + ((args[1]+args[0]-2.*sqrt(args[1])*sqrt(args[0])*cos(args[3]))/(d2*d2)) - 2.*(args[1]-sqrt(args[0])*sqrt(args[1])*cos(args[3]))/(d1*d2)) + fp->mq2*(1./d1 + 1./d2)*(1./d1 + 1./d2))*pdf2->alphasQ2(mu2)*fa(fp->x/invz,args[0],mu2);
     // ret = pdf2->alphasQ2(mu2)*fa(fp->x/z,fp->x,mu2)*((args[2]*args[2]+(1.-args[2])*(1.-args[2]))*(args[1]/d1-args[3]/d2)*(args[1]/d1-args[3]/d2)+fp->mq2*(1./d1-1./d2)*(1./d1-1./d2))/(args[0]*args[0]*2*M_PI);
-  	ret =  pdf2->alphasQ2(mu2)*fp->Q2/(4.*M_PI)*4.*args[0]*args[1]*1./(2.*M_PI)*((args[2]*args[2] + (1. - args[2])*(1. - args[2]))*(args[1]*args[1]/(d1*d1) + (args[1]*args[1] - 2.*args[0]*args[1]*cos(args[3])+ args[0]*args[0])/(d2*d2) - 2. *(args[1]*args[1] - args[0]*args[1]*cos(args[3]))/(d1*d2)) + fp->mq2*(1./d1 - 1./d2)*(1./d1 - 1./d2)) *fa(fp->x/invz, args[0]*args[0],mu2)/(args[0]*args[0]);
+  	// ret =  pdf2->alphasQ2(mu2)*fp->Q2/(4.*M_PI)*4.*args[0]*args[1]*1./(2.*M_PI)*((args[2]*args[2] + (1. - args[2])*(1. - args[2]))*(args[1]*args[1]/(d1*d1) + (args[1]*args[1] - 2.*args[0]*args[1]*cos(args[3])+ args[0]*args[0])/(d2*d2) - 2. *(args[1]*args[1] - args[0]*args[1]*cos(args[3]))/(d1*d2)) + fp->mq2*(1./d1 - 1./d2)*(1./d1 - 1./d2)) *fa(fp->x/invz, args[0]*args[0],mu2)/(args[0]*args[0]);
+    ret =  interpolacja(sqrt(mu2))*fp->Q2/(4.*M_PI)*4.*args[0]*args[1]*1./(2.*M_PI)*((args[2]*args[2] + (1. - args[2])*(1. - args[2]))*(args[1]*args[1]/(d1*d1) + (args[1]*args[1] - 2.*args[0]*args[1]*cos(args[3])+ args[0]*args[0])/(d2*d2) - 2. *(args[1]*args[1] - args[0]*args[1]*cos(args[3]))/(d1*d2)) + fp->mq2*(1./d1 - 1./d2)*(1./d1 - 1./d2)) *fa(fp->x/invz, args[0]*args[0],mu2)/(args[0]*args[0]);
   }
   else
   {
@@ -345,3 +347,4 @@ double f2_u_q(double *args, size_t dim, void *params)
   		ret = 0.;
   	return ret;
   }
+

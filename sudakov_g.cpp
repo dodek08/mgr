@@ -299,7 +299,7 @@ void read_alphas()
 {
     fstream f;
     double tmp1,tmp2;
-    f.open("CTEQ10_alphas_2.dat", ios::in | ios::out);
+    f.open("CTEQ10_alphas.dat", ios::in | ios::out);
     if (!f.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
     while(!f.eof())
     {
@@ -315,14 +315,20 @@ void read_alphas()
 
 double interpolacja(const double & kt2)
 {
+  double ukt2 = kt2;
+    if (kt2<=1.3)
+    {
+      ukt2=1.3;
+    }
 //      interpolacja liniowa
-    // int index = find_index_gt(u2s,kt2);
-    // double x1=u2s[index];
-    // double x2=u2s[index-1];
-    // double y1=as_2[x1];
-    // double y2=as_2[x2];
-    // return y1+(y2-y1)/(x2-x1)*(kt2-x1);
-      return pdf->alphasQ2(kt2); // odpowiednie as_2
+    int index = find_index_gt(u2s,ukt2);
+    double x1=u2s[index];
+    double x2=u2s[index-1];
+    double y1=as_2[x1];
+    double y2=as_2[x2];
+    double ret = y1+(y2-y1)/(x2-x1)*(ukt2-x1);
+    return ret;
+      // return pdf->alphasQ2(kt2); // odpowiednie as_2
 
 }
 
