@@ -738,17 +738,17 @@ double fsd(const double & x, const double & la2, const double & mu2)
     return pdfs->xfxQ2(3,x,la2)*Tqs(la2,mu2);
 }
 
-double fa(const double & x, const double & kt2, const double & mu2)
+double fa(const double & x, const double & kt, const double & mu2)
 {
 
-    double x0 = 041E-4;
+    double x0 = 0.41E-4;
     double lambda = 277./1000.;
     double sig0 = (2912./100.)/(389./1000.);
     double als = 0.2;
     double Qs2 = pow(x0/x,lambda);
-    double fgg = 3*sig0/(4*M_PI*M_PI*als)*kt2/Qs2*exp(-kt2/Qs2);
+    double fgg = 3*sig0/(4*M_PI*M_PI*als)*kt*kt/Qs2*exp(-kt*kt/Qs2);
     if(fgg!=fgg)
-        throw Blad("Blad w fa",x,kt2,Qs2,mu2);
+        throw Blad("Blad w fa",x,kt,Qs2,mu2);
     else
         return fgg;
     // if(sqrt(kt2)<sqrt(mu0))

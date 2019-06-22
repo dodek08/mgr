@@ -11,8 +11,8 @@ int main(int argc, char* argv[])
         warm_up();
         warm_up_f2();
         read_Ts();
-        read_ccfm();
-        read_pb();
+        // read_ccfm();
+        // read_pb();
         read_alphas();
         string siatka = argv[1];
         // int lp = atoi(argv[2]);
@@ -34,14 +34,50 @@ double fl = 0;
 
 
 cout<<"x"<<"\t"<<"Q2"<<"\t"<<"F2"<<"\t"<<"Fl"<<"\t"<<"Ft"<<endl;
-for (int i = 0; i < 4; ++i)
+for (int i = 2; i < 4; ++i)
 {
-	for (int j = 0; j < 3; ++j)
+	for (int j = 1; j < 5; ++j)
 	{
-		fl = FL_g(pow(10,-1*j),i);
-		ft = FT_g(pow(10,-1*j),i);
-		cout<<pow(10,-1*j)<<"\t"<<i<<"\t"<<fl+ft<<"\t"<<fl<<"\t"<<ft<<endl;
+		fl = FL_g(pow(10,-1*i)/**pow(10,-1*j)*/,j);
+		ft = FT_g(pow(10,-1*i)/**pow(10,-1*j)*/,j);
+		cout<<pow(10,-1*i)<<"\t"<<j<<"\t"<<fl+ft<<"\t"<<fl<<"\t"<<ft<<endl;
 	}
+}
+
+std::vector<double> v =
+{
+    1.3,
+1.5,
+1.75494 ,
+2.,
+2.49452 ,
+3.,
+3.76679 ,
+4.75    ,
+6.133,
+8.09,
+10.92,
+15.1284 ,
+21.53,
+31.5646 ,
+47.7865 ,
+74.911  ,
+91.1876 ,
+121.953 ,
+206,
+366.727 ,
+682.274 ,
+1337.31 ,
+2773.76 ,
+6116.88 ,
+14416.3 ,
+36514.7 ,
+100000,
+};
+
+for (auto const & val : v)
+{
+    //cout<<interpolacja(val)<<endl;
 }
 // // string NAZWA = siatka+to_string(n_g)+to_string(lambda_g)+to_string(beta_g);
 // //     fstream save;

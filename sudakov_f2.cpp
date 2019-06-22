@@ -14,7 +14,7 @@ map<char,double> cq2;
 map<char,int> pids; //to jest dramat
 char quarks[] = {'u','d','s','c'};
 LHAPDF::PDF* pdf2;// = LHAPDF::mkPDF("CT14nlo", 0);
-size_t calls2 = 10000;
+size_t calls2 = 1000000;
 
 constexpr double lambda = 277./1000.;
 const double x0 =  0.000041;
@@ -167,16 +167,16 @@ double FL_g(const double & x, const double & Q2)
     s2 = gsl_monte_vegas_alloc(4);
     //args :={kt2, Kt2, B, fi}
     gsl_monte_vegas_integrate(&FL_u_g, xl, xu, 4, calls2/10, r2, s2, &result, &error);
-    // do
-    // {
+     do
+     {
      result=0.;
      error=0.;
      gsl_monte_vegas_integrate(&FL_u_g, xl, xu, 4, calls2, r2, s2, &result, &error);
      // cout<<s2->chisq<<"\t"<<result<<"\t"<<error<<endl;
-     // if(s2->chisq==0)
-      // break;
-    // }
-    // while ((fabs (s2->chisq - 1.0) > 0.35) ); //more accurate
+      if(s2->chisq==0)
+       break;
+     }
+     while ((fabs (s2->chisq - 1.0) > 0.35) ); //more accurate
     gsl_monte_vegas_free(s2);
     // cout<<"FL"<<"\t"<<q<<"\t"<<result<<endl;
     final_result+=/*Q2/(4*M_PI)**/cq2[q]*result;
@@ -203,16 +203,16 @@ double FT_g(const double & x, const double & Q2)
     s2 = gsl_monte_vegas_alloc(4);
     //args :={kt2, Kt2, B, fi}
     gsl_monte_vegas_integrate(&FT_u_g, xl, xu, 4, calls2/10, r2, s2, &result, &error);
-    // do
-    // {
+    do
+     {
      result=0.;
      error=0.;
      gsl_monte_vegas_integrate(&FT_u_g, xl, xu, 4, calls2, r2, s2, &result, &error);
-     // cout<<s2->chisq<<"\t"<<result<<"\t"<<error<<endl;
-     // if(s2->chisq==0)
-      // break;
-    // }
-    // while ((fabs (s2->chisq - 1.0) > 0.35) ); //more accurate
+      //cout<<s2->chisq<<"\t"<<result<<"\t"<<error<<endl;
+      if(s2->chisq==0)
+       break;
+     }
+     while ((fabs (s2->chisq - 1.0) > 0.35) ); //more accurate
     gsl_monte_vegas_free(s2);
     // cout<<"FT"<<"\t"<<q<<"\t"<<result<<endl;
     final_result+=/*Q2/(4*M_PI)**/cq2[q]*result;
@@ -288,22 +288,23 @@ double fl_u_g(double *args, size_t dim, void *params)
     //args :={kt2, Kt2, B, fi}
   double invz = z(args[1], args[0], args[3], args[2], fp->Q2, fp->mq2);
   double ret = 1. - fp->x/invz;
-  if (ret>0)
-  {
+  // if (ret>0)
+  // {
     double d1 = D1(args[1], args[2], fp->Q2, fp->mq2);
     double d2 = D2(args[1], args[0], args[3], args[2], fp->Q2, fp->mq2);
-     double mu2 = mu_2_v(args[1], args[2], fp->mq2);
+     double mu2 = mu_2_v(args[0], args[1], fp->mq2);
     // ret = pdf2->alphasQ2(mu2)*fa(fp->x/invz,args[0],mu2)*(2.*fp->Q2*args[2]*args[2]*(1.-args[2])*(1.-args[2])*(1./d1-1./d2)*(1./d1-1./d2))/M_PI;
   	// ret = als*fp->Q2/(4*M_PI)*4*sqrt(kt2)*sqrt(Kt2)* 1./(2.*M_PI) *(4* fp->Q2 *B*B* (1. - B*B )*(1. - B*B )*(1./d1 - 1./d2)*(1./d1 - 1./d2))* fgk(fp->x/invz, kt)/kt2;
   	// ret = als*fp->Q2/(4*M_PI)*4*sqrt(args[0]*args[0])*sqrt(args[1]*args[1])* 1./(2.*M_PI) *(4* fp->Q2 *args[2]*args[2]* (1. - args[2] )*(1. - args[2] )*(1./d1 - 1./d2)*(1./d1 - 1./d2))* fgk(fp->x/invz, sqrt(args[0]*args[0]))/args[0]*args[0];
     // ret = pdf2->alphasQ2(mu2)*fp->Q2/(4*M_PI)*4.*args[0]*args[1]* 1./(2.*M_PI)*(4* fp->Q2 *args[2]*args[2]* (1. - args[2])*(1. - args[2])*(1./d1 - 1./d2)*(1./d1 - 1./d2))*fa(fp->x/invz, args[0]*args[0], mu2)/(args[0]*args[0]);
-    ret = interpolacja(sqrt(mu2))*fp->Q2/(4*M_PI)*4.*args[0]*args[1]* 1./(2.*M_PI)*(4* fp->Q2 *args[2]*args[2]* (1. - args[2])*(1. - args[2])*(1./d1 - 1./d2)*(1./d1 - 1./d2))*fa(fp->x/invz, args[0]*args[0], mu2)/(args[0]*args[0]);
+    //ret = interpolacja(sqrt(mu2))*fp->Q2/(4*M_PI)*4.*args[0]*args[1]* 1./(2.*M_PI)*(4* fp->Q2 *args[2]*args[2]* (1. - args[2])*(1. - args[2])*(1./d1 - 1./d2)*(1./d1 - 1./d2))*fa(fp->x/invz, args[0]*args[0], mu2)/(args[0]*args[0]);
 
-  }
-  else
-  {
-    ret = 0.;
-  }
+    ret = interpolacja(sqrt(mu2))*fp->Q2/(4*M_PI)*4*args[0]*args[1]*1./(2*M_PI)*(4*fp->Q2*args[2]*args[2]*(1.-args[2])*(1.-args[2])*(1./d1-1/d2)*(1./d1-1/d2))*fa(fp->x/invz,args[0],mu2)/(args[0]*args[0])*heaviside(1. - fp->x/invz);
+  // }
+  // else
+  // {
+  //   ret = 0.;
+  // }
     return ret;
   }
 
@@ -314,21 +315,21 @@ double ft_u_g(double *args, size_t dim, void *params)
     //args :={kt2, Kt2, B, fi}
   double invz = z(args[1], args[0], args[3], args[2], fp->Q2, fp->mq2);
   double ret = 1. - fp->x/invz;
-  if (ret>0)
-  {
+  
     double d1 = D1(args[1], args[2], fp->Q2, fp->mq2);
     double d2 = D2(args[1], args[0], args[3], args[2], fp->Q2, fp->mq2);
-     double mu2 = mu_2_v(args[1], args[2], fp->mq2);
+     double mu2 = mu_2_v(args[0], args[1], fp->mq2);
     // ret = (  (args[2]*args[2] + (1.-B)*(1.-B))*( K2/d1 + ((K2+k2-2.*K*k*cos(fi))/(d2*d2)) - 2*(K2-kt*K*cos(fi))/(d1*d2)) + mq2*(1./d1 + 1/d2)*(1./d1 + 1/d2)   )*pdf2->alphasQ2(mu2)*fa(fp->x/invz,args[0],mu2)*heaviside(1.-x/invz)
     /// to jest to ostetnie "dobre" ret = ((args[2]*args[2] + (1.-args[2])*(1.-args[2]))*( args[1]/d1 + ((args[1]+args[0]-2.*sqrt(args[1])*sqrt(args[0])*cos(args[3]))/(d2*d2)) - 2.*(args[1]-sqrt(args[0])*sqrt(args[1])*cos(args[3]))/(d1*d2)) + fp->mq2*(1./d1 + 1./d2)*(1./d1 + 1./d2))*pdf2->alphasQ2(mu2)*fa(fp->x/invz,args[0],mu2);
     // ret = pdf2->alphasQ2(mu2)*fa(fp->x/z,fp->x,mu2)*((args[2]*args[2]+(1.-args[2])*(1.-args[2]))*(args[1]/d1-args[3]/d2)*(args[1]/d1-args[3]/d2)+fp->mq2*(1./d1-1./d2)*(1./d1-1./d2))/(args[0]*args[0]*2*M_PI);
   	// ret =  pdf2->alphasQ2(mu2)*fp->Q2/(4.*M_PI)*4.*args[0]*args[1]*1./(2.*M_PI)*((args[2]*args[2] + (1. - args[2])*(1. - args[2]))*(args[1]*args[1]/(d1*d1) + (args[1]*args[1] - 2.*args[0]*args[1]*cos(args[3])+ args[0]*args[0])/(d2*d2) - 2. *(args[1]*args[1] - args[0]*args[1]*cos(args[3]))/(d1*d2)) + fp->mq2*(1./d1 - 1./d2)*(1./d1 - 1./d2)) *fa(fp->x/invz, args[0]*args[0],mu2)/(args[0]*args[0]);
-    ret =  interpolacja(sqrt(mu2))*fp->Q2/(4.*M_PI)*4.*args[0]*args[1]*1./(2.*M_PI)*((args[2]*args[2] + (1. - args[2])*(1. - args[2]))*(args[1]*args[1]/(d1*d1) + (args[1]*args[1] - 2.*args[0]*args[1]*cos(args[3])+ args[0]*args[0])/(d2*d2) - 2. *(args[1]*args[1] - args[0]*args[1]*cos(args[3]))/(d1*d2)) + fp->mq2*(1./d1 - 1./d2)*(1./d1 - 1./d2)) *fa(fp->x/invz, args[0]*args[0],mu2)/(args[0]*args[0]);
-  }
-  else
-  {
-    ret = 0.;
-  }
+    //ret = interpolacja(sqrt(mu2))*fp->Q2/(4.*M_PI)*4.*args[0]*args[1]*1./(2.*M_PI)*((args[2]*args[2] + (1. - args[2])*(1. - args[2]))*(args[1]*args[1]/(d1*d1) + (args[1]*args[1] - 2.*args[0]*args[1]*cos(args[3])+ args[0]*args[0])/(d1*d2) - 2. *(args[1]*args[1] - args[0]*args[1]*cos(args[3]))/(d1*d2)) + fp->mq2*(1./d1 - 1./d2)*(1./d1 - 1./d2)) *fa(fp->x/invz, args[0]*args[0],mu2)/(args[0]*args[0]);
+    ret = interpolacja(sqrt(mu2))*fp->Q2/(4.*M_PI)*4*args[0]*args[1]*1./(2*M_PI)*((args[2]*args[2]+(1.-args[2])*(1.-args[2]))*(args[1]*args[1]/(d1*d1)+(args[1]*args[1]-2*args[1]*args[0]*cos(args[3])+args[0]*args[0])/(d2*d2)-2*(args[1]*args[1]-args[0]*args[1]*cos(args[3]))/(d1*d2))+fp->mq2*(1./d1-1./d2)*(1./d1-1./d2))*fa(fp->x/invz,args[0],mu2)/(args[0]*args[0])*heaviside(1. - fp->x/invz);
+  
+  // else
+  // {
+  //   ret = 0.;
+  // }
     return ret;
 }
 
