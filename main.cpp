@@ -33,14 +33,15 @@ double fl = 0;
 	double f2=0;
 
 
-cout<<"x"<<"\t"<<"Q2"<<"\t"<<"F2"<<"\t"<<"Fl"<<"\t"<<"Ft"<<endl;
+cout<<"x"<<"\t"<<"Q2"<<"\t"<<"F2"<<"\t"<<"Fl"<<"\t"<<"Ft"<<"\t"<<"calls"<<"\t"<<"t"<<endl;
 for (int i = 2; i < 4; ++i)
 {
 	for (int j = 1; j < 5; ++j)
 	{
+        clock_t start = clock();
 		fl = FL_g(pow(10,-1*i)/**pow(10,-1*j)*/,j);
 		ft = FT_g(pow(10,-1*i)/**pow(10,-1*j)*/,j);
-		cout<<pow(10,-1*i)<<"\t"<<j<<"\t"<<fl+ft<<"\t"<<fl<<"\t"<<ft<<endl;
+		cout<<pow(10,-1*i)<<"\t"<<j<<"\t"<<fl+ft<<"\t"<<fl<<"\t"<<ft<<"calls"<<"\t"<<(double)(clock()-start)/(CLOCKS_PER_SEC)<<endl;
 	}
 }
 
