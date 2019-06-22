@@ -40,7 +40,7 @@ Wyniki::Wyniki(string name) {
             file >> tmp_x;
             file >> tmp_y;
             file >> tmp_cs;
-            // cout<<tmp_q2<<"\t"<<tmp_x<<"\t"<<tmp_y<<"\t"<<tmp_cs<<endl;
+             // cout<<tmp_q2<<"\t"<<tmp_x<<"\t"<<tmp_y<<"\t"<<tmp_cs<<endl;
             for(int i=0; i<172; ++i) 
             {
             	file >> tmp;

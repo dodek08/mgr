@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
 Wyniki HERA("HERA1+2_NCep_920.dat");
 cout<<HERA.nazwa<<endl;
 
-draw_gluons(21);
+// draw_gluons(21);
 // cout<<lp<<"\t"<</*l2<<*/endl;
 // cout<<"n_g"<<"\t"<<"lambda_g"<<"\t"<<"beta_g"<<"\t"<<"X2"<<"\t"<<"av_my_err"<</*"\t"<<"f2_full"<<*/endl;
 // cout<<"x"<<"\t"<<"Q2"<<"\t"<<"cs_calc"<<"\t"<<"cs_data"<<"\t"<<"err"<<endl;
@@ -73,7 +73,6 @@ while(x!=HERA.x.end())
 {
 	if(*Q2>=1.5 and *x<0.01)
 	{
-		// cout<<licznik<<"\t";
 	// double cs = cs_tau_f2(*x++,*Q2++,*y++);
 	double fl = FT_g(*x,*Q2);
 	double ft = FL_g(*x,*Q2);
