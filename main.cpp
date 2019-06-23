@@ -32,17 +32,27 @@ double fl = 0;
 	double ft = 0;
 	double f2=0;
 
+std::vector<double> xs = {0.1, 0.001};
+std::vector<double> Q2s = {5, 50, 200};
+std::vector<double> calls = {10000, 100000, 1000000};
 
 cout<<"x"<<"\t"<<"Q2"<<"\t"<<"F2"<<"\t"<<"Fl"<<"\t"<<"Ft"<<"\t"<<"calls"<<"\t"<<"t"<<endl;
-for (int i = 2; i < 4; ++i)
-{
-	for (int j = 1; j < 5; ++j)
-	{
+
+ for (auto const& call : calls)
+ {   
+    for (int i = 0; i < 100; ++i)
+    {
+    for(auto const& x : xs)
+    {
+        for(auto const& Q2: Q2s )
+        {
         clock_t start = clock();
-		fl = FL_g(pow(10,-1*i)/**pow(10,-1*j)*/,j);
-		ft = FT_g(pow(10,-1*i)/**pow(10,-1*j)*/,j);
-		cout<<pow(10,-1*i)<<"\t"<<j<<"\t"<<fl+ft<<"\t"<<fl<<"\t"<<ft<<"calls"<<"\t"<<(double)(clock()-start)/(CLOCKS_PER_SEC)<<endl;
-	}
+		fl = FL_g(x,Q2,call);
+		ft = FT_g(x,Q2,call);
+		cout<<x<<"\t"<<Q2<<"\t"<<fl+ft<<"\t"<<fl<<"\t"<<ft<<"\t"<<call<<"\t"<<(double)(clock()-start)/(CLOCKS_PER_SEC)<<endl;
+    }
+    }
+ }
 }
 
 std::vector<double> v =

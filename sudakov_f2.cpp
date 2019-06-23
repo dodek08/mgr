@@ -77,10 +77,10 @@ double F2_q(const double & x, const double & Q2)
 
 }
 
-double FL_g(const double & x, const double & Q2, size_t calls2=100000)
+double FL_g(const double & x, const double & Q2, size_t calls)
 {
   double result=0., error=0.;   // result and error
-  double xu[4]={500, 500, 1., 2*M_PI}; 
+  double xu[4]={50, 50, 1., 2*M_PI}; 
   double xl[4]={0.01, 0.01, 0, 0};
   double final_result=0;
   for(char q : {'u','d','s','c'})
@@ -93,27 +93,27 @@ double FL_g(const double & x, const double & Q2, size_t calls2=100000)
     FL_u_g.params=&pms;
     s2 = gsl_monte_vegas_alloc(4);
     //args :={kt2, Kt2, B, fi}
-    gsl_monte_vegas_integrate(&FL_u_g, xl, xu, 4, calls2/10, r2, s2, &result, &error);
-    // do
-    // {
+    gsl_monte_vegas_integrate(&FL_u_g, xl, xu, 4, calls/10, r2, s2, &result, &error);
+     do
+     {
      result=0.;
      error=0.;
-     gsl_monte_vegas_integrate(&FL_u_g, xl, xu, 4, calls2, r2, s2, &result, &error);
+     gsl_monte_vegas_integrate(&FL_u_g, xl, xu, 4, calls, r2, s2, &result, &error);
      // cout<<s2->chisq<<"\t"<<result<<"\t"<<error<<endl;
-     // if(s2->chisq==0)
-      // break;
-    // }
-    // while ((fabs (s2->chisq - 1.0) > 0.35) ); //more accurate
+      if(s2->chisq==0)
+       break;
+     }
+     while ((fabs (s2->chisq - 1.0) > 0.35) ); //more accurate
     gsl_monte_vegas_free(s2);
     // cout<<"FL"<<"\t"<<q<<"\t"<<result<<endl;
     final_result+=/*Q2/(4*M_PI)**/cq2[q]*result;
   }
    // cout<<"FL "<<x<<" "<<Q2<<"\t"<<final_result<<endl;
-  return final_result*100;
+  return final_result;
 
 }
 
-double FT_g(const double & x, const double & Q2, size_t calls2=100000)
+double FT_g(const double & x, const double & Q2, size_t calls)
 {
   double result=0., error=0.;   // result and error
   double xu[4]={50, 50, 1., 2*M_PI};
@@ -129,23 +129,23 @@ double FT_g(const double & x, const double & Q2, size_t calls2=100000)
     FT_u_g.params=&pms;
     s2 = gsl_monte_vegas_alloc(4);
     //args :={kt2, Kt2, B, fi}
-    gsl_monte_vegas_integrate(&FT_u_g, xl, xu, 4, calls2/10, r2, s2, &result, &error);
-    // do
-    // {
+    gsl_monte_vegas_integrate(&FT_u_g, xl, xu, 4, calls/10, r2, s2, &result, &error);
+    do
+     {
      result=0.;
      error=0.;
-     gsl_monte_vegas_integrate(&FT_u_g, xl, xu, 4, calls2, r2, s2, &result, &error);
-     // cout<<s2->chisq<<"\t"<<result<<"\t"<<error<<endl;
-     // if(s2->chisq==0)
-      // break;
-    // }
-    // while ((fabs (s2->chisq - 1.0) > 0.35) ); //more accurate
+     gsl_monte_vegas_integrate(&FT_u_g, xl, xu, 4, calls, r2, s2, &result, &error);
+      //cout<<s2->chisq<<"\t"<<result<<"\t"<<error<<endl;
+      if(s2->chisq==0)
+       break;
+     }
+     while ((fabs (s2->chisq - 1.0) > 0.35) ); //more accurate
     gsl_monte_vegas_free(s2);
     // cout<<"FT"<<"\t"<<q<<"\t"<<result<<endl;
     final_result+=/*Q2/(4*M_PI)**/cq2[q]*result;
   }
   // cout<<"FT "<<x<<" "<<Q2<<"\t"<<final_result<<endl;
-  return final_result*100;
+  return final_result;
 
 }
 
