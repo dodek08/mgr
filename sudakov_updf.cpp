@@ -562,8 +562,8 @@ double kt2;
 double mu2;
         clock_t t = clock();
 
-if(pid != 21)
-{
+// if(pid != 21)
+// {
     for( int ix=0; ix<NX+1; ix++ ){
   logx = MINLOGX + ix*DX;
   x = exp(logx);
@@ -580,56 +580,56 @@ if(pid != 21)
         // cout << "time sigma kt2 " << (double)(clock()-t)/(CLOCKS_PER_SEC) << "sek" << endl;
     }
 }
-}
-else
-{
-    NAZWA = "siatki/wykres_rozklad_" + namexd + "_pid_" + to_string(pid);
-    if (get_n_g()!=1)
-    {
-        NAZWA = "siatki/wykres_rozklad_fit_" + namexd + "_pid_" + to_string(pid);
-    }
-    fstream save2;
-    save2.open(NAZWA,ios::out);
-    if (!save.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
-    vector<double> xss = {0.00001,0.0001,0.001,0.01,0.1};
-    vector<double> mu2s = {10,100,1000,100000,1000000};
-    for( double x : xss)
-    {
-  for( int ikt2=0; ikt2<NKT2+1; ikt2++ )
-  {
-    logkt2 = MINLOGKT2 + ikt2*DKT2;
-        kt2 = exp(logkt2);
-        // t=clock();
-    for(double mu2 : mu2s)
-    {
+// }
+// else
+// {
+//     NAZWA = "siatki/wykres_rozklad_" + namexd + "_pid_" + to_string(pid);
+//     if (get_n_g()!=1)
+//     {
+//         NAZWA = "siatki/wykres_rozklad_fit_" + namexd + "_pid_" + to_string(pid);
+//     }
+//     fstream save2;
+//     save2.open(NAZWA,ios::out);
+//     if (!save.is_open()){ throw Blad("zly plik wejscia, nie istnieje lub zle wprowadzony");}
+//     vector<double> xss = {0.00001,0.0001,0.001,0.01,0.1};
+//     vector<double> mu2s = {10,100,1000,100000,1000000};
+//     for( double x : xss)
+//     {
+//   for( int ikt2=0; ikt2<NKT2+1; ikt2++ )
+//   {
+//     logkt2 = MINLOGKT2 + ikt2*DKT2;
+//         kt2 = exp(logkt2);
+//         // t=clock();
+//     for(double mu2 : mu2s)
+//     {
      
-            save2<<x<<"\t"<<kt2<<"\t"<<mu2<<"\t"<<fa(x,kt2,mu2)<<endl;
-    }
-    }
-    }
-    save2.close();
+//             save2<<x<<"\t"<<kt2<<"\t"<<mu2<<"\t"<<fa(x,kt2,mu2)<<endl;
+//     }
+//     }
+//     }
+//     save2.close();
 
-for( int ix=0; ix<NX+1; ix++ ){
-  logx = MINLOGX + ix*DX;
-  x = exp(logx);
-  for( int ikt2=0; ikt2<NKT2+1; ikt2++ ){
-    logkt2 = MINLOGKT2 + ikt2*DKT2;
-        kt2 = exp(logkt2);
-        // t=clock();
-    for( int imu2=0; imu2<NMU2+1; imu2++ ){
-     logmu2 = MINLOGMU2 + imu2*DMU2;
-        mu2 = exp(logmu2);
+// for( int ix=0; ix<NX+1; ix++ ){
+//   logx = MINLOGX + ix*DX;
+//   x = exp(logx);
+//   for( int ikt2=0; ikt2<NKT2+1; ikt2++ ){
+//     logkt2 = MINLOGKT2 + ikt2*DKT2;
+//         kt2 = exp(logkt2);
+//         // t=clock();
+//     for( int imu2=0; imu2<NMU2+1; imu2++ ){
+//      logmu2 = MINLOGMU2 + imu2*DMU2;
+//         mu2 = exp(logmu2);
      
-            save<<x<<"\t"<<kt2<<"\t"<<mu2<<"\t"<<fa(x,kt2,mu2)<<endl;
-        }
-        // cout << "time sigma kt2 " << (double)(clock()-t)/(CLOCKS_PER_SEC) << "sek" << endl;
-    }
-     cout << "time x =\t"<<x<<"\t" << (double)(clock()-t)/(CLOCKS_PER_SEC) << " sek" << endl;
+//             save<<x<<"\t"<<kt2<<"\t"<<mu2<<"\t"<<fa(x,kt2,mu2)<<endl;
+//         }
+//         // cout << "time sigma kt2 " << (double)(clock()-t)/(CLOCKS_PER_SEC) << "sek" << endl;
+//     }
+//      cout << "time x =\t"<<x<<"\t" << (double)(clock()-t)/(CLOCKS_PER_SEC) << " sek" << endl;
 
-}
+// }
+
+// }
     save.close();
-
-}
 }
 
 double q_pid(const double & x, const double & kt2, const int & pid)
@@ -651,9 +651,9 @@ double fq_pid(const double & x, const double & kt2, const double & mu2, const in
 {
     if(sqrt(kt2)<sqrt(mu0))
     {
-        // if(pid == 21)
-        //     return pdfs->xfxQ2(pid,x,mu0)*Tgs(mu0,mu2)/mu0;
-        // else
+        if(pid == 21)
+            return pdfs->xfxQ2(pid,x,mu0)*Tgs(mu0,mu2)/mu0;
+        else
         return pdfs->xfxQ2(pid,x,mu0)*Tqs(mu0,mu2)/mu0;
     }
     else

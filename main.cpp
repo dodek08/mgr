@@ -27,6 +27,21 @@ int main(int argc, char* argv[])
         clock_t start = clock();
         cout<<setprecision(10)<<endl;
 
+        // draw_gluons(1);
+        // draw_gluons(-1);
+        // draw_gluons(2);
+        // draw_gluons(-2);
+        // draw_gluons(3);
+        // draw_gluons(-3);
+        // draw_gluons(4);
+        // draw_gluons(-4);
+        // draw_gluons(5);
+        // draw_gluons(-5);
+        draw_gluons(21);
+
+        cout << "Czas wykonywania: " << (double)(clock()-start)/(CLOCKS_PER_SEC) << "sek" << endl;
+        cool_down();
+
 // string NAZWA = siatka+to_string(n_g)+to_string(lambda_g)+to_string(beta_g);
 //     fstream save;
 //     save.open(NAZWA,ios::out);
@@ -68,7 +83,7 @@ set_beta_g(beta_g);
 	// {
 	// 	set_beta_g(beta_g+beta_tmp);
 
-
+/*
 while(x!=HERA.x.end())
 {
 	if(*Q2>=1.5 and *x<0.01)
@@ -137,7 +152,7 @@ X2=0;
     save.close();
 
         cout << "Czas wykonywania: " << (double)(clock()-start)/(CLOCKS_PER_SEC) << "sek" << endl;
-        cool_down();
+        cool_down();*/
     }
     catch(Blad B)
     {
