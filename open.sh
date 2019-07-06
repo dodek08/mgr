@@ -1,9 +1,6 @@
 #!/bin/bash
 
-subl main.cpp
-subl sudakov_f2.h
-subl sudakov_f2.cpp
-export PATH=/usr/local/bin:$PATH
-export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/usr/local/lib/lib
+export LHAPATH=/mnt/c/Users/HP/Desktop/repo/testy/
 
 echo "otwarty projekt! i zmienne ustawione"

@@ -32,16 +32,19 @@ double fl = 0;
 	double ft = 0;
 	double f2=0;
 
-std::vector<double> xs = {0.1, 0.001};
-std::vector<double> Q2s = {5, 50, 200};
+// std::vector<double> xs = {0.1, 0.001};
+// std::vector<double> Q2s = {5, 50, 200};
+std::vector<double> xs = {0.01, 0.001};
+std::vector<double> Q2s = {1, 2, 3, 4};
 std::vector<double> calls = {10000, 100000, 1000000};
+double call = 100000;
 
 cout<<"x"<<"\t"<<"Q2"<<"\t"<<"F2"<<"\t"<<"Fl"<<"\t"<<"Ft"<<"\t"<<"calls"<<"\t"<<"t"<<endl;
 
- for (auto const& call : calls)
- {   
-    for (int i = 0; i < 100; ++i)
-    {
+ // for (auto const& call : calls)
+ // {   
+ //    for (int i = 0; i < 100; ++i)
+ //    {
     for(auto const& x : xs)
     {
         for(auto const& Q2: Q2s )
@@ -52,8 +55,8 @@ cout<<"x"<<"\t"<<"Q2"<<"\t"<<"F2"<<"\t"<<"Fl"<<"\t"<<"Ft"<<"\t"<<"calls"<<"\t"<<
 		cout<<x<<"\t"<<Q2<<"\t"<<fl+ft<<"\t"<<fl<<"\t"<<ft<<"\t"<<call<<"\t"<<(double)(clock()-start)/(CLOCKS_PER_SEC)<<endl;
     }
     }
- }
-}
+//  }
+// }
 
 std::vector<double> v =
 {

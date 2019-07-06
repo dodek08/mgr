@@ -288,8 +288,8 @@ double fl_u_g(double *args, size_t dim, void *params)
     //args :={kt2, Kt2, B, fi}
   double invz = z(args[1], args[0], args[3], args[2], fp->Q2, fp->mq2);
   double ret = 1. - fp->x/invz;
-  // if (ret>0)
-  // {
+  if (ret>0)
+  {
     double d1 = D1(args[1], args[2], fp->Q2, fp->mq2);
     double d2 = D2(args[1], args[0], args[3], args[2], fp->Q2, fp->mq2);
      double mu2 = mu_2_v(args[0], args[1], fp->mq2);
@@ -299,12 +299,12 @@ double fl_u_g(double *args, size_t dim, void *params)
     // ret = pdf2->alphasQ2(mu2)*fp->Q2/(4*M_PI)*4.*args[0]*args[1]* 1./(2.*M_PI)*(4* fp->Q2 *args[2]*args[2]* (1. - args[2])*(1. - args[2])*(1./d1 - 1./d2)*(1./d1 - 1./d2))*fa(fp->x/invz, args[0]*args[0], mu2)/(args[0]*args[0]);
     //ret = interpolacja(sqrt(mu2))*fp->Q2/(4*M_PI)*4.*args[0]*args[1]* 1./(2.*M_PI)*(4* fp->Q2 *args[2]*args[2]* (1. - args[2])*(1. - args[2])*(1./d1 - 1./d2)*(1./d1 - 1./d2))*fa(fp->x/invz, args[0]*args[0], mu2)/(args[0]*args[0]);
 
-    ret = interpolacja(sqrt(mu2))*fp->Q2/(4*M_PI)*4*args[0]*args[1]*1./(2*M_PI)*(4*fp->Q2*args[2]*args[2]*(1.-args[2])*(1.-args[2])*(1./d1-1/d2)*(1./d1-1/d2))*fa(fp->x/invz,args[0],mu2)/(args[0]*args[0])*heaviside(1. - fp->x/invz);
-  // }
-  // else
-  // {
-  //   ret = 0.;
-  // }
+    ret = interpolacja(sqrt(mu2))*fp->Q2/(4*M_PI)*4*args[0]*args[1]*1./(2*M_PI)*(4*fp->Q2*args[2]*args[2]*(1.-args[2])*(1.-args[2])*(1./d1-1/d2)*(1./d1-1/d2))*fa(fp->x/invz,args[0],mu2)/(args[0]*args[0]);
+  }
+  else
+  {
+    ret = 0.;
+  }
     return ret;
   }
 
@@ -315,7 +315,8 @@ double ft_u_g(double *args, size_t dim, void *params)
     //args :={kt2, Kt2, B, fi}
   double invz = z(args[1], args[0], args[3], args[2], fp->Q2, fp->mq2);
   double ret = 1. - fp->x/invz;
-  
+  if (ret>0)
+  {
     double d1 = D1(args[1], args[2], fp->Q2, fp->mq2);
     double d2 = D2(args[1], args[0], args[3], args[2], fp->Q2, fp->mq2);
      double mu2 = mu_2_v(args[0], args[1], fp->mq2);
@@ -324,12 +325,12 @@ double ft_u_g(double *args, size_t dim, void *params)
     // ret = pdf2->alphasQ2(mu2)*fa(fp->x/z,fp->x,mu2)*((args[2]*args[2]+(1.-args[2])*(1.-args[2]))*(args[1]/d1-args[3]/d2)*(args[1]/d1-args[3]/d2)+fp->mq2*(1./d1-1./d2)*(1./d1-1./d2))/(args[0]*args[0]*2*M_PI);
   	// ret =  pdf2->alphasQ2(mu2)*fp->Q2/(4.*M_PI)*4.*args[0]*args[1]*1./(2.*M_PI)*((args[2]*args[2] + (1. - args[2])*(1. - args[2]))*(args[1]*args[1]/(d1*d1) + (args[1]*args[1] - 2.*args[0]*args[1]*cos(args[3])+ args[0]*args[0])/(d2*d2) - 2. *(args[1]*args[1] - args[0]*args[1]*cos(args[3]))/(d1*d2)) + fp->mq2*(1./d1 - 1./d2)*(1./d1 - 1./d2)) *fa(fp->x/invz, args[0]*args[0],mu2)/(args[0]*args[0]);
     //ret = interpolacja(sqrt(mu2))*fp->Q2/(4.*M_PI)*4.*args[0]*args[1]*1./(2.*M_PI)*((args[2]*args[2] + (1. - args[2])*(1. - args[2]))*(args[1]*args[1]/(d1*d1) + (args[1]*args[1] - 2.*args[0]*args[1]*cos(args[3])+ args[0]*args[0])/(d1*d2) - 2. *(args[1]*args[1] - args[0]*args[1]*cos(args[3]))/(d1*d2)) + fp->mq2*(1./d1 - 1./d2)*(1./d1 - 1./d2)) *fa(fp->x/invz, args[0]*args[0],mu2)/(args[0]*args[0]);
-    ret = interpolacja(sqrt(mu2))*fp->Q2/(4.*M_PI)*4*args[0]*args[1]*1./(2*M_PI)*((args[2]*args[2]+(1.-args[2])*(1.-args[2]))*(args[1]*args[1]/(d1*d1)+(args[1]*args[1]-2*args[1]*args[0]*cos(args[3])+args[0]*args[0])/(d2*d2)-2*(args[1]*args[1]-args[0]*args[1]*cos(args[3]))/(d1*d2))+fp->mq2*(1./d1-1./d2)*(1./d1-1./d2))*fa(fp->x/invz,args[0],mu2)/(args[0]*args[0])*heaviside(1. - fp->x/invz);
-  
-  // else
-  // {
-  //   ret = 0.;
-  // }
+    ret = interpolacja(sqrt(mu2))*fp->Q2/(4.*M_PI)*4*args[0]*args[1]*1./(2*M_PI)*((args[2]*args[2]+(1.-args[2])*(1.-args[2]))*(args[1]*args[1]/(d1*d1)+(args[1]*args[1]-2*args[1]*args[0]*cos(args[3])+args[0]*args[0])/(d2*d2)-2*(args[1]*args[1]-args[0]*args[1]*cos(args[3]))/(d1*d2))+fp->mq2*(1./d1-1./d2)*(1./d1-1./d2))*fa(fp->x/invz,args[0],mu2)/(args[0]*args[0]);
+  }
+  else
+  {
+    ret = 0.;
+  }
     return ret;
 }
 
