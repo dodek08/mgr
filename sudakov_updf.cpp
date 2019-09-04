@@ -116,8 +116,8 @@ void read_ccfm()
     cout<<pdfs->xfxQ2(1, 0.1, 2*2)<<endl;*/ //cos jak zlota regula Fermiego
     fstream f;
     double tmp0,tmp1,tmp2,tmp3;
-    // f.open("KShardscale2_dilute_linear.dat", ios::in | ios::out);
-    f.open("ccfm.dat", ios::in | ios::out);
+    f.open("KShardscale2_dilute_linear.dat", ios::in | ios::out);
+    // f.open("ccfm.dat", ios::in | ios::out);
     if (!f.is_open()){ throw Blad("zly plik wejscia KShardscale2_dilute_linear.dat, nie istnieje lub zle wprowadzony");}
     while(!f.eof())
     {
@@ -125,15 +125,17 @@ void read_ccfm()
         f>>tmp1; //kt2
         f>>tmp2;    //mu2
         f>>tmp3;    //siatka
-        ccfm.insert(pair<tuple<double,double,double>,double>(make_tuple(exp(tmp0),exp(tmp1),exp(tmp2)*exp(tmp2)),tmp3));
+        // ccfm.insert(pair<tuple<double,double,double>,double>(make_tuple(exp(tmp0),exp(tmp1),exp(tmp2)*exp(tmp2)),tmp3));
+        ccfm.insert(pair<tuple<double,double,double>,double>(make_tuple(tmp0,tmp1,tmp2),tmp3));
 
         // dla ccfm 
-        ccfm_X.push_back(exp(tmp0));
-        ccfm_Kt2.push_back(exp(tmp1));
-        ccfm_Mu.push_back(exp(tmp2)*exp(tmp2));
-        // ccfm_X.push_back(tmp0);
-        // ccfm_Kt2.push_back(tmp1);
-        // ccfm_Mu.push_back(tmp2);
+        // ccfm_X.push_back(exp(tmp0));
+        // ccfm_Kt2.push_back(exp(tmp1));
+        // ccfm_Mu.push_back(exp(tmp2)*exp(tmp2));
+        //dla KSH
+        ccfm_X.push_back(tmp0);
+        ccfm_Kt2.push_back(tmp1);
+        ccfm_Mu.push_back(tmp2);
     }
     f.close();
 
@@ -275,14 +277,20 @@ double ccfm_s(const double & x, const double & kt2, const double & mu2)
     // }
     // else
     // {
+    double ukt2=kt2;
+    double umu2=mu2;
+    if(sqrt(kt2)<sqrt(mu0))
+        ukt2 = mu0;
+    if(mu2<mu0)
+        umu2 = mu0;
         double xl, xh;
         int x_ind = find_index_gt(ccfm_Xred, x);
         xl = ccfm_Xred[x_ind-1];
         xh = ccfm_Xred[x_ind];
         double kth, ktl, muh, mul;
-        tab[0]=find_index_gt(ccfm_Mured,mu2);
+        tab[0]=find_index_gt(ccfm_Mured,umu2);
         tab[1]=tab[0]-1;
-        tab[2]=find_index_gt(ccfm_Kt2red,kt2);
+        tab[2]=find_index_gt(ccfm_Kt2red,ukt2);
         tab[3]=tab[2]-1;
         muh = ccfm_Mured[tab[0]];
         mul = ccfm_Mured[tab[1]];
@@ -298,11 +306,11 @@ double ccfm_s(const double & x, const double & kt2, const double & mu2)
         c = (lf[2]-lr[2])/(rf[1]-rr[1]);
         b = rf[2]-a*rf[1];
         d = lf[2]-c*lf[1];
-        double y = a*kt2+b;
-        double y1 = c*kt2+d;
+        double y = a*ukt2+b;
+        double y1 = c*ukt2+d;
         f = (y-y1)/(rf[0]-lf[0]);
         g = y1-f*lf[0];
-        double ret1= f*mu2+g;
+        double ret1= f*umu2+g;
         //punkt drugi
         double lf2[] = {mul, ktl, ccfm.find(make_tuple(xh, ktl, mul))->second};
         double rf2[] = {muh, ktl, ccfm.find(make_tuple(xh, ktl, muh))->second};
@@ -313,21 +321,25 @@ double ccfm_s(const double & x, const double & kt2, const double & mu2)
         c = (lf2[2]-lr2[2])/(rf2[1]-rr2[1]);
         b = rf2[2]-a*rf2[1];
         d = lf2[2]-c*lf2[1];
-        y = a*kt2+b;
-        y1 = c*kt2+d;
+        y = a*ukt2+b;
+        y1 = c*ukt2+d;
         f = (y-y1)/(rf2[0]-lf2[0]);
         g = y1-f*lf2[0];
-        double ret2= f*mu2+g;
+        double ret2= f*umu2+g;
         //interpolacja miedzy xl a xh
         a = (ret2 - ret1)/(xh - xl);
         b = ret1 - xl*a;
         double ret = a*x + b;
 
         if (ret<0)
+        {
             return 0.0;
-        
+            cout<<"ret<0"<<endl;
+
+        }
         else
           //  cout<<difftime(stop,start)<<endl;
+        
         return ret;
         // }
 }
@@ -649,11 +661,14 @@ double fq_pid_d(const double & x, const double & la2, const double & mu2, const 
 
 double fq_pid(const double & x, const double & kt2, const double & mu2, const int & pid)
 {
+    if(pid==21)
+        return fa(x,kt2,mu2);
+    if(mu2<mu0)
+    {
+        return pdfs->xfxQ2(pid,x,mu0)*Tqs(mu0,mu0)/mu0;
+    }
     if(sqrt(kt2)<sqrt(mu0))
     {
-        if(pid == 21)
-            return pdfs->xfxQ2(pid,x,mu0)*Tgs(mu0,mu2)/mu0;
-        else
         return pdfs->xfxQ2(pid,x,mu0)*Tqs(mu0,mu2)/mu0;
     }
     else
@@ -740,6 +755,22 @@ double fsd(const double & x, const double & la2, const double & mu2)
 
 double fa(const double & x, const double & kt2, const double & mu2)
 {
+
+    // double x0 = 0.41E-4;
+    // double lambda = 277./1000.;
+    // double sig0 = (2912./100.)/(389./1000.);
+    // double als = 0.2;
+    // double Qs2 = pow(x0/x,lambda);
+    // double fgg = 3*sig0/(4*M_PI*M_PI*als)*kt2/Qs2*exp(-kt2/Qs2);
+    // if(fgg!=fgg)
+    //     throw Blad("Blad w fa",x,kt2,Qs2,mu2);
+    // else
+        // return fgg;
+    
+    if(mu2<mu0)
+    {
+        return (n_g*pow(x,lambda_g)*pow((1.-x),beta_g))*pdfs->xfxQ2(21,x,mu0)*Tgs(mu0,mu0)/mu0;
+    }
     if(sqrt(kt2)<sqrt(mu0))
     {
         return (n_g*pow(x,lambda_g)*pow((1.-x),beta_g))*pdfs->xfxQ2(21,x,mu0)*Tgs(mu0,mu2)/mu0;
