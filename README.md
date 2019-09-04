@@ -4,7 +4,7 @@ Oprogramowanie powstało na potrzeby pracy magisterskiej z zakresu fizyki czaste
 
 ## Na start
 
-Sklonuj repozytorium i ściągnij na swój komputer. Jeśli chcesz, aby projekt od razu pokazał swoje możliwości, dobrze posiadać konto w infrastrukturze PL-GRID, co oszczędzi czas na instalację LHA PDF oraz GSL
+Sklonuj repozytorium i ściągnij na swój komputer. Jeśli chcesz, aby projekt od razu pokazał swoje możliwości, dobrze posiadać konto w infrastrukturze PL-GRID, co oszczędzi czas na instalację LHA PDF oraz GSL. Plik makefile do kompilacji na klastrze PROMETHEUS w repozytorium zapusany jest jako makefile_na_klastrze.make
 
 ### Potrzebne do uruchomienia
 
@@ -41,5 +41,5 @@ Projekt dostępny na zasadzie dostępu do prac magisterskich AGH.
 
 ## Podziękowania
 
-Dziękuję promotorowi prof. Krzystofowi Kutakowi, oraz jego współpracownikom, prof. Maciejowi Skrzypkowi, dr. Marcinowi Buremu oraz prof. Sebastianowi Sapecie, za pomoc i dyskusję. Praca zrealizowana dzięki grantowi PL-GRID
+Dziękuję promotorowi prof. Krzystofowi Kutakowi, oraz jego współpracownikom, prof. Maciejowi Skrzypkowi, dr. Marcinowi Buremu oraz prof. Sebastianowi Sapecie, reprezentujących IFJ PAN za pomoc i dyskusję. Praca zrealizowana dzięki grantowi PL-GRID
 
