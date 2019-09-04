@@ -315,20 +315,20 @@ void read_alphas()
 
 double interpolacja(const double & kt2)
 {
-  double ukt2 = kt2;
     if (kt2<1.3)
     {
-      ukt2=1.3;
+      return pdf-> alphasQ2(1.3);
     }
+    else
 //      interpolacja liniowa
-    int index = find_index_gt(u2s,ukt2);
-    double x1=u2s[index];
-    double x2=u2s[index-1];
-    double y1=as_2[x1];
-    double y2=as_2[x2];
-    double ret = y1+(y2-y1)/(x2-x1)*(ukt2-x1);
-    return ret;
-      // return pdf->alphasQ2(kt2); // odpowiednie as_2
+    // int index = find_index_gt(u2s,ukt2);
+    // double x1=u2s[index];
+    // double x2=u2s[index-1];
+    // double y1=as_2[x1];
+    // double y2=as_2[x2];
+    // double ret = y1+(y2-y1)/(x2-x1)*(ukt2-x1);
+    // return ret;
+      return pdf->alphasQ2(kt2); // odpowiednie as_2
     // return 0.2;
 
 }

@@ -14,7 +14,7 @@ map<char,double> cq2;
 map<char,int> pids; //to jest dramat
 char quarks[] = {'u','d','s','c'};
 LHAPDF::PDF* pdf2;// = LHAPDF::mkPDF("CT14nlo", 0);
-size_t calls2 = 1000000;
+size_t calls2 = 100000;
 
 constexpr double lambda = 277./1000.;
 const double x0 =  0.000041;
@@ -44,8 +44,8 @@ double fgk(const double & x, const double & kt)
 double F2_q(const double & x, const double & Q2)
 {
   double result=0., error=0.;   // result and error
-  double xu[3]={Q2, Q2, 1}; 
-  double xl[3]={0.01, 0.01, 0};
+  double xu[3]={Q2, 50, sqrt(Q2)/(sqrt(Q2)+sqrt(50.))}; 
+  double xl[3]={0.01, 0.01, x};
   double final_result=0;
   for(char q : {'u','d','s','c'})
   {
@@ -57,20 +57,20 @@ double F2_q(const double & x, const double & Q2)
     F2_u_q.params=&pms;
     s2 = gsl_monte_vegas_alloc(3);
     //args :={kt2, Kt2, B, fi}
-    gsl_monte_vegas_integrate(&F2_u_q, xl, xu, 3, calls2/10, r2, s2, &result, &error);
-    // do
-    // {
+    gsl_monte_vegas_integrate(&F2_u_q, xl, xu, 3, calls2/5, r2, s2, &result, &error);
+    do
+    {
      result=0.;
      error=0.;
      gsl_monte_vegas_integrate(&F2_u_q, xl, xu, 3, calls2, r2, s2, &result, &error);
      // cout<<s2->chisq<<"\t"<<result<<"\t"<<error<<endl;
-     // if(s2->chisq==0)
-      // break;
-    // }
-    // while ((fabs (s2->chisq - 1.0) > 0.35) ); //more accurate
+     if(s2->chisq==0)
+      break;
+    }
+    while ((fabs (s2->chisq - 1.0) > 0.35) ); //more accurate
     gsl_monte_vegas_free(s2);
     // cout<<"F2"<<"\t"<<q<<"\t"<<result<<endl;
-    final_result+=/*Q2/(4*M_PI)**/cq2[q]/(2.*M_PI)*result;
+    final_result+=/*Q2/(4*M_PI)**/cq2[q]*2/(M_PI)*result;
   }
     // cout<<"F2 "<<x<<" "<<Q2<<"\t"<<final_result<<endl;
   return final_result;
@@ -298,8 +298,10 @@ double fl_u_g(double *args, size_t dim, void *params)
   	// ret = als*fp->Q2/(4*M_PI)*4*sqrt(args[0]*args[0])*sqrt(args[1]*args[1])* 1./(2.*M_PI) *(4* fp->Q2 *args[2]*args[2]* (1. - args[2] )*(1. - args[2] )*(1./d1 - 1./d2)*(1./d1 - 1./d2))* fgk(fp->x/invz, sqrt(args[0]*args[0]))/args[0]*args[0];
     // ret = pdf2->alphasQ2(mu2)*fp->Q2/(4*M_PI)*4.*args[0]*args[1]* 1./(2.*M_PI)*(4* fp->Q2 *args[2]*args[2]* (1. - args[2])*(1. - args[2])*(1./d1 - 1./d2)*(1./d1 - 1./d2))*fa(fp->x/invz, args[0]*args[0], mu2)/(args[0]*args[0]);
     //ret = interpolacja(sqrt(mu2))*fp->Q2/(4*M_PI)*4.*args[0]*args[1]* 1./(2.*M_PI)*(4* fp->Q2 *args[2]*args[2]* (1. - args[2])*(1. - args[2])*(1./d1 - 1./d2)*(1./d1 - 1./d2))*fa(fp->x/invz, args[0]*args[0], mu2)/(args[0]*args[0]);
-
-    ret = interpolacja(sqrt(mu2))*fp->Q2/(4.*M_PI)*4.*args[0]*args[1]*1./(2.*M_PI)*(4.*fp->Q2*args[2]*args[2]*(1.-args[2])*(1.-args[2])*(1./d1-1./d2)*(1./d1-1./d2))*fa(fp->x/invz,args[0],mu2)/(args[0]*args[0]);
+// to pierwsze ret dla rozkladow ktore sa w postaci f(x,kt^2,Q2)
+    // ret = interpolacja(sqrt(mu2))*fp->Q2/(4.*M_PI)*4.*args[0]*args[1]*1./(2.*M_PI)*(4.*fp->Q2*args[2]*args[2]*(1.-args[2])*(1.-args[2])*(1./d1-1./d2)*(1./d1-1./d2))*fa(fp->x/invz,args[0]*args[0],mu2)/(args[0]*args[0]);
+    // to dla rozkladow ktore sa postaci f(x,kt^2,Q2)/kt^2 czyli moich
+    ret = interpolacja(sqrt(mu2))*fp->Q2/(4.*M_PI)*4.*args[0]*args[1]*1./(2.*M_PI)*(4.*fp->Q2*args[2]*args[2]*(1.-args[2])*(1.-args[2])*(1./d1-1./d2)*(1./d1-1./d2))*fa(fp->x/invz,args[0]*args[0],mu2);
   }
   else
   {
@@ -325,7 +327,9 @@ double ft_u_g(double *args, size_t dim, void *params)
     // ret = pdf2->alphasQ2(mu2)*fa(fp->x/z,fp->x,mu2)*((args[2]*args[2]+(1.-args[2])*(1.-args[2]))*(args[1]/d1-args[3]/d2)*(args[1]/d1-args[3]/d2)+fp->mq2*(1./d1-1./d2)*(1./d1-1./d2))/(args[0]*args[0]*2*M_PI);
   	// ret =  pdf2->alphasQ2(mu2)*fp->Q2/(4.*M_PI)*4.*args[0]*args[1]*1./(2.*M_PI)*((args[2]*args[2] + (1. - args[2])*(1. - args[2]))*(args[1]*args[1]/(d1*d1) + (args[1]*args[1] - 2.*args[0]*args[1]*cos(args[3])+ args[0]*args[0])/(d2*d2) - 2. *(args[1]*args[1] - args[0]*args[1]*cos(args[3]))/(d1*d2)) + fp->mq2*(1./d1 - 1./d2)*(1./d1 - 1./d2)) *fa(fp->x/invz, args[0]*args[0],mu2)/(args[0]*args[0]);
     //ret = interpolacja(sqrt(mu2))*fp->Q2/(4.*M_PI)*4.*args[0]*args[1]*1./(2.*M_PI)*((args[2]*args[2] + (1. - args[2])*(1. - args[2]))*(args[1]*args[1]/(d1*d1) + (args[1]*args[1] - 2.*args[0]*args[1]*cos(args[3])+ args[0]*args[0])/(d1*d2) - 2. *(args[1]*args[1] - args[0]*args[1]*cos(args[3]))/(d1*d2)) + fp->mq2*(1./d1 - 1./d2)*(1./d1 - 1./d2)) *fa(fp->x/invz, args[0]*args[0],mu2)/(args[0]*args[0]);
-    ret = interpolacja(sqrt(mu2))*fp->Q2/(4.*M_PI)*4.*args[0]*args[1]*1./(2.*M_PI)*((args[2]*args[2]+(1.-args[2])*(1.-args[2]))*(args[1]*args[1]/(d1*d1)+(args[1]*args[1]-2*args[1]*args[0]*cos(args[3])+args[0]*args[0])/(d2*d2)-2.*(args[1]*args[1]-args[0]*args[1]*cos(args[3]))/(d1*d2))+fp->mq2*(1./d1-1./d2)*(1./d1-1./d2))*fa(fp->x/invz,args[0],mu2)/(args[0]*args[0]);
+    //patrz fl_u_g
+    // ret = interpolacja(sqrt(mu2))*fp->Q2/(4.*M_PI)*4.*args[0]*args[1]*1./(2.*M_PI)*((args[2]*args[2]+(1.-args[2])*(1.-args[2]))*(args[1]*args[1]/(d1*d1)+(args[1]*args[1]-2*args[1]*args[0]*cos(args[3])+args[0]*args[0])/(d2*d2)-2.*(args[1]*args[1]-args[0]*args[1]*cos(args[3]))/(d1*d2))+fp->mq2*(1./d1-1./d2)*(1./d1-1./d2))*fa(fp->x/invz,args[0]*args[0],mu2)/(args[0]*args[0]);
+    ret = interpolacja(sqrt(mu2))*fp->Q2/(4.*M_PI)*4.*args[0]*args[1]*1./(2.*M_PI)*((args[2]*args[2]+(1.-args[2])*(1.-args[2]))*(args[1]*args[1]/(d1*d1)+(args[1]*args[1]-2*args[1]*args[0]*cos(args[3])+args[0]*args[0])/(d2*d2)-2.*(args[1]*args[1]-args[0]*args[1]*cos(args[3]))/(d1*d2))+fp->mq2*(1./d1-1./d2)*(1./d1-1./d2))*fa(fp->x/invz,args[0]*args[0],mu2);
   }
   else
   {
@@ -342,9 +346,11 @@ double f2_u_q(double *args, size_t dim, void *params)
     // ret = pdf2->alphasQ2(mu2)*fa(fp->x/invz,args[0],mu2)*(2.*fp->Q2*args[2]*args[2]*(1.-args[2])*(1.-args[2])*(1./d1-1./d2)*(1./d1-1./d2))/M_PI;
   	// ret = als*fp->Q2/(4*M_PI)*4*sqrt(kt2)*sqrt(Kt2)* 1./(2.*M_PI) *(4* fp->Q2 *B*B* (1. - B*B )*(1. - B*B )*(1./d1 - 1./d2)*(1./d1 - 1./d2))* fgk(fp->x/invz, kt)/kt2;
   	// ret = als*fp->Q2/(4*M_PI)*4*sqrt(args[0]*args[0])*sqrt(args[1]*args[1])* 1./(2.*M_PI) *(4* fp->Q2 *args[2]*args[2]* (1. - args[2] )*(1. - args[2] )*(1./d1 - 1./d2)*(1./d1 - 1./d2))* fgk(fp->x/invz, sqrt(args[0]*args[0]))/args[0]*args[0];
-    double ret = sqrt(fp->Q2)/(sqrt(fp->Q2)+args[1]);
-    if(args[2]<ret and args[2]>fp->x and args[0]*args[0]>args[1])
-    	ret = args[1]/args[0]*pdf2->alphasQ2(args[0]*args[0])*(fq_pid(fp->x/args[2],args[1]*args[1],fp->Q2,fp->pid)+fq_pid(fp->x/args[2],args[1]*args[1],fp->Q2,-1*fp->pid))*Pqq(args[2]);
+    // double ret = sqrt(fp->Q2)/(sqrt(fp->Q2)+args[1]);
+    double ret = 0;
+    if( args[2]>=fp->x)
+    	// ret = args[0]/args[1]*pdf2->alphasQ2(args[0]*args[0])*(fq_pid(fp->x/args[2],args[1]*args[1],fp->Q2,fp->pid)+fq_pid(fp->x/args[2],args[1]*args[1],fp->Q2,-1*fp->pid))*Pqq(args[2]);
+      ret = args[1]/(args[0])*pdf2->alphasQ2(args[0]*args[0])*(fq_pid(fp->x/args[2],args[1]*args[1],fp->Q2,fp->pid)+fq_pid(fp->x/args[2],args[1]*args[1],fp->Q2,-1*fp->pid))*Pqq(args[2]);
   	else
   		ret = 0.;
   	return ret;
